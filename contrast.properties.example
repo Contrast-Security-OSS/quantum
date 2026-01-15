@@ -1,0 +1,7 @@
+# Contrast API Configuration
+# Copy this file to contrast.properties and fill in your values
+
+contrast.url=https://your-instance.contrastsecurity.com/api/ns-ui/v1
+contrast.org_id=your-org-id
+contrast.auth_header=base64-encoded-email:service-key
+contrast.api_key=your-api-key

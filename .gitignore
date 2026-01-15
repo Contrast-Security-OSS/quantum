@@ -1,0 +1,24 @@
+# Credentials - NEVER commit
+contrast.properties
+
+# Build output
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Claude Code
+.claude/
+CLAUDE.md
+
+# OS
+.DS_Store
+
+# Generated files
+*.csv
+cbom*.json
+
+# Shell scripts (may contain credentials)
+*.sh
