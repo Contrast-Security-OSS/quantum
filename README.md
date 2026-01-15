@@ -1,14 +1,28 @@
 # Quantum CBOM Generator
 
-Generate [CycloneDX CBOM](https://cyclonedx.org/capabilities/cbom/) (Cryptography Bill of Materials) from Contrast Security observations.
+Generate [CycloneDX CBOM](https://cyclonedx.org/capabilities/cbom/) (Cryptography Bill of Materials) from Contrast Security observability data.
+
+## Why Contrast for Crypto Inventory?
+
+Contrast provides runtime observability that goes far beyond static code scanning:
+
+- **Full-stack inventory** - Captures crypto usage across your entire application stack at runtime, not just what's visible in source code
+- **Complete algorithm details** - Strength, feedback mode, padding scheme, and OIDs for each algorithm
+- **Usage metrics** - How often each crypto component is actually called in production
+- **Full stack traces** - Understand the context: is this crypto used for passwords, SSL/TLS, tokens, or something else?
+- **Multiple call paths** - See how many different code paths invoke each crypto component
+- **Application dependencies** - Which apps and APIs depend on each crypto component
+
+This runtime visibility is critical for post-quantum migration planning - you need to know not just *what* crypto you have, but *how* it's being used.
 
 ## Features
 
-- Fetches cryptographic algorithm usage from Contrast API
 - Generates CycloneDX 1.6 compliant CBOM in JSON format
+- Fetches cryptographic algorithm usage from Contrast API
 - Shows which applications use which cryptographic algorithms
 - Includes NIST quantum security levels for post-quantum migration planning
-- Tracks usage counts per algorithm
+- Tracks usage counts and unique call locations per algorithm
+- Full stack traces showing crypto usage context
 - Filters by application or environment (PRODUCTION, DEVELOPMENT, QA)
 
 ## Quick Start
@@ -61,8 +75,9 @@ The generated CBOM includes:
   - OID (Object Identifier)
   - Classical security level
   - NIST quantum security level (0 = quantum vulnerable)
-  - Usage count and unique call locations
-  - Evidence showing where crypto is called from
+  - `contrast:usageCount` - total invocations at runtime
+  - `contrast:uniqueLocations` - number of distinct call paths
+  - Full stack traces showing usage context (passwords, SSL, etc.)
 
 Example dependency structure:
 ```
@@ -70,6 +85,15 @@ Contrast Crypto Inventory
 ├── app-frontend → SHA-256, AES/GCM
 └── app-backend → SHA-256, MD5 (quantum vulnerable), RSA
 ```
+
+### CBOM Properties
+
+| Property | Description |
+|----------|-------------|
+| `contrast:usageCount` | Total number of times this algorithm was invoked at runtime |
+| `contrast:uniqueLocations` | Number of distinct code paths that use this algorithm |
+
+These metrics help prioritize migration efforts - a crypto algorithm called millions of times across dozens of code paths needs more attention than one used once during startup.
 
 ## Building
 
