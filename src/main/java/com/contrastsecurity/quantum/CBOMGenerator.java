@@ -608,16 +608,19 @@ public class CBOMGenerator {
                 occ.setLocation(obs.callee != null ? obs.callee : obs.caller);
 
                 StringBuilder context = new StringBuilder();
-                if (obs.caller != null && !obs.caller.isEmpty()) {
-                    context.append("Caller: ").append(obs.caller);
+                if (obs.applicationName != null && !obs.applicationName.isEmpty()) {
+                    context.append("App: ").append(obs.applicationName);
                 }
                 if (obs.route != null && !obs.route.isEmpty()) {
                     if (context.length() > 0) context.append(" | ");
                     context.append("Route: ").append(obs.route);
                 }
-                if (obs.applicationName != null && !obs.applicationName.isEmpty()) {
+                if (obs.stackTrace != null && !obs.stackTrace.isEmpty()) {
+                    if (context.length() > 0) context.append("\n");
+                    context.append("Stack Trace:\n").append(obs.stackTrace);
+                } else if (obs.caller != null && !obs.caller.isEmpty()) {
                     if (context.length() > 0) context.append(" | ");
-                    context.append("App: ").append(obs.applicationName);
+                    context.append("Caller: ").append(obs.caller);
                 }
                 if (context.length() > 0) {
                     occ.setAdditionalContext(context.toString());
