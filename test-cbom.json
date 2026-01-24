@@ -1,0 +1,503 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:test-12345-mock-cbom",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-01-23T12:00:00Z",
+    "component": {
+      "type": "application",
+      "bom-ref": "contrast-crypto-inventory",
+      "name": "Acme Financial Services - Mock Inventory",
+      "version": "1.0"
+    }
+  },
+  "components": [
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-rsa-2048",
+      "name": "RSA",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "15000"},
+        {"name": "contrast:uniqueLocations", "value": "12"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "java.security.Signature.getInstance(Signature.java)",
+            "additionalContext": "App: acme-document-service Stack Trace:\njava.security.Signature.getInstance(Signature.java:256)\ncom.acme.documents.signing.DocumentSigner.signDocument(DocumentSigner.java:89)\ncom.acme.documents.signing.LegalDocumentProcessor.certifyDocument(LegalDocumentProcessor.java:234)\ncom.acme.documents.api.DocumentController.submitSignedContract(DocumentController.java:156)\norg.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:897)"
+          },
+          {
+            "location": "javax.crypto.Cipher.getInstance(Cipher.java)",
+            "additionalContext": "App: acme-vault-service Stack Trace:\njavax.crypto.Cipher.getInstance(Cipher.java:543)\ncom.acme.vault.encryption.AsymmetricKeyWrapper.wrapKey(AsymmetricKeyWrapper.java:67)\ncom.acme.vault.storage.SecretStorage.storeEncryptedSecret(SecretStorage.java:123)\ncom.acme.vault.api.SecretsController.createSecret(SecretsController.java:89)\norg.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:897)"
+          },
+          {
+            "location": "java.security.Signature.getInstance(Signature.java)",
+            "additionalContext": "App: acme-auth-service Stack Trace:\njava.security.Signature.getInstance(Signature.java:256)\ncom.nimbusds.jose.crypto.RSASSASigner.sign(RSASSASigner.java:134)\ncom.nimbusds.jwt.SignedJWT.sign(SignedJWT.java:267)\ncom.acme.auth.jwt.JwtTokenProvider.generateAccessToken(JwtTokenProvider.java:78)\ncom.acme.auth.service.AuthenticationService.login(AuthenticationService.java:156)\ncom.acme.auth.api.AuthController.authenticate(AuthController.java:45)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "pke",
+          "parameterSetIdentifier": "2048",
+          "cryptoFunctions": ["encrypt", "decrypt", "sign", "verify", "keygen"],
+          "classicalSecurityLevel": 112,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.113549.1.1.1"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-ecdsa-p256",
+      "name": "SHA256withECDSA",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "8500"},
+        {"name": "contrast:uniqueLocations", "value": "5"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "java.security.Signature.getInstance(Signature.java)",
+            "additionalContext": "App: acme-payment-service Stack Trace:\njava.security.Signature.getInstance(Signature.java:256)\ncom.acme.payments.crypto.TransactionSigner.signTransaction(TransactionSigner.java:112)\ncom.acme.payments.processing.PaymentProcessor.processPayment(PaymentProcessor.java:234)\ncom.acme.payments.api.PaymentController.submitPayment(PaymentController.java:78)\norg.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:897)"
+          },
+          {
+            "location": "java.security.Signature.getInstance(Signature.java)",
+            "additionalContext": "App: acme-blockchain-service Stack Trace:\njava.security.Signature.getInstance(Signature.java:256)\ncom.acme.blockchain.wallet.WalletSigner.signBlockchainTransaction(WalletSigner.java:89)\ncom.acme.blockchain.ledger.LedgerService.commitTransaction(LedgerService.java:167)\ncom.acme.blockchain.api.BlockchainController.transfer(BlockchainController.java:123)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "signature",
+          "parameterSetIdentifier": "256",
+          "cryptoFunctions": ["sign", "verify", "keygen"],
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.10045.4.3.2"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-ecdh-p256",
+      "name": "ECDH",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "25000"},
+        {"name": "contrast:uniqueLocations", "value": "3"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "javax.crypto.KeyAgreement.getInstance(KeyAgreement.java)",
+            "additionalContext": "App: acme-messaging-service Stack Trace:\njavax.crypto.KeyAgreement.getInstance(KeyAgreement.java:189)\ncom.acme.messaging.crypto.E2EKeyExchange.deriveSharedSecret(E2EKeyExchange.java:78)\ncom.acme.messaging.encryption.MessageEncryptor.encryptMessage(MessageEncryptor.java:134)\ncom.acme.messaging.service.SecureMessagingService.sendEncryptedMessage(SecureMessagingService.java:89)\ncom.acme.messaging.api.MessagingController.sendMessage(MessagingController.java:56)"
+          },
+          {
+            "location": "javax.crypto.KeyAgreement.getInstance(KeyAgreement.java)",
+            "additionalContext": "App: acme-api-gateway Stack Trace:\njavax.crypto.KeyAgreement.getInstance(KeyAgreement.java:189)\nsun.security.ssl.ECDHKeyExchange$ECDHEPossession.<init>(ECDHKeyExchange.java:134)\nsun.security.ssl.ECDHKeyExchange$ECDHEPossessionGenerator.createPossession(ECDHKeyExchange.java:178)\nsun.security.ssl.SSLKeyExchange.createPossession(SSLKeyExchange.java:134)\nsun.security.ssl.ServerHello$T13ServerHelloProducer.produce(ServerHello.java:567)\nsun.security.ssl.SSLHandshake.produce(SSLHandshake.java:436)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "key-agree",
+          "parameterSetIdentifier": "256",
+          "cryptoFunctions": ["keyderive", "keygen"],
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.3.132.1.12"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-aes-256-gcm",
+      "name": "AES/GCM/NoPadding",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "150000"},
+        {"name": "contrast:uniqueLocations", "value": "8"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "javax.crypto.Cipher.getInstance(Cipher.java)",
+            "additionalContext": "App: acme-vault-service Stack Trace:\njavax.crypto.Cipher.getInstance(Cipher.java:543)\ncom.acme.vault.encryption.AESEncryptor.encryptData(AESEncryptor.java:89)\ncom.acme.vault.storage.EncryptedBlobStorage.storeBlob(EncryptedBlobStorage.java:156)\ncom.acme.vault.service.SecretService.storeCustomerPII(SecretService.java:234)\ncom.acme.vault.api.SecretsController.createSecret(SecretsController.java:78)"
+          },
+          {
+            "location": "javax.crypto.Cipher.getInstance(Cipher.java)",
+            "additionalContext": "App: acme-database-service Stack Trace:\njavax.crypto.Cipher.getInstance(Cipher.java:543)\ncom.acme.db.encryption.ColumnEncryptor.encryptColumn(ColumnEncryptor.java:67)\ncom.acme.db.repository.CustomerRepository.saveCustomer(CustomerRepository.java:123)\ncom.acme.db.service.CustomerService.createCustomer(CustomerService.java:89)\ncom.acme.db.api.CustomerController.register(CustomerController.java:45)"
+          },
+          {
+            "location": "javax.crypto.Cipher.getInstance(Cipher.java)",
+            "additionalContext": "App: acme-api-gateway Stack Trace:\njavax.crypto.Cipher.getInstance(Cipher.java:543)\nsun.security.ssl.SSLCipher$T13GcmWriteCipherGenerator$GcmWriteCipher.<init>(SSLCipher.java:2011)\nsun.security.ssl.SSLCipher.createWriteCipher(SSLCipher.java:564)\nsun.security.ssl.Finished$T13FinishedProducer.onProduceFinished(Finished.java:718)\nsun.security.ssl.SSLHandshake.produce(SSLHandshake.java:436)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "ae",
+          "parameterSetIdentifier": "256",
+          "mode": "gcm",
+          "padding": "raw",
+          "cryptoFunctions": ["encrypt", "decrypt", "keygen"],
+          "classicalSecurityLevel": 256,
+          "nistQuantumSecurityLevel": 5
+        },
+        "oid": "2.16.840.1.101.3.4.1.46"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-aes-128-cbc",
+      "name": "AES/CBC/PKCS5Padding",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "5000"},
+        {"name": "contrast:uniqueLocations", "value": "2"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "javax.crypto.Cipher.getInstance(Cipher.java)",
+            "additionalContext": "App: acme-legacy-service Stack Trace:\njavax.crypto.Cipher.getInstance(Cipher.java:543)\ncom.acme.legacy.crypto.LegacyEncryptor.encrypt(LegacyEncryptor.java:45)\ncom.acme.legacy.storage.FileArchiver.archiveDocument(FileArchiver.java:123)\ncom.acme.legacy.service.ArchiveService.archiveOldRecords(ArchiveService.java:89)\ncom.acme.legacy.scheduler.ArchiveJob.execute(ArchiveJob.java:34)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "block-cipher",
+          "parameterSetIdentifier": "128",
+          "mode": "cbc",
+          "padding": "pkcs5",
+          "cryptoFunctions": ["encrypt", "decrypt", "keygen"],
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 1
+        },
+        "oid": "2.16.840.1.101.3.4.1.2"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-3des",
+      "name": "DESede/CBC/PKCS5Padding",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "1200"},
+        {"name": "contrast:uniqueLocations", "value": "1"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "javax.crypto.Cipher.getInstance(Cipher.java)",
+            "additionalContext": "App: acme-legacy-payments Stack Trace:\njavax.crypto.Cipher.getInstance(Cipher.java:543)\ncom.acme.legacy.payments.TripleDESEncryptor.encryptCardData(TripleDESEncryptor.java:67)\ncom.acme.legacy.payments.CardProcessor.processCard(CardProcessor.java:134)\ncom.acme.legacy.payments.PaymentGateway.chargeCard(PaymentGateway.java:89)\ncom.acme.legacy.api.LegacyPaymentController.processPayment(LegacyPaymentController.java:45)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "block-cipher",
+          "parameterSetIdentifier": "168",
+          "mode": "cbc",
+          "padding": "pkcs5",
+          "cryptoFunctions": ["encrypt", "decrypt", "keygen"],
+          "classicalSecurityLevel": 112,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.113549.3.7"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-sha256",
+      "name": "SHA-256",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "500000"},
+        {"name": "contrast:uniqueLocations", "value": "15"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "java.security.MessageDigest.getInstance(MessageDigest.java)",
+            "additionalContext": "App: acme-auth-service Stack Trace:\njava.security.MessageDigest.getInstance(MessageDigest.java:178)\norg.springframework.security.crypto.bcrypt.BCrypt.hashpw(BCrypt.java:567)\norg.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.encode(BCryptPasswordEncoder.java:89)\ncom.acme.auth.service.UserService.createUser(UserService.java:123)\ncom.acme.auth.api.UserController.register(UserController.java:56)"
+          },
+          {
+            "location": "java.security.MessageDigest.getInstance(MessageDigest.java)",
+            "additionalContext": "App: acme-api-gateway Stack Trace:\njava.security.MessageDigest.getInstance(MessageDigest.java:178)\nsun.security.ssl.HKDF.<init>(HKDF.java:66)\nsun.security.ssl.NewSessionTicket.derivePreSharedKey(NewSessionTicket.java:178)\nsun.security.ssl.SSLHandshake.produce(SSLHandshake.java:436)"
+          },
+          {
+            "location": "java.security.MessageDigest.getInstance(MessageDigest.java)",
+            "additionalContext": "App: acme-integrity-service Stack Trace:\njava.security.MessageDigest.getInstance(MessageDigest.java:178)\ncom.acme.integrity.FileHasher.computeHash(FileHasher.java:45)\ncom.acme.integrity.service.IntegrityService.verifyFileIntegrity(IntegrityService.java:89)\ncom.acme.integrity.api.IntegrityController.verify(IntegrityController.java:34)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "hash",
+          "parameterSetIdentifier": "256",
+          "cryptoFunctions": ["digest"],
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 3
+        },
+        "oid": "2.16.840.1.101.3.4.2.1"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-sha1",
+      "name": "SHA-1",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "2500"},
+        {"name": "contrast:uniqueLocations", "value": "2"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "java.security.MessageDigest.getInstance(MessageDigest.java)",
+            "additionalContext": "App: acme-git-service Stack Trace:\njava.security.MessageDigest.getInstance(MessageDigest.java:178)\norg.eclipse.jgit.lib.ObjectId.fromString(ObjectId.java:89)\norg.eclipse.jgit.storage.file.FileRepository.resolve(FileRepository.java:234)\ncom.acme.git.service.GitService.getCommit(GitService.java:123)\ncom.acme.git.api.GitController.getCommitDetails(GitController.java:45)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "hash",
+          "parameterSetIdentifier": "160",
+          "cryptoFunctions": ["digest"],
+          "classicalSecurityLevel": 80,
+          "nistQuantumSecurityLevel": 1
+        },
+        "oid": "1.3.14.3.2.26"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-md5",
+      "name": "MD5",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "800"},
+        {"name": "contrast:uniqueLocations", "value": "2"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "java.security.MessageDigest.getInstance(MessageDigest.java)",
+            "additionalContext": "App: acme-cache-service Stack Trace:\njava.security.MessageDigest.getInstance(MessageDigest.java:178)\ncom.acme.cache.KeyGenerator.generateCacheKey(KeyGenerator.java:45)\ncom.acme.cache.service.CacheService.computeKey(CacheService.java:89)\ncom.acme.cache.api.CacheController.get(CacheController.java:34)"
+          },
+          {
+            "location": "java.security.MessageDigest.getInstance(MessageDigest.java)",
+            "additionalContext": "App: acme-legacy-auth Stack Trace:\njava.security.MessageDigest.getInstance(MessageDigest.java:178)\ncom.acme.legacy.auth.MD5PasswordEncoder.encode(MD5PasswordEncoder.java:34)\ncom.acme.legacy.auth.LegacyAuthService.authenticate(LegacyAuthService.java:89)\ncom.acme.legacy.api.LegacyLoginController.login(LegacyLoginController.java:45)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "hash",
+          "parameterSetIdentifier": "128",
+          "cryptoFunctions": ["digest"],
+          "classicalSecurityLevel": 0,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.113549.2.5"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-hmac-sha256",
+      "name": "HmacSHA256",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "75000"},
+        {"name": "contrast:uniqueLocations", "value": "6"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "javax.crypto.Mac.getInstance(Mac.java)",
+            "additionalContext": "App: acme-auth-service Stack Trace:\njavax.crypto.Mac.getInstance(Mac.java:234)\ncom.nimbusds.jose.crypto.MACVerifier.verify(MACVerifier.java:89)\ncom.nimbusds.jwt.SignedJWT.verify(SignedJWT.java:178)\ncom.acme.auth.jwt.JwtTokenValidator.validateToken(JwtTokenValidator.java:67)\ncom.acme.auth.filter.JwtAuthenticationFilter.doFilter(JwtAuthenticationFilter.java:45)"
+          },
+          {
+            "location": "javax.crypto.Mac.getInstance(Mac.java)",
+            "additionalContext": "App: acme-webhook-service Stack Trace:\njavax.crypto.Mac.getInstance(Mac.java:234)\ncom.acme.webhook.security.WebhookSigner.computeSignature(WebhookSigner.java:56)\ncom.acme.webhook.service.WebhookService.signPayload(WebhookService.java:89)\ncom.acme.webhook.api.WebhookController.sendWebhook(WebhookController.java:34)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "mac",
+          "parameterSetIdentifier": "256",
+          "cryptoFunctions": ["tag", "verify", "keygen"],
+          "classicalSecurityLevel": 256,
+          "nistQuantumSecurityLevel": 3
+        },
+        "oid": "1.2.840.113549.2.9"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-pbkdf2",
+      "name": "PBKDF2WithHmacSHA256",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "12000"},
+        {"name": "contrast:uniqueLocations", "value": "2"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "javax.crypto.SecretKeyFactory.getInstance(SecretKeyFactory.java)",
+            "additionalContext": "App: acme-vault-service Stack Trace:\njavax.crypto.SecretKeyFactory.getInstance(SecretKeyFactory.java:123)\ncom.acme.vault.kdf.PBKDF2KeyDeriver.deriveKey(PBKDF2KeyDeriver.java:67)\ncom.acme.vault.encryption.MasterKeyManager.deriveMasterKey(MasterKeyManager.java:89)\ncom.acme.vault.service.VaultInitializer.initialize(VaultInitializer.java:45)\ncom.acme.vault.Application.main(Application.java:23)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "kdf",
+          "parameterSetIdentifier": "256",
+          "cryptoFunctions": ["keyderive"],
+          "classicalSecurityLevel": 256,
+          "nistQuantumSecurityLevel": 3
+        }
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-dh-2048",
+      "name": "DiffieHellman",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "3000"},
+        {"name": "contrast:uniqueLocations", "value": "1"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "javax.crypto.KeyAgreement.getInstance(KeyAgreement.java)",
+            "additionalContext": "App: acme-vpn-service Stack Trace:\njavax.crypto.KeyAgreement.getInstance(KeyAgreement.java:189)\ncom.acme.vpn.crypto.DHKeyExchange.performKeyExchange(DHKeyExchange.java:89)\ncom.acme.vpn.tunnel.TunnelEstablisher.establishTunnel(TunnelEstablisher.java:134)\ncom.acme.vpn.service.VPNService.connect(VPNService.java:67)\ncom.acme.vpn.api.VPNController.connect(VPNController.java:34)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "key-agree",
+          "parameterSetIdentifier": "2048",
+          "cryptoFunctions": ["keyderive", "keygen"],
+          "classicalSecurityLevel": 112,
+          "nistQuantumSecurityLevel": 0
+        }
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto-rsa-4096-sign",
+      "name": "SHA512withRSA",
+      "properties": [
+        {"name": "contrast:usageCount", "value": "500"},
+        {"name": "contrast:uniqueLocations", "value": "2"}
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "java.security.Signature.getInstance(Signature.java)",
+            "additionalContext": "App: acme-codesigning-service Stack Trace:\njava.security.Signature.getInstance(Signature.java:256)\ncom.acme.codesigning.signer.JarSigner.signJar(JarSigner.java:123)\ncom.acme.codesigning.service.CodeSigningService.signArtifact(CodeSigningService.java:89)\ncom.acme.codesigning.api.SigningController.signRelease(SigningController.java:45)"
+          },
+          {
+            "location": "java.security.Signature.getInstance(Signature.java)",
+            "additionalContext": "App: acme-ca-service Stack Trace:\njava.security.Signature.getInstance(Signature.java:256)\nsun.security.x509.X509CertImpl.sign(X509CertImpl.java:456)\ncom.acme.ca.issuer.CertificateIssuer.issueCertificate(CertificateIssuer.java:178)\ncom.acme.ca.service.CAService.issueClientCert(CAService.java:89)\ncom.acme.ca.api.CertificateController.requestCertificate(CertificateController.java:45)"
+          }
+        ]
+      },
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "signature",
+          "parameterSetIdentifier": "4096",
+          "cryptoFunctions": ["sign", "verify", "keygen"],
+          "classicalSecurityLevel": 140,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.113549.1.1.13"
+      }
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-auth-service",
+      "name": "acme-auth-service"
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-vault-service",
+      "name": "acme-vault-service"
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-payment-service",
+      "name": "acme-payment-service"
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-document-service",
+      "name": "acme-document-service"
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-messaging-service",
+      "name": "acme-messaging-service"
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-api-gateway",
+      "name": "acme-api-gateway"
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-legacy-service",
+      "name": "acme-legacy-service"
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-codesigning-service",
+      "name": "acme-codesigning-service"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "app-acme-auth-service",
+      "dependsOn": ["crypto-rsa-2048", "crypto-sha256", "crypto-hmac-sha256"]
+    },
+    {
+      "ref": "app-acme-vault-service",
+      "dependsOn": ["crypto-rsa-2048", "crypto-aes-256-gcm", "crypto-pbkdf2"]
+    },
+    {
+      "ref": "app-acme-payment-service",
+      "dependsOn": ["crypto-ecdsa-p256"]
+    },
+    {
+      "ref": "app-acme-document-service",
+      "dependsOn": ["crypto-rsa-2048"]
+    },
+    {
+      "ref": "app-acme-messaging-service",
+      "dependsOn": ["crypto-ecdh-p256", "crypto-aes-256-gcm"]
+    },
+    {
+      "ref": "app-acme-api-gateway",
+      "dependsOn": ["crypto-ecdh-p256", "crypto-aes-256-gcm", "crypto-sha256"]
+    },
+    {
+      "ref": "app-acme-legacy-service",
+      "dependsOn": ["crypto-aes-128-cbc", "crypto-3des", "crypto-md5"]
+    },
+    {
+      "ref": "app-acme-codesigning-service",
+      "dependsOn": ["crypto-rsa-4096-sign"]
+    }
+  ]
+}
