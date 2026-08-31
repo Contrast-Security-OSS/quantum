@@ -145,7 +145,15 @@ Contrast AI Usage Inventory
 - **Quantum Advisor** - findings grouped by risk level (CRITICAL/HIGH/MEDIUM/LOW/NOT_QUANTUM_ISSUE), with an "Application Context" section describing each app from its architecture graph data
 - **AI Advisor** - organized as an inventory of AI-enabled applications (one section per app, not per finding): an AI-generated description of what the app does, then each AI usage instance with model/provider/endpoint and a description of what that specific call is doing, inferred from the key methods around it in the stack trace
 
-Both advisors write their generated application descriptions back into the source BOM's `Component.description` field, so the BOM itself stays self-describing even without the report.
+Both advisors write their generated application descriptions back into the source BOM's `Component.description` field, so the BOM itself stays self-describing even without the report. The Quantum Advisor also writes `quantum:*` risk properties (risk level, recommendation, code source, etc.) back onto each crypto algorithm component - this happens automatically as part of every run, no separate step needed.
+
+## CBOM Viewer
+
+`tools/cbom-viewer.html` is a standalone, offline browser tool for viewing a CBOM: drag and drop (or click to browse for) a `cbom*.json` file and it renders the crypto algorithm components - including any `quantum:*` risk properties the advisor wrote back - as readable cards, no server or build step required. It's CBOM-specific (renders `cryptographic-asset` components) and doesn't currently render AI-BOM's `machine-learning-model` components.
+
+```bash
+open tools/cbom-viewer.html
+```
 
 ## Building
 
