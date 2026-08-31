@@ -51,11 +51,11 @@ import com.google.gson.JsonObject;
  * Generates CycloneDX CBOM (Cryptography Bill of Materials) from Contrast API.
  *
  * Usage:
- *   java CBOMGenerator                      # Fetch all apps, output cbom.json
- *   java CBOMGenerator --app "AppName"      # Fetch single app
- *   java CBOMGenerator --list               # List available apps
- *   java CBOMGenerator -o custom.json       # Custom output filename
- *   java CBOMGenerator -c config.properties # Use custom config file
+ *   java -jar quantum.jar cbom                      # Fetch all apps, output cbom.json
+ *   java -jar quantum.jar cbom --app "AppName"      # Fetch single app
+ *   java -jar quantum.jar cbom --list               # List available apps
+ *   java -jar quantum.jar cbom -o custom.json       # Custom output filename
+ *   java -jar quantum.jar cbom -c config.properties # Use custom config file
  *
  * Config file (contrast.properties):
  *   contrast.url=https://eval.contrastsecurity.com/api/ns-ui/v1
@@ -186,24 +186,24 @@ public class CBOMGenerator {
     private static void printUsage() {
         System.out.println("\nCBOM Generator - Create CycloneDX CBOM from Contrast observations");
         System.out.println("\nUsage:");
-        System.out.println("  java -jar quantum.jar                    Generate CBOM for all apps");
-        System.out.println("  java -jar quantum.jar --app <id|name>    Filter by app (ID or name)");
-        System.out.println("  java -jar quantum.jar --env <tier>       Filter by environment (PRODUCTION, DEVELOPMENT, QA)");
-        System.out.println("  java -jar quantum.jar --list             List available applications with IDs");
-        System.out.println("  java -jar quantum.jar --analyze          Run Quantum Advisor AI analysis after CBOM generation");
-        System.out.println("  java -jar quantum.jar -o <file.json>     Specify output filename");
-        System.out.println("  java -jar quantum.jar -c <config.properties>  Use custom config file");
+        System.out.println("  java -jar quantum.jar cbom                    Generate CBOM for all apps");
+        System.out.println("  java -jar quantum.jar cbom --app <id|name>    Filter by app (ID or name)");
+        System.out.println("  java -jar quantum.jar cbom --env <tier>       Filter by environment (PRODUCTION, DEVELOPMENT, QA)");
+        System.out.println("  java -jar quantum.jar cbom --list             List available applications with IDs");
+        System.out.println("  java -jar quantum.jar cbom --analyze          Run Quantum Advisor AI analysis after CBOM generation");
+        System.out.println("  java -jar quantum.jar cbom -o <file.json>     Specify output filename");
+        System.out.println("  java -jar quantum.jar cbom -c <config.properties>  Use custom config file");
         System.out.println("\nConfig file (contrast.properties):");
         System.out.println("  contrast.url=https://eval.contrastsecurity.com/api/ns-ui/v1");
         System.out.println("  contrast.org_id=your-org-id");
         System.out.println("  contrast.auth_header=base64-encoded-credentials");
         System.out.println("  contrast.api_key=your-api-key");
         System.out.println("\nExamples:");
-        System.out.println("  java -jar quantum.jar                          # all apps -> cbom.json");
-        System.out.println("  java -jar quantum.jar --env PRODUCTION         # only prod observations");
-        System.out.println("  java -jar quantum.jar --app MyApp --env PRODUCTION");
-        System.out.println("  java -jar quantum.jar --analyze                # generate CBOM + AI analysis report");
-        System.out.println("  java -jar quantum.jar -c prod.properties --list");
+        System.out.println("  java -jar quantum.jar cbom                          # all apps -> cbom.json");
+        System.out.println("  java -jar quantum.jar cbom --env PRODUCTION         # only prod observations");
+        System.out.println("  java -jar quantum.jar cbom --app MyApp --env PRODUCTION");
+        System.out.println("  java -jar quantum.jar cbom --analyze                # generate CBOM + AI analysis report");
+        System.out.println("  java -jar quantum.jar cbom -c prod.properties --list");
     }
 
     /**

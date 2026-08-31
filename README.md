@@ -50,49 +50,51 @@ contrast.api_key=your-api-key
 mvn clean package
 
 # CBOM
-java -jar target/quantum-1.0-SNAPSHOT.jar
+java -jar target/quantum-1.0-SNAPSHOT.jar cbom
 
 # AI-BOM
-java -cp target/quantum-1.0-SNAPSHOT.jar com.contrastsecurity.quantum.AIBOMGenerator
+java -jar target/quantum-1.0-SNAPSHOT.jar aibom
 ```
 
 ## Usage
+
+A single jar with two subcommands, `cbom` and `aibom`, taking the same set of flags:
 
 ### CBOM (crypto)
 
 ```bash
 # Generate CBOM for all apps
-java -jar quantum.jar
+java -jar quantum.jar cbom
 
 # List available applications
-java -jar quantum.jar --list
+java -jar quantum.jar cbom --list
 
 # Generate CBOM for specific app (by name or ID)
-java -jar quantum.jar --app "MyApp"
-java -jar quantum.jar --app 7136cb1b-f846-4c1d-bdd3-77b448cbd2fe
+java -jar quantum.jar cbom --app "MyApp"
+java -jar quantum.jar cbom --app 7136cb1b-f846-4c1d-bdd3-77b448cbd2fe
 
 # Filter by environment
-java -jar quantum.jar --env PRODUCTION
+java -jar quantum.jar cbom --env PRODUCTION
 
 # Combine filters
-java -jar quantum.jar --app "MyApp" --env PRODUCTION -o myapp-prod.json
+java -jar quantum.jar cbom --app "MyApp" --env PRODUCTION -o myapp-prod.json
 
 # Use custom config file
-java -jar quantum.jar -c /path/to/config.properties
+java -jar quantum.jar cbom -c /path/to/config.properties
 
 # Generate CBOM + AI-powered Quantum Advisor risk report
-java -jar quantum.jar --analyze
+java -jar quantum.jar cbom --analyze
 ```
 
 ### AI-BOM (AI/LLM usage)
 
-Same flags, different (currently unshaded) entry point:
+Same flags, `aibom` subcommand:
 
 ```bash
-java -cp quantum.jar com.contrastsecurity.quantum.AIBOMGenerator
-java -cp quantum.jar com.contrastsecurity.quantum.AIBOMGenerator --list
-java -cp quantum.jar com.contrastsecurity.quantum.AIBOMGenerator --app "MyApp" --env PRODUCTION
-java -cp quantum.jar com.contrastsecurity.quantum.AIBOMGenerator --analyze
+java -jar quantum.jar aibom
+java -jar quantum.jar aibom --list
+java -jar quantum.jar aibom --app "MyApp" --env PRODUCTION
+java -jar quantum.jar aibom --analyze
 ```
 
 ### Advisor reports directly
@@ -168,7 +170,7 @@ Two sample AI-BOM files are included to try it with:
 mvn clean package
 ```
 
-Creates `target/quantum-1.0-SNAPSHOT.jar` (executable uber-jar, default entry point is `CBOMGenerator`; run `AIBOMGenerator` via `-cp`).
+Creates `target/quantum-1.0-SNAPSHOT.jar` (executable uber-jar; `Main` dispatches to `cbom`/`aibom` based on the first argument).
 
 ## Configuration
 
