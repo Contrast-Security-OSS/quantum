@@ -3,7 +3,6 @@ contrast.properties
 
 # Build output
 target/
-tools/__pycache__/
 
 # IDE
 .idea/
