@@ -1,4 +1,4 @@
-package com.contrastsecurity.quantum;
+package com.contrastsecurity.bomsquad;
 
 import java.util.HashMap;
 import java.util.Map;

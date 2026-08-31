@@ -1,4 +1,4 @@
-# Quantum
+# BOM Squad
 
 Generate [CycloneDX](https://cyclonedx.org/) Bills of Materials from Contrast Security runtime observability data:
 
@@ -52,10 +52,10 @@ contrast.api_key=your-api-key
 mvn clean package
 
 # CBOM
-java -jar target/quantum-1.0-SNAPSHOT.jar cbom
+java -jar target/bom-squad-1.0-SNAPSHOT.jar cbom
 
 # AI-BOM
-java -jar target/quantum-1.0-SNAPSHOT.jar aibom
+java -jar target/bom-squad-1.0-SNAPSHOT.jar aibom
 ```
 
 ## Usage
@@ -66,26 +66,26 @@ A single jar with two subcommands, `cbom` and `aibom`, taking the same set of fl
 
 ```bash
 # Generate CBOM for all apps
-java -jar quantum.jar cbom
+java -jar bom-squad.jar cbom
 
 # List available applications
-java -jar quantum.jar cbom --list
+java -jar bom-squad.jar cbom --list
 
 # Generate CBOM for specific app (by name or ID)
-java -jar quantum.jar cbom --app "MyApp"
-java -jar quantum.jar cbom --app 7136cb1b-f846-4c1d-bdd3-77b448cbd2fe
+java -jar bom-squad.jar cbom --app "MyApp"
+java -jar bom-squad.jar cbom --app 7136cb1b-f846-4c1d-bdd3-77b448cbd2fe
 
 # Filter by environment
-java -jar quantum.jar cbom --env PRODUCTION
+java -jar bom-squad.jar cbom --env PRODUCTION
 
 # Combine filters
-java -jar quantum.jar cbom --app "MyApp" --env PRODUCTION -o myapp-prod.json
+java -jar bom-squad.jar cbom --app "MyApp" --env PRODUCTION -o myapp-prod.json
 
 # Use custom config file
-java -jar quantum.jar cbom -c /path/to/config.properties
+java -jar bom-squad.jar cbom -c /path/to/config.properties
 
 # Generate CBOM + AI-powered Quantum Advisor risk report
-java -jar quantum.jar cbom --analyze
+java -jar bom-squad.jar cbom --analyze
 ```
 
 ### AI-BOM (AI/LLM usage)
@@ -93,10 +93,10 @@ java -jar quantum.jar cbom --analyze
 Same flags, `aibom` subcommand:
 
 ```bash
-java -jar quantum.jar aibom
-java -jar quantum.jar aibom --list
-java -jar quantum.jar aibom --app "MyApp" --env PRODUCTION
-java -jar quantum.jar aibom --analyze
+java -jar bom-squad.jar aibom
+java -jar bom-squad.jar aibom --list
+java -jar bom-squad.jar aibom --app "MyApp" --env PRODUCTION
+java -jar bom-squad.jar aibom --analyze
 ```
 
 ### Re-running an advisor against an existing BOM
@@ -105,10 +105,10 @@ java -jar quantum.jar aibom --analyze
 
 ```bash
 # Crypto / post-quantum risk report
-java -jar quantum.jar cbom-advisor cbom.json -o report.md
+java -jar bom-squad.jar cbom-advisor cbom.json -o report.md
 
 # AI usage inventory / governance risk report
-java -jar quantum.jar aibom-advisor aibom.json -o report.md
+java -jar bom-squad.jar aibom-advisor aibom.json -o report.md
 ```
 
 Everything - BOM generation and AI analysis - runs in a single JVM process. The advisors shell out to the `claude` CLI already logged in to this shell (no separate API key or AWS/Bedrock credentials needed, and no Python required) - just make sure `claude` is on your `PATH` and authenticated.
@@ -174,7 +174,7 @@ Two sample AI-BOM files are included to try it with:
 mvn clean package
 ```
 
-Creates `target/quantum-1.0-SNAPSHOT.jar` (executable uber-jar; `Main` dispatches to `cbom`/`aibom` based on the first argument).
+Creates `target/bom-squad-1.0-SNAPSHOT.jar` (executable uber-jar; `Main` dispatches to `cbom`/`aibom` based on the first argument).
 
 ## Configuration
 

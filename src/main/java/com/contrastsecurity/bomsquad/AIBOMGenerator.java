@@ -1,4 +1,4 @@
-package com.contrastsecurity.quantum;
+package com.contrastsecurity.bomsquad;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,11 +44,11 @@ import com.google.gson.JsonObject;
  * Generates a CycloneDX AI-BOM (AI/ML usage inventory) from Contrast API observations.
  *
  * Usage:
- *   java -jar quantum.jar aibom                # Fetch all apps, output aibom.json
- *   java -jar quantum.jar aibom --app "AppName" # Fetch single app
- *   java -jar quantum.jar aibom --list          # List available applications
- *   java -jar quantum.jar aibom -o custom.json  # Custom output filename
- *   java -jar quantum.jar aibom -c config.properties
+ *   java -jar bom-squad.jar aibom                # Fetch all apps, output aibom.json
+ *   java -jar bom-squad.jar aibom --app "AppName" # Fetch single app
+ *   java -jar bom-squad.jar aibom --list          # List available applications
+ *   java -jar bom-squad.jar aibom -o custom.json  # Custom output filename
+ *   java -jar bom-squad.jar aibom -c config.properties
  *
  * Config file (contrast.properties):
  *   contrast.url=https://your-instance.contrastsecurity.com/api/ns-ui/v1
@@ -175,13 +175,13 @@ public class AIBOMGenerator {
     private static void printUsage() {
         System.out.println("\nAI-BOM Generator - Create CycloneDX AI-BOM from Contrast AI usage observations");
         System.out.println("\nUsage:");
-        System.out.println("  java -jar quantum.jar aibom                   Generate AI-BOM for all apps");
-        System.out.println("  java -jar quantum.jar aibom --app <id|name>   Filter by app (ID or name)");
-        System.out.println("  java -jar quantum.jar aibom --env <tier>      Filter by environment (PRODUCTION, DEVELOPMENT, QA)");
-        System.out.println("  java -jar quantum.jar aibom --list            List available applications with IDs");
-        System.out.println("  java -jar quantum.jar aibom --analyze         Run AI Advisor analysis after AI-BOM generation");
-        System.out.println("  java -jar quantum.jar aibom -o <file.json>    Specify output filename");
-        System.out.println("  java -jar quantum.jar aibom -c <config.properties>  Use custom config file");
+        System.out.println("  java -jar bom-squad.jar aibom                   Generate AI-BOM for all apps");
+        System.out.println("  java -jar bom-squad.jar aibom --app <id|name>   Filter by app (ID or name)");
+        System.out.println("  java -jar bom-squad.jar aibom --env <tier>      Filter by environment (PRODUCTION, DEVELOPMENT, QA)");
+        System.out.println("  java -jar bom-squad.jar aibom --list            List available applications with IDs");
+        System.out.println("  java -jar bom-squad.jar aibom --analyze         Run AI Advisor analysis after AI-BOM generation");
+        System.out.println("  java -jar bom-squad.jar aibom -o <file.json>    Specify output filename");
+        System.out.println("  java -jar bom-squad.jar aibom -c <config.properties>  Use custom config file");
         System.out.println("\nConfig file (contrast.properties):");
         System.out.println("  contrast.url=https://eval.contrastsecurity.com/api/ns-ui/v1");
         System.out.println("  contrast.org_id=your-org-id");

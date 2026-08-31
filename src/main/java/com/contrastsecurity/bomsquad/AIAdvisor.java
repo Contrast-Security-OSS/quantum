@@ -1,4 +1,4 @@
-package com.contrastsecurity.quantum;
+package com.contrastsecurity.bomsquad;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -27,7 +27,7 @@ import com.google.gson.JsonObject;
  * level): for each app, describes what it appears to be, then lists how it uses AI.
  *
  * Usage:
- *   java -jar quantum.jar aibom-advisor aibom.json [-v] [-o report.md] [--json out.json] [--no-confirm]
+ *   java -jar bom-squad.jar aibom-advisor aibom.json [-v] [-o report.md] [--json out.json] [--no-confirm]
  */
 public class AIAdvisor {
 
@@ -114,7 +114,7 @@ public class AIAdvisor {
             else if (a.equals("--json") && i + 1 < args.length) jsonOut = args[++i];
             else if (a.equals("--no-confirm")) noConfirm = true;
             else if (a.equals("-h") || a.equals("--help")) {
-                System.out.println("Usage: java -jar quantum.jar aibom-advisor <aibom.json> [-v] [-o report.md] [--json out.json] [--no-confirm]");
+                System.out.println("Usage: java -jar bom-squad.jar aibom-advisor <aibom.json> [-v] [-o report.md] [--json out.json] [--no-confirm]");
                 return;
             } else if (!a.startsWith("-")) {
                 aibomPath = a;
