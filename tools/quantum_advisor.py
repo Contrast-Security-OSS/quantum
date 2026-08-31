@@ -15,6 +15,7 @@ import argparse
 import json
 import sys
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional
 from ai_client import AIClient, Colors, confirm_cost
 
@@ -305,28 +306,86 @@ def generate_app_descriptions(client: AIClient, apps: dict[str, AppMetadata], ve
     return descriptions
 
 
-def write_descriptions_to_bom(bom_path: str, descriptions: dict[str, str]) -> int:
-    """Write generated application descriptions back into the CBOM's own application
-    components (CycloneDX's standard Component.description field), so the BOM is
-    self-describing for anyone who consumes the JSON directly. Returns the count written."""
+RISK_SEVERITY_ORDER = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'NOT_QUANTUM_ISSUE', 'UNKNOWN', 'ERROR']
+
+
+def _risk_rank(risk_level: str) -> int:
+    return RISK_SEVERITY_ORDER.index(risk_level) if risk_level in RISK_SEVERITY_ORDER else len(RISK_SEVERITY_ORDER)
+
+
+def enrich_bom(bom_path: str, descriptions: dict[str, str], results: list[dict]) -> tuple[int, int]:
+    """Write the advisor's findings back into the CBOM itself:
+    - application component descriptions (CycloneDX's standard Component.description)
+    - quantum:* risk properties on each cryptographic-asset component, rolled up from
+      the worst-risk occurrence analyzed for that algorithm (same property names
+      quantum_enhance.py used to write, so this supersedes running that separately)
+
+    This makes the CBOM self-describing for anyone who consumes the JSON directly,
+    not just the markdown report. Returns (apps_described, algorithms_annotated)."""
     with open(bom_path, 'r') as f:
         bom = json.load(f)
 
-    written = 0
+    findings_by_algorithm: dict[str, list[dict]] = {}
+    for r in results:
+        findings_by_algorithm.setdefault(r.get('algorithm', ''), []).append(r)
+
+    apps_described = 0
+    algorithms_annotated = 0
+
     for component in bom.get('components', []):
         bom_ref = component.get('bom-ref', '')
-        if component.get('type') != 'application' or not bom_ref.startswith('app-'):
-            continue
-        description = descriptions.get(component.get('name', ''))
-        if description:
-            component['description'] = description
-            written += 1
 
-    if written:
+        if component.get('type') == 'application' and bom_ref.startswith('app-'):
+            description = descriptions.get(component.get('name', ''))
+            if description:
+                component['description'] = description
+                apps_described += 1
+            continue
+
+        if component.get('type') != 'cryptographic-asset':
+            continue
+
+        findings = findings_by_algorithm.get(component.get('name', ''))
+        if not findings:
+            continue
+
+        worst = min(findings, key=lambda r: _risk_rank(r.get('risk_level', 'UNKNOWN')))
+
+        quantum_props = [
+            ('quantum:riskLevel', worst.get('risk_level', 'UNKNOWN')),
+            ('quantum:title', worst.get('title', '')),
+            ('quantum:usageSummary', worst.get('usage_summary', '')),
+            ('quantum:dataSensitivity', worst.get('data_sensitivity', '')),
+            ('quantum:dataLifetime', worst.get('data_lifetime', '')),
+            ('quantum:codeSource', worst.get('code_source', '')),
+            ('quantum:sourcePackage', worst.get('source_package', '')),
+            ('quantum:remediationOwner', worst.get('remediation_owner', '')),
+            ('quantum:quantumThreat', worst.get('quantum_threat', '')),
+            ('quantum:recommendation', worst.get('recommendation', '')),
+            ('quantum:migrationNotes', worst.get('migration_notes', '')),
+            ('quantum:findingsAnalyzed', str(len(findings))),
+        ]
+
+        # Drop any stale quantum:* properties from a previous run before re-adding,
+        # so repeated runs don't accumulate duplicates.
+        props = [p for p in component.get('properties', []) if not p.get('name', '').startswith('quantum:')]
+        for name, value in quantum_props:
+            if value:
+                props.append({'name': name, 'value': str(value)})
+        component['properties'] = props
+        algorithms_annotated += 1
+
+    if apps_described or algorithms_annotated:
+        meta_props = [p for p in bom.get('metadata', {}).get('properties', [])
+                      if not p.get('name', '').startswith('quantum:')]
+        meta_props.append({'name': 'quantum:enhancedAt', 'value': datetime.now().isoformat()})
+        meta_props.append({'name': 'quantum:enhancedBy', 'value': 'Contrast Quantum Advisor'})
+        bom.setdefault('metadata', {})['properties'] = meta_props
+
         with open(bom_path, 'w') as f:
             json.dump(bom, f, indent=2)
 
-    return written
+    return apps_described, algorithms_annotated
 
 
 def analyze_occurrence(client: AIClient, occ: CryptoOccurrence, verbose: bool = False) -> dict:
@@ -559,7 +618,6 @@ def generate_html_report(markdown_content: str) -> str:
 def generate_report(results: list[dict], metadata: dict, app_metadata: dict[str, AppMetadata],
                      app_descriptions: dict[str, str]) -> str:
     """Generate a professional task-oriented markdown report."""
-    from datetime import datetime
 
     report_date = datetime.now().strftime("%B %d, %Y")
     source_name = metadata.get('component', {}).get('name', 'Unknown')
@@ -949,9 +1007,6 @@ def main():
     if apps_in_scope:
         print(f"\n{Colors.BLUE}Describing {len(apps_in_scope)} applications...{Colors.NC}")
         app_descriptions = generate_app_descriptions(client, apps_in_scope, args.verbose)
-        written = write_descriptions_to_bom(args.cbom, app_descriptions)
-        if written:
-            print(f"  Wrote {written} application description(s) back into {args.cbom}")
 
     # Analyze each occurrence
     print(f"\n{Colors.BLUE}Analyzing {len(occurrences)} cryptographic usages...{Colors.NC}")
@@ -980,6 +1035,12 @@ def main():
                 "title": f"{occ.algorithm} in {occ.application}",
                 "recommendation": str(e)
             })
+
+    # Write descriptions and quantum:* risk properties back into the CBOM itself
+    apps_described, algorithms_annotated = enrich_bom(args.cbom, app_descriptions, results)
+    if apps_described or algorithms_annotated:
+        print(f"  Enriched {args.cbom}: {apps_described} application description(s), "
+              f"{algorithms_annotated} algorithm(s) annotated with quantum:* properties")
 
     # Generate report
     report = generate_report(results, metadata, app_metadata, app_descriptions)
