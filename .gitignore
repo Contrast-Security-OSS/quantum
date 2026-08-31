@@ -20,10 +20,6 @@ CLAUDE.md
 *.csv
 cbom*.json
 
-# Python
-__pycache__/
-*.pyc
-
 # Shell scripts (may contain credentials)
 *.sh
 
