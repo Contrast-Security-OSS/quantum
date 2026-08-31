@@ -211,9 +211,9 @@ public class CBOMGenerator {
      * post-quantum cryptography readiness report, in-process (no Python required).
      */
     private void runQuantumAdvisor(String cbomFile) {
-        System.out.println("\n" + "============================================================");
+        System.out.println("\n" + "=".repeat(60));
         System.out.println("Running Quantum Advisor Analysis...");
-        System.out.println("============================================================");
+        System.out.println("=".repeat(60));
 
         // Determine output filename (replace .json with -advisor.md)
         String advisorOutput = cbomFile.replace(".json", "-advisor.md");

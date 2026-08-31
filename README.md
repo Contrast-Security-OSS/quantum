@@ -7,7 +7,7 @@ Generate [CycloneDX](https://cyclonedx.org/) Bills of Materials from Contrast Se
 
 Both come with an AI-powered advisor report: **Quantum Advisor** (crypto risk) and **AI Advisor** (AI usage risk).
 
-**Requirements:** Java 8+ and Maven to build; the `claude` CLI on your `PATH` and logged in, for the AI analysis. No Python, no separate API key, no AWS/Bedrock credentials. One jar, one command per BOM type.
+**Requirements:** Java 17+ and Maven to build; the `claude` CLI on your `PATH` and logged in, for the AI analysis. No Python, no separate API key, no AWS/Bedrock credentials. One jar, one command per BOM type.
 
 ## Why Contrast for This?
 

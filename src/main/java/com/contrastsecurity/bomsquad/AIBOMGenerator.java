@@ -194,9 +194,9 @@ public class AIBOMGenerator {
      * assessment report, in-process (no Python required).
      */
     private void runAIAdvisor(String aiBomFile) {
-        System.out.println("\n" + "============================================================");
+        System.out.println("\n" + "=".repeat(60));
         System.out.println("Running AI Advisor Analysis...");
-        System.out.println("============================================================");
+        System.out.println("=".repeat(60));
 
         String advisorOutput = aiBomFile.replace(".json", "-advisor.md");
 

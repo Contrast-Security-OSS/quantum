@@ -255,7 +255,7 @@ public class QuantumAdvisor {
             }
             System.out.println("\nReport written to " + output);
         } else {
-            System.out.println("\n" + "============================================================");
+            System.out.println("\n" + "=".repeat(60));
             System.out.println(report);
         }
 

@@ -161,9 +161,9 @@ public class ClaudeClient {
     }
 
     public void printSummary() {
-        System.out.println("\n" + "==================================================");
+        System.out.println("\n" + "=".repeat(50));
         System.out.println("AI Usage Summary");
-        System.out.println("==================================================");
+        System.out.println("=".repeat(50));
         System.out.println("  Calls:         " + totalCalls);
         System.out.println("  Input tokens:  " + totalInputTokens);
         System.out.println("  Output tokens: " + totalOutputTokens);
