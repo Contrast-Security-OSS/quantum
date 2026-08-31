@@ -1,29 +1,37 @@
-# Quantum CBOM Generator
+# Quantum
 
-Generate [CycloneDX CBOM](https://cyclonedx.org/capabilities/cbom/) (Cryptography Bill of Materials) from Contrast Security observability data.
+Generate [CycloneDX](https://cyclonedx.org/) Bills of Materials from Contrast Security runtime observability data:
 
-## Why Contrast for Crypto Inventory?
+- **CBOM** ([Cryptography Bill of Materials](https://cyclonedx.org/capabilities/cbom/)) - every cryptographic algorithm actually observed running, for post-quantum migration planning
+- **AI-BOM** (AI/LLM usage inventory) - every AI model and provider actually observed running, for AI governance and shadow-AI visibility
 
-Contrast provides runtime observability that goes far beyond static code scanning:
+Both come with an AI-powered advisor report: **Quantum Advisor** (crypto risk) and **AI Advisor** (AI usage risk).
 
-- **Full-stack inventory** - Captures crypto usage across your entire application stack at runtime, not just what's visible in source code
-- **Complete algorithm details** - Strength, feedback mode, padding scheme, and OIDs for each algorithm
-- **Usage metrics** - How often each crypto component is actually called in production
-- **Full stack traces** - Understand the context: is this crypto used for passwords, SSL/TLS, tokens, or something else?
-- **Multiple call paths** - See how many different code paths invoke each crypto component
-- **Application dependencies** - Which apps and APIs depend on each crypto component
+## Why Contrast for This?
 
-This runtime visibility is critical for post-quantum migration planning - you need to know not just *what* crypto you have, but *how* it's being used.
+Contrast provides runtime observability that goes far beyond static code scanning or self-reported inventories:
+
+- **Full-stack inventory** - Captures crypto and AI usage across your entire application stack at runtime, not just what's declared in source code or dependency manifests
+- **Complete details** - Algorithm strength/mode/padding/OIDs for crypto; provider/model/endpoint for AI
+- **Usage metrics** - How often each crypto algorithm or AI model is actually called in production
+- **Full stack traces** - Understand the context: is this crypto protecting passwords, SSL/TLS, tokens? Is this AI call generating a chat reply, summarizing a document?
+- **Multiple call paths** - See how many different code paths invoke each algorithm/model
+- **Architecture context** - Each application component is enriched with its language, security posture, and what it's connected to (from the Contrast architecture graph), so the advisor reports can describe what an application actually is, not just what it uses
+- **Application dependencies** - Which apps and APIs depend on each crypto algorithm or AI model
+
+This runtime visibility is critical for post-quantum migration and AI governance planning - you need to know not just *what's* in use, but *how* it's being used and by *what*.
 
 ## Features
 
-- Generates CycloneDX 1.6 compliant CBOM in JSON format
-- Fetches cryptographic algorithm usage from Contrast API
-- Shows which applications use which cryptographic algorithms
-- Includes NIST quantum security levels for post-quantum migration planning
-- Tracks usage counts and unique call locations per algorithm
-- Full stack traces showing crypto usage context
+- Generates CycloneDX 1.6 compliant CBOM and AI-BOM in JSON format
+- Fetches usage data from the Contrast `/observations` API (crypto algorithms and AI/LLM usage share this endpoint, filtered by rule type)
+- Shows which applications use which algorithms/models
+- Application components are enriched with `contrast:*` properties (language, posture score, criticality, open issues, connections) and a deep-link `externalReference` back to the Contrast Explorer UI, both pulled from the `contrast-graph` API
+- Includes NIST quantum security levels for post-quantum migration planning, and cloud-vs-local host classification for AI usage
+- Tracks usage counts and unique call locations per algorithm/model
+- Full stack traces showing usage context
 - Filters by application or environment (PRODUCTION, DEVELOPMENT, QA)
+- `--analyze` runs the matching AI advisor after generation, which writes its generated application descriptions back into the BOM's `Component.description` field
 
 ## Quick Start
 
@@ -36,13 +44,21 @@ contrast.auth_header=base64-encoded-email:service-key
 contrast.api_key=your-api-key
 ```
 
-2. Run:
+2. Build and run:
 
 ```bash
-java -jar quantum-1.0-SNAPSHOT.jar
+mvn clean package
+
+# CBOM
+java -jar target/quantum-1.0-SNAPSHOT.jar
+
+# AI-BOM
+java -cp target/quantum-1.0-SNAPSHOT.jar com.contrastsecurity.quantum.AIBOMGenerator
 ```
 
 ## Usage
+
+### CBOM (crypto)
 
 ```bash
 # Generate CBOM for all apps
@@ -63,37 +79,73 @@ java -jar quantum.jar --app "MyApp" --env PRODUCTION -o myapp-prod.json
 
 # Use custom config file
 java -jar quantum.jar -c /path/to/config.properties
+
+# Generate CBOM + AI-powered Quantum Advisor risk report
+java -jar quantum.jar --analyze
 ```
+
+### AI-BOM (AI/LLM usage)
+
+Same flags, different (currently unshaded) entry point:
+
+```bash
+java -cp quantum.jar com.contrastsecurity.quantum.AIBOMGenerator
+java -cp quantum.jar com.contrastsecurity.quantum.AIBOMGenerator --list
+java -cp quantum.jar com.contrastsecurity.quantum.AIBOMGenerator --app "MyApp" --env PRODUCTION
+java -cp quantum.jar com.contrastsecurity.quantum.AIBOMGenerator --analyze
+```
+
+### Advisor reports directly
+
+```bash
+# Crypto / post-quantum risk report
+python3 tools/quantum_advisor.py cbom.json -o report.md
+
+# AI usage inventory / governance risk report
+python3 tools/ai_advisor.py aibom.json -o report.md
+```
+
+The advisor tools shell out to the `claude` CLI already logged in to this shell (no separate API key or AWS/Bedrock credentials needed) - just make sure `claude` is on your `PATH` and authenticated.
 
 ## Output
 
-The generated CBOM includes:
+### CBOM
 
-- **Application components** with dependencies on crypto algorithms
+- **Application components** with dependencies on crypto algorithms, enriched with `contrast:language`/`postureScore`/`connectedApplications`/etc. and a deep-link `externalReference`
 - **Cryptographic asset components** with:
   - Algorithm properties (primitive, mode, padding)
   - OID (Object Identifier)
   - Classical security level
   - NIST quantum security level (0 = quantum vulnerable)
-  - `contrast:usageCount` - total invocations at runtime
-  - `contrast:uniqueLocations` - number of distinct call paths
-  - Full stack traces showing usage context (passwords, SSL, etc.)
+  - `contrast:usageCount` / `contrast:uniqueLocations`
+  - Full stack traces showing usage context (passwords, SSL, etc.), deduplicated per-application
 
-Example dependency structure:
 ```
 Contrast Crypto Inventory
 ├── app-frontend → SHA-256, AES/GCM
 └── app-backend → SHA-256, MD5 (quantum vulnerable), RSA
 ```
 
-### CBOM Properties
+### AI-BOM
 
-| Property | Description |
-|----------|-------------|
-| `contrast:usageCount` | Total number of times this algorithm was invoked at runtime |
-| `contrast:uniqueLocations` | Number of distinct code paths that use this algorithm |
+- **Application components**, enriched the same way as the CBOM's
+- **`machine-learning-model` components** (one per provider/model observed) with:
+  - `contrast:provider` / `contrast:endpoint` / `contrast:hostCategory` (`cloud`, `local`, or `unknown`)
+  - `contrast:usageCount` / `contrast:uniqueLocations`
+  - Full stack traces, deduplicated per-application
 
-These metrics help prioritize migration efforts - a crypto algorithm called millions of times across dozens of code paths needs more attention than one used once during startup.
+```
+Contrast AI Usage Inventory
+├── app-aiservice → openai/gpt-4o (cloud)
+└── app-reportservice → openai/smollm2:135m-tuned (local, via Ollama)
+```
+
+### Advisor reports
+
+- **Quantum Advisor** - findings grouped by risk level (CRITICAL/HIGH/MEDIUM/LOW/NOT_QUANTUM_ISSUE), with an "Application Context" section describing each app from its architecture graph data
+- **AI Advisor** - organized as an inventory of AI-enabled applications (one section per app, not per finding): an AI-generated description of what the app does, then each AI usage instance with model/provider/endpoint and a description of what that specific call is doing, inferred from the key methods around it in the stack trace
+
+Both advisors write their generated application descriptions back into the source BOM's `Component.description` field, so the BOM itself stays self-describing even without the report.
 
 ## Building
 
@@ -101,7 +153,7 @@ These metrics help prioritize migration efforts - a crypto algorithm called mill
 mvn clean package
 ```
 
-Creates `target/quantum-1.0-SNAPSHOT.jar` (executable uber-jar).
+Creates `target/quantum-1.0-SNAPSHOT.jar` (executable uber-jar, default entry point is `CBOMGenerator`; run `AIBOMGenerator` via `-cp`).
 
 ## Configuration
 
@@ -114,10 +166,10 @@ Creates `target/quantum-1.0-SNAPSHOT.jar` (executable uber-jar).
 
 ## Algorithm Analysis
 
-The tool automatically parses algorithm strings (e.g., `AES/GCM/NoPadding`) and extracts:
+The tool automatically parses algorithm strings straight from the JCA `Cipher`/`MessageDigest`/etc. constructor (e.g., `AES/GCM/NoPadding`, `RSA/ECB/OAEPWithSHA-256AndMGF1Padding`, `PBEWithMD5AndDES`) and extracts:
 
-- Algorithm family (AES, RSA, SHA, etc.)
-- Mode (GCM, CBC, ECB, etc.)
+- Algorithm family (AES, RSA, SHA, DES/3DES, PBE, etc.)
+- Mode (GCM, CBC, ECB, CTR, etc.) - omitted for asymmetric algorithms, where a "mode" segment in the transformation string is a JCA naming artifact, not a real cryptographic mode
 - Padding scheme
 - Key size
 - Cryptographic primitive type
@@ -126,7 +178,7 @@ The tool automatically parses algorithm strings (e.g., `AES/GCM/NoPadding`) and 
 ### Quantum Vulnerability
 
 Algorithms are classified by NIST quantum security level:
-- **Level 0**: Quantum vulnerable (RSA, ECDSA, ECDH, etc.)
+- **Level 0**: Quantum vulnerable (RSA, ECDSA, ECDH, etc.) - also used as a catch-all for classically-broken algorithms (MD5, SHA-1, DES) that the advisor then re-classifies as `NOT_QUANTUM_ISSUE`
 - **Level 1-5**: Quantum resistant (AES-128+, SHA-256+, ML-KEM, ML-DSA, etc.)
 
 ## License

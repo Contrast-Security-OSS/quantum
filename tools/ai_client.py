@@ -2,6 +2,10 @@
 """
 ai_client.py: Centralized AI client with token tracking and cost estimation.
 
+Shells out to the `claude` CLI (Claude Code) in non-interactive print mode, using
+whatever Claude access is already logged in to this shell (subscription or API key) -
+no separate AWS/Bedrock credentials required.
+
 Provides a single interface for all AI calls with:
 - Token usage tracking (input/output)
 - Cost estimation and logging
@@ -26,38 +30,31 @@ Usage:
     print(client.get_summary())
 """
 
-import boto3
 import json
+import subprocess
 import time
 import random
 import threading
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Optional
 
 
-# Pricing per 1M tokens (as of Jan 2025)
-# https://aws.amazon.com/bedrock/pricing/
+# Rough per-1M-token pricing, used only for the pre-task cost estimate shown to the
+# user before running. Actual cost per call comes from the `claude` CLI's own
+# reported total_cost_usd, which may be $0 if covered by a subscription plan.
 MODEL_PRICING = {
-    # Claude 3.5 Sonnet
-    "anthropic.claude-3-5-sonnet-20241022-v2:0": {"input": 3.00, "output": 15.00},
-    "us.anthropic.claude-3-5-sonnet-20241022-v2:0": {"input": 3.00, "output": 15.00},
-    # Claude 3.5 Sonnet v1
-    "anthropic.claude-3-5-sonnet-20240620-v1:0": {"input": 3.00, "output": 15.00},
-    # Claude Sonnet 4
-    "us.anthropic.claude-sonnet-4-20250514-v1:0": {"input": 3.00, "output": 15.00},
-    "anthropic.claude-sonnet-4-20250514-v1:0": {"input": 3.00, "output": 15.00},
-    # Claude 3 Haiku (cheap)
-    "anthropic.claude-3-haiku-20240307-v1:0": {"input": 0.25, "output": 1.25},
-    # Default fallback
     "default": {"input": 3.00, "output": 15.00}
 }
 
 
 @dataclass
 class TokenUsage:
-    """Track token usage for a single call."""
+    """Track token usage and actual reported cost for a single call."""
     input_tokens: int = 0
     output_tokens: int = 0
+    cache_read_tokens: int = 0
+    cache_creation_tokens: int = 0
+    cost_usd: float = 0.0
     model: str = ""
 
     @property
@@ -65,11 +62,8 @@ class TokenUsage:
         return self.input_tokens + self.output_tokens
 
     def cost(self) -> float:
-        """Calculate cost in USD."""
-        pricing = MODEL_PRICING.get(self.model, MODEL_PRICING["default"])
-        input_cost = (self.input_tokens / 1_000_000) * pricing["input"]
-        output_cost = (self.output_tokens / 1_000_000) * pricing["output"]
-        return input_cost + output_cost
+        """Actual cost in USD as reported by the claude CLI for this call."""
+        return self.cost_usd
 
 
 @dataclass
@@ -100,29 +94,19 @@ class Colors:
 
 
 class AIClient:
-    """Centralized AI client with token tracking."""
+    """Centralized AI client that shells out to the `claude` CLI."""
 
     def __init__(
         self,
-        model: str = "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-        region: str = "us-east-2",
-        profile: str = "architecture",
-        max_retries: int = 5
+        model: Optional[str] = None,
+        max_retries: int = 5,
+        timeout_seconds: int = 180
     ):
+        # model=None uses whatever default model this shell's `claude` is configured for.
         self.model = model
-        self.region = region
-        self.profile = profile
         self.max_retries = max_retries
+        self.timeout_seconds = timeout_seconds
         self.stats = SessionStats()
-        self._client = None
-
-    @property
-    def client(self):
-        """Lazy-load Bedrock client."""
-        if self._client is None:
-            session = boto3.Session(profile_name=self.profile, region_name=self.region)
-            self._client = session.client("bedrock-runtime")
-        return self._client
 
     def estimate_cost(
         self,
@@ -130,7 +114,10 @@ class AIClient:
         avg_input_tokens: int = 2000,
         avg_output_tokens: int = 500
     ) -> float:
-        """Estimate cost for a batch of AI calls.
+        """Rough pre-task cost estimate for a batch of AI calls.
+
+        This is a ballpark figure only - actual cost (which may be $0 under a
+        subscription plan) is tracked per-call from the claude CLI's own reporting.
 
         Args:
             num_items: Number of items to process
@@ -140,7 +127,7 @@ class AIClient:
         Returns:
             Estimated cost in USD
         """
-        pricing = MODEL_PRICING.get(self.model, MODEL_PRICING["default"])
+        pricing = MODEL_PRICING["default"]
         total_input = num_items * avg_input_tokens
         total_output = num_items * avg_output_tokens
 
@@ -156,67 +143,71 @@ class AIClient:
         max_tokens: int = 4096,
         temperature: float = 0.0
     ) -> tuple[str, TokenUsage]:
-        """Make an AI call with token tracking.
+        """Make an AI call via the `claude` CLI, with token tracking.
 
         Args:
             prompt: The system/instruction prompt
-            content: Additional content to process
-            max_tokens: Maximum output tokens
-            temperature: Model temperature
+            content: Additional content to process (the user turn)
+            max_tokens: Unused (the claude CLI does not expose a max-tokens flag) -
+                kept for API compatibility with callers.
+            temperature: Unused for the same reason.
 
         Returns:
             Tuple of (response_text, token_usage)
         """
-        full_prompt = prompt
-        if content:
-            full_prompt = f"{prompt}\n\n---\n\n{content}"
+        cmd = [
+            "claude", "-p",
+            "--system-prompt", prompt,
+            "--disallowed-tools", "*",
+            "--output-format", "json",
+        ]
+        if self.model:
+            cmd += ["--model", self.model]
+        cmd.append(content if content else prompt)
 
-        usage = TokenUsage(model=self.model)
+        last_error: Optional[Exception] = None
 
         for attempt in range(self.max_retries):
             try:
-                response = self.client.converse(
-                    modelId=self.model,
-                    messages=[
-                        {
-                            "role": "user",
-                            "content": [{"text": full_prompt}]
-                        }
-                    ],
-                    inferenceConfig={
-                        "maxTokens": max_tokens,
-                        "temperature": temperature
-                    }
+                proc = subprocess.run(
+                    cmd,
+                    capture_output=True,
+                    text=True,
+                    timeout=self.timeout_seconds,
                 )
 
-                # Extract token usage from response
-                response_usage = response.get('usage', {})
-                usage.input_tokens = response_usage.get('inputTokens', 0)
-                usage.output_tokens = response_usage.get('outputTokens', 0)
+                if proc.returncode != 0:
+                    raise RuntimeError(f"claude CLI exited {proc.returncode}: {proc.stderr.strip()[:500]}")
 
-                # Track in session stats
+                data = json.loads(proc.stdout)
+
+                if data.get("is_error"):
+                    raise RuntimeError(f"claude CLI error: {str(data.get('result'))[:500]}")
+
+                usage_data = data.get("usage", {})
+                usage = TokenUsage(
+                    input_tokens=usage_data.get("input_tokens", 0),
+                    output_tokens=usage_data.get("output_tokens", 0),
+                    cache_read_tokens=usage_data.get("cache_read_input_tokens", 0),
+                    cache_creation_tokens=usage_data.get("cache_creation_input_tokens", 0),
+                    cost_usd=data.get("total_cost_usd", 0.0),
+                    model=self.model or "default",
+                )
                 self.stats.add(usage)
 
-                # Extract text from response
-                output = response.get('output', {})
-                message = output.get('message', {})
-                content_list = message.get('content', [])
+                return data.get("result", ""), usage
 
-                if content_list and 'text' in content_list[0]:
-                    return content_list[0]['text'], usage
-                return str(response), usage
-
-            except Exception as e:
-                if 'throttl' in str(e).lower() or 'rate' in str(e).lower():
+            except (subprocess.TimeoutExpired, RuntimeError, json.JSONDecodeError) as e:
+                last_error = e
+                message = str(e).lower()
+                if 'throttl' in message or 'rate' in message or 'overload' in message or isinstance(e, subprocess.TimeoutExpired):
                     if attempt < self.max_retries - 1:
                         wait_time = (2 ** attempt) + random.random()
                         time.sleep(wait_time)
-                    else:
-                        raise
-                else:
-                    raise
+                        continue
+                raise
 
-        raise Exception("Max retries exceeded")
+        raise last_error or Exception("Max retries exceeded")
 
     def get_summary(self) -> str:
         """Get a summary of token usage and costs."""
@@ -261,8 +252,7 @@ def confirm_cost(estimated_cost: float, num_items: int, threshold: float = 0.50)
 
     print(f"\n{Colors.YELLOW}[COST ESTIMATE]{Colors.NC}")
     print(f"  Items to process: {num_items}")
-    print(f"  Estimated cost:   ${estimated_cost:.2f}")
-    print(f"  Model:            Claude Sonnet 4")
+    print(f"  Estimated cost:   ${estimated_cost:.2f} (ballpark - actual may be $0 under a subscription plan)")
 
     while True:
         choice = input(f"\nProceed? [y/n]: ").strip().lower()
@@ -311,11 +301,4 @@ def print_global_summary():
 if __name__ == "__main__":
     # Quick test
     print("AI Client module loaded successfully")
-
-    # Show pricing info
-    print("\nModel Pricing (per 1M tokens):")
-    for model, pricing in MODEL_PRICING.items():
-        if model != "default":
-            print(f"  {model}:")
-            print(f"    Input:  ${pricing['input']:.2f}")
-            print(f"    Output: ${pricing['output']:.2f}")
+    print("\nUses the `claude` CLI already logged in to this shell - no AWS/Bedrock credentials needed.")
