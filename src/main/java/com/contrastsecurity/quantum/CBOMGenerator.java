@@ -207,8 +207,8 @@ public class CBOMGenerator {
     }
 
     /**
-     * Run the Quantum Advisor Python tool to analyze the CBOM and generate an AI-powered
-     * post-quantum cryptography readiness report.
+     * Run the Quantum Advisor to analyze the CBOM and generate an AI-powered
+     * post-quantum cryptography readiness report, in-process (no Python required).
      */
     private void runQuantumAdvisor(String cbomFile) {
         System.out.println("\n" + "=".repeat(60));
@@ -218,34 +218,8 @@ public class CBOMGenerator {
         // Determine output filename (replace .json with -advisor.md)
         String advisorOutput = cbomFile.replace(".json", "-advisor.md");
 
-        try {
-            // Build the command
-            ProcessBuilder pb = new ProcessBuilder(
-                "python3",
-                "tools/quantum_advisor.py",
-                cbomFile,
-                "--no-confirm",
-                "-o", advisorOutput
-            );
-
-            pb.inheritIO(); // Show output in real-time
-            pb.directory(new File(System.getProperty("user.dir")));
-
-            Process process = pb.start();
-            int exitCode = process.waitFor();
-
-            if (exitCode == 0) {
-                System.out.println("\nQuantum Advisor report written to: " + advisorOutput);
-            } else {
-                System.err.println("\nQuantum Advisor exited with code: " + exitCode);
-            }
-        } catch (IOException e) {
-            System.err.println("\nFailed to run Quantum Advisor: " + e.getMessage());
-            System.err.println("Make sure Python 3 is installed and tools/quantum_advisor.py exists");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("\nQuantum Advisor was interrupted");
-        }
+        QuantumAdvisor.main(new String[]{cbomFile, "--no-confirm", "-o", advisorOutput});
+        System.out.println("\nQuantum Advisor report written to: " + advisorOutput);
     }
 
     // Track raw counts per algorithm before deduplication

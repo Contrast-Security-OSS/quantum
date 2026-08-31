@@ -28,6 +28,12 @@ public class Main {
             case "aibom":
                 AIBOMGenerator.main(rest);
                 break;
+            case "cbom-advisor":
+                QuantumAdvisor.main(rest);
+                break;
+            case "aibom-advisor":
+                AIAdvisor.main(rest);
+                break;
             case "--help":
             case "-h":
                 printUsage();
@@ -42,8 +48,12 @@ public class Main {
     private static void printUsage() {
         System.out.println("\nQuantum - Contrast Security Bill of Materials generator");
         System.out.println("\nUsage:");
-        System.out.println("  java -jar quantum.jar cbom [options]     Generate a Cryptography Bill of Materials");
-        System.out.println("  java -jar quantum.jar aibom [options]    Generate an AI/LLM usage Bill of Materials");
+        System.out.println("  java -jar quantum.jar cbom [options]              Generate a Cryptography Bill of Materials");
+        System.out.println("  java -jar quantum.jar aibom [options]             Generate an AI/LLM usage Bill of Materials");
+        System.out.println("  java -jar quantum.jar cbom-advisor <cbom.json>    Re-run the Quantum Advisor against an existing CBOM");
+        System.out.println("  java -jar quantum.jar aibom-advisor <aibom.json>  Re-run the AI Advisor against an existing AI-BOM");
+        System.out.println("\n`cbom --analyze` / `aibom --analyze` already run the matching advisor automatically after generation -");
+        System.out.println("the standalone cbom-advisor/aibom-advisor commands are for re-running the advisor without regenerating the BOM.");
         System.out.println("\nRun with -h after a subcommand for its options, e.g.:");
         System.out.println("  java -jar quantum.jar cbom -h");
         System.out.println("  java -jar quantum.jar aibom -h");

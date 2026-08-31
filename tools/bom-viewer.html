@@ -434,7 +434,7 @@
             }
 
             // Build per-app AI usage instances (one per model dependency, filtered to
-            // evidence occurrences belonging to that app - mirrors ai_advisor.py's parsing)
+            // evidence occurrences belonging to that app - mirrors AIAdvisor.java's parsing)
             const appUsages = appComponents.map(app => {
                 const modelRefs = getDependsOn(bom, app['bom-ref']);
                 const usages = [];
@@ -535,6 +535,10 @@
                     const host = props['contrast:hostCategory'] || 'unknown';
                     const provider = model.publisher || props['contrast:provider'] || 'unknown';
                     const usageCount = parseInt(props['contrast:usageCount'] || 0);
+                    // contrast:uniqueLocations on the model component is a global count
+                    // across every app that uses it - reachability for this app is the
+                    // number of its own matching evidence occurrences instead.
+                    const reachability = occurrences.length;
 
                     html += `
                         <div class="finding">
@@ -543,20 +547,14 @@
                                 <span class="finding-title"><code>${escapeHtml(model.name)}</code> (${escapeHtml(provider)})</span>
                             </div>
                             <table>
+                                <tr><th>Model</th><td><code>${escapeHtml(model.name)}</code></td></tr>
+                                <tr><th>Provider</th><td>${escapeHtml(provider)}</td></tr>
                                 <tr><th>Endpoint</th><td><code>${escapeHtml(props['contrast:endpoint'] || 'unknown')}</code></td></tr>
                                 <tr><th>Host Category</th><td>${escapeHtml(host)}</td></tr>
-                                <tr><th>Usage Count</th><td>${usageCount.toLocaleString()} invocations</td></tr>
-                                <tr><th>Unique Locations</th><td>${escapeHtml(props['contrast:uniqueLocations'] || '1')} code path(s)</td></tr>
+                                <tr><th>Usage Count (model-wide)</th><td>${usageCount.toLocaleString()} invocations across all apps using this model</td></tr>
+                                <tr><th>Reachability (this app)</th><td>${reachability} code path(s) in this application</td></tr>
                             </table>
                     `;
-
-                    for (const occ of occurrences) {
-                        const ctx = occ.additionalContext || '';
-                        const stackMatch = ctx.match(/Stack Trace:\n?([\s\S]*)/);
-                        if (stackMatch) {
-                            html += `<p><strong>Stack Trace:</strong></p><pre class="stack-trace">${escapeHtml(stackMatch[1].trim())}</pre>`;
-                        }
-                    }
 
                     html += `</div>`;
                 }

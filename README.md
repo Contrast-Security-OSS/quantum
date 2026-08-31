@@ -7,6 +7,8 @@ Generate [CycloneDX](https://cyclonedx.org/) Bills of Materials from Contrast Se
 
 Both come with an AI-powered advisor report: **Quantum Advisor** (crypto risk) and **AI Advisor** (AI usage risk).
 
+**Requirements:** Java 8+ and Maven to build; the `claude` CLI on your `PATH` and logged in, for the AI analysis. No Python, no separate API key, no AWS/Bedrock credentials. One jar, one command per BOM type.
+
 ## Why Contrast for This?
 
 Contrast provides runtime observability that goes far beyond static code scanning or self-reported inventories:
@@ -97,17 +99,19 @@ java -jar quantum.jar aibom --app "MyApp" --env PRODUCTION
 java -jar quantum.jar aibom --analyze
 ```
 
-### Advisor reports directly
+### Re-running an advisor against an existing BOM
+
+`cbom --analyze` / `aibom --analyze` already run the matching advisor automatically after generation. To re-run the advisor against a BOM you already have (without regenerating it), use the standalone subcommands:
 
 ```bash
 # Crypto / post-quantum risk report
-python3 tools/quantum_advisor.py cbom.json -o report.md
+java -jar quantum.jar cbom-advisor cbom.json -o report.md
 
 # AI usage inventory / governance risk report
-python3 tools/ai_advisor.py aibom.json -o report.md
+java -jar quantum.jar aibom-advisor aibom.json -o report.md
 ```
 
-The advisor tools shell out to the `claude` CLI already logged in to this shell (no separate API key or AWS/Bedrock credentials needed) - just make sure `claude` is on your `PATH` and authenticated.
+Everything - BOM generation and AI analysis - runs in a single JVM process. The advisors shell out to the `claude` CLI already logged in to this shell (no separate API key or AWS/Bedrock credentials needed, and no Python required) - just make sure `claude` is on your `PATH` and authenticated.
 
 ## Output
 

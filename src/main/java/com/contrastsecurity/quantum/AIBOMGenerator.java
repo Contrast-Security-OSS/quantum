@@ -190,8 +190,8 @@ public class AIBOMGenerator {
     }
 
     /**
-     * Run the AI Advisor Python tool to analyze the AI-BOM and generate an AI-usage
-     * risk assessment report.
+     * Run the AI Advisor to analyze the AI-BOM and generate an AI-usage risk
+     * assessment report, in-process (no Python required).
      */
     private void runAIAdvisor(String aiBomFile) {
         System.out.println("\n" + "=".repeat(60));
@@ -200,33 +200,8 @@ public class AIBOMGenerator {
 
         String advisorOutput = aiBomFile.replace(".json", "-advisor.md");
 
-        try {
-            ProcessBuilder pb = new ProcessBuilder(
-                "python3",
-                "tools/ai_advisor.py",
-                aiBomFile,
-                "--no-confirm",
-                "-o", advisorOutput
-            );
-
-            pb.inheritIO();
-            pb.directory(new File(System.getProperty("user.dir")));
-
-            Process process = pb.start();
-            int exitCode = process.waitFor();
-
-            if (exitCode == 0) {
-                System.out.println("\nAI Advisor report written to: " + advisorOutput);
-            } else {
-                System.err.println("\nAI Advisor exited with code: " + exitCode);
-            }
-        } catch (IOException e) {
-            System.err.println("\nFailed to run AI Advisor: " + e.getMessage());
-            System.err.println("Make sure Python 3 is installed and tools/ai_advisor.py exists");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("\nAI Advisor was interrupted");
-        }
+        AIAdvisor.main(new String[]{aiBomFile, "--no-confirm", "-o", advisorOutput});
+        System.out.println("\nAI Advisor report written to: " + advisorOutput);
     }
 
     // Track raw counts per model (provider + model) before deduplication
