@@ -158,6 +158,10 @@ Both advisors write their generated application descriptions back into the sourc
 open tools/bom-viewer.html
 ```
 
+Two sample AI-BOM files are included to try it with:
+- `sample-aibom.json` - real output from `AIBOMGenerator` against a live org (one model, both apps local/self-hosted)
+- `test-aibom.json` - a hand-crafted fixture covering cases the sample doesn't: multiple providers (OpenAI/Anthropic/Ollama), both cloud and local host categories, and an app with multiple call sites for the same model
+
 ## Building
 
 ```bash
