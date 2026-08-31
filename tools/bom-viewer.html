@@ -452,12 +452,27 @@
 
             const totalUsages = appUsages.reduce((sum, a) => sum + a.usages.length, 0);
             const hostCounts = { cloud: 0, local: 0, unknown: 0 };
+
+            // Aggregate model/provider usage across all applications. usageCount is the
+            // model's total invocation count (computed once, org-wide) - it's the same
+            // value on every occurrence of that model, so it's set once per model here,
+            // not summed across apps/usages (which would double-count it).
+            const modelSummary = {};
             for (const a of appUsages) {
                 for (const u of a.usages) {
                     const host = u.props['contrast:hostCategory'] || 'unknown';
                     hostCounts[host] = (hostCounts[host] || 0) + 1;
+
+                    const provider = u.model.publisher || u.props['contrast:provider'] || 'unknown';
+                    const key = `${provider}::${u.model.name}`;
+                    if (!modelSummary[key]) {
+                        modelSummary[key] = { provider, model: u.model.name, host, apps: new Set(), usageCount: parseInt(u.props['contrast:usageCount'] || 0) };
+                    }
+                    modelSummary[key].apps.add(a.app.name);
                 }
             }
+            const modelRows = Object.values(modelSummary).sort((x, y) => x.provider.localeCompare(y.provider));
+            const distinctProviders = new Set(modelRows.map(m => m.provider)).size;
 
             let html = `
                 <h1>Contrast AI Advisor</h1>
@@ -471,10 +486,12 @@
 
                 <h2>Executive Summary</h2>
 
-                <div class="callout">
-                    <strong>This is not a self-reported inventory.</strong> Every application and AI usage
-                    instance here was actually observed running by Contrast Security's runtime instrumentation.
-                </div>
+                <p>This report inventories every AI/LLM model and provider observed actually running in production
+                across your applications, captured by Contrast Security's runtime instrumentation.</p>
+
+                <p><strong>${appUsages.length}</strong> application(s) use AI, calling <strong>${modelRows.length}</strong>
+                distinct model(s) across <strong>${distinctProviders}</strong> provider(s), for <strong>${totalUsages}</strong>
+                total usage instance(s).</p>
 
                 <div class="summary-grid">
                     <div class="summary-card"><div class="count">${appUsages.length}</div><div class="label">Applications with AI usage</div></div>
@@ -482,6 +499,20 @@
                     <div class="summary-card"><div class="count">${hostCounts.cloud}</div><div class="label">Cloud / external calls</div></div>
                     <div class="summary-card"><div class="count">${hostCounts.local}</div><div class="label">Local / self-hosted calls</div></div>
                 </div>
+
+                <h3>Models &amp; Providers</h3>
+                <table>
+                    <tr><th>Provider</th><th>Model</th><th>Host Category</th><th>Applications</th><th>Invocations</th></tr>
+                    ${modelRows.map(m => `
+                        <tr>
+                            <td>${escapeHtml(m.provider)}</td>
+                            <td><code>${escapeHtml(m.model)}</code></td>
+                            <td><span class="host-badge host-${m.host}">${m.host}</span></td>
+                            <td>${m.apps.size}</td>
+                            <td>${m.usageCount.toLocaleString()}</td>
+                        </tr>
+                    `).join('')}
+                </table>
 
                 <hr>
                 <h2>Application Inventory</h2>

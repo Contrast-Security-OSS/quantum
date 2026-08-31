@@ -423,6 +423,7 @@ def analyze_occurrence(client: AIClient, occ: CryptoOccurrence, verbose: bool = 
 
     return {
         "algorithm": occ.algorithm,
+        "application": occ.application,
         "risk_level": "UNKNOWN",
         "title": f"Analyze {occ.algorithm} in {occ.application}",
         "usage_summary": "Failed to parse AI response",
@@ -630,6 +631,31 @@ def generate_report(results: list[dict], metadata: dict, app_metadata: dict[str,
         if algo not in algo_risks:
             algo_risks[algo] = level
 
+    # Aggregate per-algorithm usage across all occurrences. frequency_count is the
+    # algorithm's total invocation count (computed once, org-wide) - it's the same
+    # value on every occurrence of that algorithm, so it's set once per algorithm
+    # here, not summed across apps/occurrences (which would double-count it).
+    algo_summary = {}
+    for r in results:
+        algo = r.get('algorithm', 'Unknown')
+        agg = algo_summary.setdefault(algo, {
+            'risk_level': r.get('risk_level', 'UNKNOWN'),
+            'apps': set(),
+            'usage_count': r.get('frequency_count', 0),
+        })
+        if r.get('application'):
+            agg['apps'].add(r['application'])
+
+    apps_in_report = sorted({r.get('application') for r in results if r.get('application')})
+    algos_by_app = {}
+    for r in results:
+        if r.get('application'):
+            algos_by_app.setdefault(r['application'], set()).add(r.get('algorithm', 'Unknown'))
+
+    quantum_vulnerable_count = sum(1 for a in algo_summary.values() if a['risk_level'] in ('CRITICAL', 'HIGH', 'MEDIUM'))
+    quantum_safe_count = sum(1 for a in algo_summary.values() if a['risk_level'] == 'LOW')
+    classical_issue_count = sum(1 for a in algo_summary.values() if a['risk_level'] == 'NOT_QUANTUM_ISSUE')
+
     lines = [
         "<!-- Contrast Quantum Advisor Report -->",
         "",
@@ -646,22 +672,44 @@ def generate_report(results: list[dict], metadata: dict, app_metadata: dict[str,
         "",
         "## Executive Summary",
         "",
-        "### Runtime Observability Advantage",
+        "This assessment inventories every cryptographic algorithm actually observed running in production "
+        "across your applications - algorithm strength, mode, invocation frequency, and the real call context "
+        "behind each finding, captured by Contrast Security's runtime instrumentation rather than declared "
+        "dependencies or static code scanning.",
         "",
-        "> 🔬 **This is not a theoretical assessment.** Every finding in this report represents cryptographic "
-        "operations **actually observed running in production** applications and APIs. Contrast Security's "
-        "runtime instrumentation captured real algorithm usage, complete call stacks, invocation frequency, "
-        "and data flow context — providing ground truth that static analysis cannot deliver.",
+        f"**{len(apps_in_report)}** application(s) use cryptography, calling **{len(algo_summary)}** distinct "
+        f"algorithm(s), for **{len(results)}** total findings analyzed.",
         "",
-        "Unlike source code scanning that reports on declared dependencies, this assessment shows:",
-        "- **What crypto is actually executing** (not just imported)",
-        "- **How it's being used** (signing, encryption, key exchange, hashing)",
-        "- **What data it protects** (derived from runtime call context)",
-        "- **How often it's called** (actual production frequency)",
-        "- **All crypto across the entire application stack** — custom code, frameworks, and third-party libraries",
-        "- **Code source attribution** — distinguishing custom code (direct fix) from library code (vendor dependency)",
-        ""
     ]
+
+    if quantum_vulnerable_count > 0:
+        lines.append(f"> **{quantum_vulnerable_count} of {len(algo_summary)} algorithms need post-quantum remediation** "
+                    f"(CRITICAL/HIGH/MEDIUM risk).")
+    else:
+        lines.append("> No algorithms were flagged as needing post-quantum remediation.")
+
+    lines.append("")
+    lines.append("### Applications")
+    lines.append("")
+    lines.append("| Application | Algorithms Used |")
+    lines.append("|-------------|------------------|")
+    for app_name in apps_in_report:
+        algos_used = ', '.join(f"`{a}`" for a in sorted(algos_by_app.get(app_name, [])))
+        lines.append(f"| {app_name} | {algos_used} |")
+
+    lines.append("")
+    lines.append("### Algorithms")
+    lines.append("")
+    lines.append("| Algorithm | Risk Level | Applications | Invocations |")
+    lines.append("|-----------|------------|---------------|-------------|")
+    for algo, agg in sorted(algo_summary.items()):
+        lines.append(f"| `{algo}` | {agg['risk_level']} | {len(agg['apps'])} | {agg['usage_count']:,} |")
+
+    lines.append("")
+    lines.append(f"- **{quantum_vulnerable_count}** algorithm(s) need post-quantum remediation (CRITICAL/HIGH/MEDIUM)")
+    lines.append(f"- **{quantum_safe_count}** algorithm(s) are quantum-safe as-is (LOW)")
+    lines.append(f"- **{classical_issue_count}** algorithm(s) have classical (non-quantum) weaknesses to address separately")
+    lines.append("")
 
     # Application context - one entry per app with observed crypto usage, describing what it is
     # and what it's connected to (from the Contrast architecture graph)
@@ -1031,6 +1079,7 @@ def main():
             print(f"  {Colors.RED}Error analyzing {occ.algorithm} in {occ.application}: {e}{Colors.NC}")
             results.append({
                 "algorithm": occ.algorithm,
+                "application": occ.application,
                 "risk_level": "ERROR",
                 "title": f"{occ.algorithm} in {occ.application}",
                 "recommendation": str(e)

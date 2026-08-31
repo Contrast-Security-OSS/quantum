@@ -309,15 +309,31 @@ def generate_report(app_results: list[dict], entries: list[AppInventoryEntry], m
     entries_by_name = {e.name: e for e in entries}
 
     risk_counts = {}
+    risk_by_app = {}
     for r in app_results:
         level = r.get('risk_level', 'UNKNOWN')
         risk_counts[level] = risk_counts.get(level, 0) + 1
+        risk_by_app[r.get('application')] = level
 
     total_apps = len(app_results)
     total_usages = sum(len(e.ai_usages) for e in entries)
     critical_count = risk_counts.get('CRITICAL', 0)
     high_count = risk_counts.get('HIGH', 0)
     action_needed = critical_count + high_count
+
+    # Aggregate model/provider usage across all applications. usage_count is the
+    # model's total invocation count (computed once, org-wide, by AIBOMGenerator) -
+    # it's the same value on every occurrence of that model, so it's set once per
+    # model here, not summed across occurrences/apps (which would double-count it).
+    model_summary = {}
+    for e in entries:
+        for u in e.ai_usages:
+            key = (u.provider or 'unknown', u.model)
+            agg = model_summary.setdefault(key, {'host_category': u.host_category, 'apps': set(), 'usage_count': u.usage_count})
+            agg['apps'].add(e.name)
+
+    cloud_models = sorted({k for k, v in model_summary.items() if v['host_category'] == 'cloud'})
+    local_models = sorted({k for k, v in model_summary.items() if v['host_category'] == 'local'})
 
     lines = [
         "<!-- Contrast AI Advisor Report -->",
@@ -335,18 +351,44 @@ def generate_report(app_results: list[dict], entries: list[AppInventoryEntry], m
         "",
         "## Executive Summary",
         "",
-        "> This is not a self-reported inventory. Every application and AI usage instance in this report was "
-        "**actually observed running** by Contrast Security's runtime instrumentation - including the model, "
-        "provider, destination endpoint, and the real call stack behind each usage.",
+        f"This report inventories every AI/LLM model and provider observed actually running in production "
+        f"across your applications - the model, provider, destination endpoint, and real call stack behind "
+        f"each usage, captured by Contrast Security's runtime instrumentation.",
         "",
-        f"- **{total_apps}** application(s) with observed AI usage",
-        f"- **{total_usages}** distinct AI usage instance(s) across those applications",
+        f"**{total_apps}** application(s) use AI, calling **{len(model_summary)}** distinct model(s) across "
+        f"**{len({provider for provider, _ in model_summary})}** provider(s), for **{total_usages}** total usage instance(s).",
+        "",
     ]
 
     if action_needed > 0:
-        lines.append(f"- **{action_needed}** application(s) flagged CRITICAL or HIGH risk and need priority review")
+        lines.append(f"> **{action_needed} of {total_apps} applications need priority review** "
+                    f"({critical_count} critical, {high_count} high) for their AI usage.")
     else:
-        lines.append("- No applications flagged CRITICAL or HIGH risk")
+        lines.append("> No applications were flagged CRITICAL or HIGH risk for their AI usage.")
+
+    lines.append("")
+    lines.append("### Applications")
+    lines.append("")
+    lines.append("| Application | Risk Level | Models Used |")
+    lines.append("|-------------|------------|--------------|")
+    for e in entries:
+        models_used = ', '.join(sorted({f"`{u.model}`" for u in e.ai_usages}))
+        lines.append(f"| {e.name} | {risk_by_app.get(e.name, 'UNKNOWN')} | {models_used} |")
+
+    lines.append("")
+    lines.append("### Models & Providers")
+    lines.append("")
+    lines.append("| Provider | Model | Host Category | Applications | Invocations |")
+    lines.append("|----------|-------|----------------|---------------|-------------|")
+    for (provider, model), agg in sorted(model_summary.items()):
+        lines.append(f"| {provider} | `{model}` | {agg['host_category']} | {len(agg['apps'])} | {agg['usage_count']:,} |")
+
+    lines.append("")
+    if cloud_models:
+        lines.append(f"- **{len(cloud_models)}** model(s) called over the network to an external cloud provider "
+                    f"(data leaves your infrastructure)")
+    if local_models:
+        lines.append(f"- **{len(local_models)}** model(s) self-hosted/local (no external data egress)")
 
     lines.append("")
     lines.append("| Risk Level | Applications |")
