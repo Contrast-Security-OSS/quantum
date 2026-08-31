@@ -149,13 +149,13 @@ Both advisors write their generated application descriptions back into the sourc
 
 ## BOM Viewer
 
-`tools/cbom-viewer.html` is a standalone, offline browser tool for viewing a CBOM or AI-BOM: drag and drop (or click to browse for) a JSON file and it detects which kind of BOM it is and renders it accordingly - no server or build step required.
+`tools/bom-viewer.html` is a standalone, offline browser tool for viewing a CBOM or AI-BOM: drag and drop (or click to browse for) a JSON file and it detects which kind of BOM it is and renders it accordingly - no server or build step required.
 
 - **CBOM** - crypto algorithm components as readable cards, including any `quantum:*` risk properties the advisor wrote back
 - **AI-BOM** - an application-by-application view (model, provider, endpoint, host category, stack trace) plus each app's `Component.description`, mirroring the AI Advisor report
 
 ```bash
-open tools/cbom-viewer.html
+open tools/bom-viewer.html
 ```
 
 ## Building
