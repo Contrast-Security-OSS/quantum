@@ -22,3 +22,6 @@ cbom*.json
 
 # Shell scripts (may contain credentials)
 *.sh
+
+# Contrast Security
+.contrast/

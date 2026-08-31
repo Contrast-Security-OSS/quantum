@@ -1,4 +1,4 @@
-package com.contrastsecurity.quantum;
+package com.contrastsecurity.bomsquad;
 
 import java.util.ArrayList;
 import java.util.List;

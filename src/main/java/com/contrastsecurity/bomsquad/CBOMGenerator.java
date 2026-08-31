@@ -1,4 +1,4 @@
-package com.contrastsecurity.quantum;
+package com.contrastsecurity.bomsquad;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +29,7 @@ import org.cyclonedx.generators.json.BomJsonGenerator;
 import org.cyclonedx.model.Bom;
 import org.cyclonedx.model.Component;
 import org.cyclonedx.model.Dependency;
+import org.cyclonedx.model.ExternalReference;
 import org.cyclonedx.model.Metadata;
 import org.cyclonedx.model.component.crypto.AlgorithmProperties;
 import org.cyclonedx.model.component.crypto.CryptoProperties;
@@ -50,11 +51,11 @@ import com.google.gson.JsonObject;
  * Generates CycloneDX CBOM (Cryptography Bill of Materials) from Contrast API.
  *
  * Usage:
- *   java CBOMGenerator                      # Fetch all apps, output cbom.json
- *   java CBOMGenerator --app "AppName"      # Fetch single app
- *   java CBOMGenerator --list               # List available apps
- *   java CBOMGenerator -o custom.json       # Custom output filename
- *   java CBOMGenerator -c config.properties # Use custom config file
+ *   java -jar bom-squad.jar cbom                      # Fetch all apps, output cbom.json
+ *   java -jar bom-squad.jar cbom --app "AppName"      # Fetch single app
+ *   java -jar bom-squad.jar cbom --list               # List available apps
+ *   java -jar bom-squad.jar cbom -o custom.json       # Custom output filename
+ *   java -jar bom-squad.jar cbom -c config.properties # Use custom config file
  *
  * Config file (contrast.properties):
  *   contrast.url=https://eval.contrastsecurity.com/api/ns-ui/v1
@@ -63,6 +64,8 @@ import com.google.gson.JsonObject;
  *   contrast.api_key=your-api-key
  */
 public class CBOMGenerator {
+
+    private static final String CRYPTO_ALGORITHM_RULE_ID = "crypto-algorithm";
 
     private String baseUrl;
     private String orgId;
@@ -127,6 +130,7 @@ public class CBOMGenerator {
         String outputFile = "cbom.json";
         String configFile = null;
         boolean listOnly = false;
+        boolean runAnalysis = false;
 
         // Parse args
         for (int i = 0; i < args.length; i++) {
@@ -136,6 +140,8 @@ public class CBOMGenerator {
                 envFilter = args[++i].toUpperCase();
             } else if ("--list".equals(args[i])) {
                 listOnly = true;
+            } else if ("--analyze".equals(args[i])) {
+                runAnalysis = true;
             } else if ("-o".equals(args[i]) && i + 1 < args.length) {
                 outputFile = args[++i];
             } else if ("-c".equals(args[i]) && i + 1 < args.length) {
@@ -164,6 +170,11 @@ public class CBOMGenerator {
                 }
 
                 generator.writeCBOM(result.bom, outputFile);
+
+                // Run Quantum Advisor analysis if requested
+                if (runAnalysis) {
+                    generator.runQuantumAdvisor(outputFile);
+                }
             }
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
@@ -175,26 +186,47 @@ public class CBOMGenerator {
     private static void printUsage() {
         System.out.println("\nCBOM Generator - Create CycloneDX CBOM from Contrast observations");
         System.out.println("\nUsage:");
-        System.out.println("  java -jar quantum.jar                    Generate CBOM for all apps");
-        System.out.println("  java -jar quantum.jar --app <id|name>    Filter by app (ID or name)");
-        System.out.println("  java -jar quantum.jar --env <tier>       Filter by environment (PRODUCTION, DEVELOPMENT, QA)");
-        System.out.println("  java -jar quantum.jar --list             List available applications with IDs");
-        System.out.println("  java -jar quantum.jar -o <file.json>     Specify output filename");
-        System.out.println("  java -jar quantum.jar -c <config.properties>  Use custom config file");
+        System.out.println("  java -jar bom-squad.jar cbom                    Generate CBOM for all apps");
+        System.out.println("  java -jar bom-squad.jar cbom --app <id|name>    Filter by app (ID or name)");
+        System.out.println("  java -jar bom-squad.jar cbom --env <tier>       Filter by environment (PRODUCTION, DEVELOPMENT, QA)");
+        System.out.println("  java -jar bom-squad.jar cbom --list             List available applications with IDs");
+        System.out.println("  java -jar bom-squad.jar cbom --analyze          Run Quantum Advisor AI analysis after CBOM generation");
+        System.out.println("  java -jar bom-squad.jar cbom -o <file.json>     Specify output filename");
+        System.out.println("  java -jar bom-squad.jar cbom -c <config.properties>  Use custom config file");
         System.out.println("\nConfig file (contrast.properties):");
         System.out.println("  contrast.url=https://eval.contrastsecurity.com/api/ns-ui/v1");
         System.out.println("  contrast.org_id=your-org-id");
         System.out.println("  contrast.auth_header=base64-encoded-credentials");
         System.out.println("  contrast.api_key=your-api-key");
         System.out.println("\nExamples:");
-        System.out.println("  java -jar quantum.jar                          # all apps -> cbom.json");
-        System.out.println("  java -jar quantum.jar --env PRODUCTION         # only prod observations");
-        System.out.println("  java -jar quantum.jar --app MyApp --env PRODUCTION");
-        System.out.println("  java -jar quantum.jar -c prod.properties --list");
+        System.out.println("  java -jar bom-squad.jar cbom                          # all apps -> cbom.json");
+        System.out.println("  java -jar bom-squad.jar cbom --env PRODUCTION         # only prod observations");
+        System.out.println("  java -jar bom-squad.jar cbom --app MyApp --env PRODUCTION");
+        System.out.println("  java -jar bom-squad.jar cbom --analyze                # generate CBOM + AI analysis report");
+        System.out.println("  java -jar bom-squad.jar cbom -c prod.properties --list");
+    }
+
+    /**
+     * Run the Quantum Advisor to analyze the CBOM and generate an AI-powered
+     * post-quantum cryptography readiness report, in-process (no Python required).
+     */
+    private void runQuantumAdvisor(String cbomFile) {
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("Running Quantum Advisor Analysis...");
+        System.out.println("=".repeat(60));
+
+        // Determine output filename (replace .json with -advisor.md)
+        String advisorOutput = cbomFile.replace(".json", "-advisor.md");
+
+        QuantumAdvisor.main(new String[]{cbomFile, "--no-confirm", "-o", advisorOutput});
+        System.out.println("\nQuantum Advisor report written to: " + advisorOutput);
     }
 
     // Track raw counts per algorithm before deduplication
     private Map<String, Integer> algorithmRawCounts = new HashMap<>();
+
+    // Application-level architecture/connection info from the Contrast graph, keyed by applicationId
+    private Map<String, AppGraphInfo> appGraphInfo = new HashMap<>();
 
     public List<Observation> fetchObservations() throws IOException {
         System.out.println("\nFetching observations from Contrast API...");
@@ -209,16 +241,31 @@ public class CBOMGenerator {
             // First pass: parse basic info, filter, count, and deduplicate
             // Dedup key: algorithm + applicationId + route (before fetching details)
             Map<String, Observation> uniqueObservations = new HashMap<>();
+            Set<String> environmentsSeen = new HashSet<>();
             int skipped = 0;
 
+            int nonCrypto = 0;
             for (JsonElement element : observationList) {
                 JsonObject obs = element.getAsJsonObject();
+
+                // The observations endpoint returns all OBSERVABILITY data (crypto, AI usage, etc.)
+                // so filter client-side to just crypto algorithm findings.
+                String ruleId = getStringOrNull(obs, "ruleId");
+                if (!CRYPTO_ALGORITHM_RULE_ID.equals(ruleId)) {
+                    nonCrypto++;
+                    continue;
+                }
+
                 Observation observation = parseObservationFromList(obs);
 
                 // Filter by environment if specified
                 if (envFilter != null && !envFilter.equals(observation.environment)) {
                     skipped++;
                     continue;
+                }
+
+                if (observation.environment != null) {
+                    environmentsSeen.add(observation.environment);
                 }
 
                 // Track raw count per algorithm (before dedup)
@@ -233,8 +280,9 @@ public class CBOMGenerator {
                 }
             }
 
+            System.out.println("  Filtered to " + (observationList.size() - nonCrypto) + " crypto algorithm observations");
             if (skipped > 0) {
-                System.out.println("  Filtered to " + (observationList.size() - skipped) + " (env: " + envFilter + ")");
+                System.out.println("  Filtered to " + (observationList.size() - nonCrypto - skipped) + " (env: " + envFilter + ")");
             }
             System.out.println("  Deduplicated to " + uniqueObservations.size() + " unique observations");
 
@@ -246,6 +294,16 @@ public class CBOMGenerator {
                 System.out.print('.');
             }
             System.out.println(" done");
+
+            if (!environmentsSeen.isEmpty()) {
+                System.out.println("\nFetching application architecture/connection graph...");
+                try {
+                    appGraphInfo = ApplicationGraphFetcher.fetch(httpClient, gson, baseUrl, orgId, authHeader, apiKey, environmentsSeen);
+                    System.out.println("  Found graph data for " + appGraphInfo.size() + " applications");
+                } catch (IOException e) {
+                    System.out.println("  Skipping graph enrichment (" + e.getMessage() + ")");
+                }
+            }
 
             return new ArrayList<>(uniqueObservations.values());
         }
@@ -495,6 +553,37 @@ public class CBOMGenerator {
             appComponent.setType(Component.Type.APPLICATION);
             appComponent.setName(appName != null ? appName : appId);
             appComponent.setBomRef("app-" + sanitizeBomRef(appName != null ? appName : appId));
+
+            AppGraphInfo graphInfo = appGraphInfo.get(appId);
+            if (graphInfo != null) {
+                List<Property> appProps = new ArrayList<>();
+                if (graphInfo.language != null) {
+                    appProps.add(property("contrast:language", graphInfo.language));
+                }
+                if (graphInfo.postureScore != null) {
+                    appProps.add(property("contrast:postureScore", String.valueOf(graphInfo.postureScore)));
+                }
+                if (graphInfo.postureSeverity != null) {
+                    appProps.add(property("contrast:postureSeverity", graphInfo.postureSeverity));
+                }
+                if (graphInfo.criticality != null) {
+                    appProps.add(property("contrast:criticality", String.valueOf(graphInfo.criticality)));
+                }
+                if (graphInfo.openIssuesTotal != null) {
+                    appProps.add(property("contrast:openIssuesTotal", String.valueOf(graphInfo.openIssuesTotal)));
+                }
+                appProps.add(property("contrast:serverCount", String.valueOf(graphInfo.serverCount)));
+                appProps.add(property("contrast:libraryCount", String.valueOf(graphInfo.libraryCount)));
+                if (!graphInfo.connectedApplications.isEmpty()) {
+                    appProps.add(property("contrast:connectedApplications", String.join(", ", graphInfo.connectedApplications)));
+                }
+                appComponent.setProperties(appProps);
+
+                if (graphInfo.nodeId != null) {
+                    appComponent.addExternalReference(buildAppExternalReference(appId, graphInfo.nodeId));
+                }
+            }
+
             components.add(appComponent);
             appBomRefs.add(appComponent.getBomRef());
 
@@ -602,7 +691,8 @@ public class CBOMGenerator {
 
         Set<String> seen = new HashSet<>();
         for (Observation obs : occurrences) {
-            String key = (obs.caller != null ? obs.caller : "") + "|" + (obs.route != null ? obs.route : "");
+            String key = (obs.applicationId != null ? obs.applicationId : "") + "|"
+                + (obs.caller != null ? obs.caller : "") + "|" + (obs.route != null ? obs.route : "");
             if (seen.add(key)) {
                 Occurrence occ = new Occurrence();
                 occ.setLocation(obs.callee != null ? obs.callee : obs.caller);
@@ -730,6 +820,25 @@ public class CBOMGenerator {
                 break;
         }
         return functions;
+    }
+
+    private Property property(String name, String value) {
+        Property p = new Property();
+        p.setName(name);
+        p.setValue(value);
+        return p;
+    }
+
+    private ExternalReference buildAppExternalReference(String appId, String graphNodeId) {
+        String uiBaseUrl = baseUrl.replaceAll("/api/.*", "");
+        String url = uiBaseUrl + "/Contrast/cs/index.html#/" + orgId
+            + "/explorer?detailsId=" + graphNodeId + "&applicationId=" + appId;
+
+        ExternalReference ref = new ExternalReference();
+        ref.setType(ExternalReference.Type.RUNTIME_ANALYSIS_REPORT);
+        ref.setUrl(url);
+        ref.setComment("Contrast Application Explorer");
+        return ref;
     }
 
     private String sanitizeBomRef(String input) {

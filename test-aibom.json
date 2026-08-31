@@ -1,0 +1,174 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:test-aibom-0000-0000-000000000001",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-31T12:00:00Z",
+    "component": {
+      "type": "application",
+      "bom-ref": "contrast-ai-inventory",
+      "name": "Acme Corp - Mock AI Inventory",
+      "version": "1.0"
+    }
+  },
+  "components": [
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "ai-openai-gpt-4o",
+      "publisher": "openai",
+      "name": "gpt-4o",
+      "properties": [
+        { "name": "contrast:usageCount", "value": "48213" },
+        { "name": "contrast:uniqueLocations", "value": "3" },
+        { "name": "contrast:provider", "value": "openai" },
+        { "name": "contrast:endpoint", "value": "https://api.openai.com/v1" },
+        { "name": "contrast:hostCategory", "value": "cloud" }
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "com.openai.services.blocking.chat.ChatCompletionServiceImpl.create(ChatCompletionServiceImpl.kt:63)",
+            "additionalContext": "App: acme-support-bot | Route: POST /api/support/chat\nStack Trace:\ncom.openai.services.blocking.chat.ChatCompletionServiceImpl.create(ChatCompletionServiceImpl.kt:63) com.openai.services.blocking.chat.ChatCompletionService.create(ChatCompletionService.kt:64) com.acme.support.ChatAssistantService.generateReply(ChatAssistantService.java:88) com.acme.support.SupportChatController.chat(SupportChatController.java:41) org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)"
+          },
+          {
+            "location": "com.openai.services.blocking.chat.ChatCompletionServiceImpl.create(ChatCompletionServiceImpl.kt:63)",
+            "additionalContext": "App: acme-support-bot | Route: POST /api/support/summarize\nStack Trace:\ncom.openai.services.blocking.chat.ChatCompletionServiceImpl.create(ChatCompletionServiceImpl.kt:63) com.openai.services.blocking.chat.ChatCompletionService.create(ChatCompletionService.kt:64) com.acme.support.TicketSummarizerService.summarize(TicketSummarizerService.java:52) com.acme.support.SupportChatController.summarizeTicket(SupportChatController.java:67) org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)"
+          }
+        ]
+      }
+    },
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "ai-anthropic-claude-3-5-sonnet",
+      "publisher": "anthropic",
+      "name": "claude-3-5-sonnet-20241022",
+      "properties": [
+        { "name": "contrast:usageCount", "value": "1250" },
+        { "name": "contrast:uniqueLocations", "value": "1" },
+        { "name": "contrast:provider", "value": "anthropic" },
+        { "name": "contrast:endpoint", "value": "https://api.anthropic.com/v1" },
+        { "name": "contrast:hostCategory", "value": "cloud" }
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "com.anthropic.client.MessagesClientImpl.create(MessagesClientImpl.java:74)",
+            "additionalContext": "App: acme-analytics | Route: POST /internal/insights/generate\nStack Trace:\ncom.anthropic.client.MessagesClientImpl.create(MessagesClientImpl.java:74) com.acme.analytics.InsightGeneratorService.generateInsight(InsightGeneratorService.java:112) com.acme.analytics.InsightBatchJob.run(InsightBatchJob.java:39) org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:84)"
+          }
+        ]
+      }
+    },
+    {
+      "type": "machine-learning-model",
+      "bom-ref": "ai-ollama-llama3-8b",
+      "publisher": "ollama",
+      "name": "llama3:8b",
+      "properties": [
+        { "name": "contrast:usageCount", "value": "6402" },
+        { "name": "contrast:uniqueLocations", "value": "2" },
+        { "name": "contrast:provider", "value": "ollama" },
+        { "name": "contrast:endpoint", "value": "http://ollama.internal:11434/v1" },
+        { "name": "contrast:hostCategory", "value": "local" }
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "com.acme.docsearch.EmbeddingClient.embed(EmbeddingClient.java:47)",
+            "additionalContext": "App: acme-docsearch | Route: POST /api/docs/index\nStack Trace:\ncom.acme.docsearch.EmbeddingClient.embed(EmbeddingClient.java:47) com.acme.docsearch.DocumentIndexerService.indexDocument(DocumentIndexerService.java:63) com.acme.docsearch.IndexUploadController.upload(IndexUploadController.java:29) org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)"
+          },
+          {
+            "location": "com.acme.docsearch.EmbeddingClient.embed(EmbeddingClient.java:47)",
+            "additionalContext": "App: acme-docsearch | Route: GET /api/docs/search\nStack Trace:\ncom.acme.docsearch.EmbeddingClient.embed(EmbeddingClient.java:47) com.acme.docsearch.SemanticSearchService.search(SemanticSearchService.java:81) com.acme.docsearch.SearchController.query(SearchController.java:35) org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)"
+          }
+        ]
+      }
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-support-bot",
+      "name": "acme-support-bot",
+      "description": "acme-support-bot is a Java Spring Boot backend that powers the customer support chat widget, generating chat replies and ticket summaries via OpenAI's cloud API. It's exposed through acme-frontend and handles a high volume of customer-facing traffic.",
+      "properties": [
+        { "name": "contrast:language", "value": "JAVA" },
+        { "name": "contrast:postureScore", "value": "6.2" },
+        { "name": "contrast:postureSeverity", "value": "MEDIUM" },
+        { "name": "contrast:criticality", "value": "4" },
+        { "name": "contrast:openIssuesTotal", "value": "11" },
+        { "name": "contrast:serverCount", "value": "3" },
+        { "name": "contrast:libraryCount", "value": "142" },
+        { "name": "contrast:connectedApplications", "value": "acme-frontend" }
+      ],
+      "externalReferences": [
+        {
+          "type": "runtime-analysis-report",
+          "url": "https://acme.contrastsecurity.com/Contrast/cs/index.html#/test-org-0000/explorer?detailsId=-100001&applicationId=app-acme-support-bot-0001",
+          "comment": "Contrast Application Explorer"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-analytics",
+      "name": "acme-analytics",
+      "description": "acme-analytics is a scheduled batch service that generates business insights from internal data using Anthropic's cloud API. It runs as a background job rather than serving live user traffic.",
+      "properties": [
+        { "name": "contrast:language", "value": "JAVA" },
+        { "name": "contrast:postureScore", "value": "7.8" },
+        { "name": "contrast:postureSeverity", "value": "LOW" },
+        { "name": "contrast:criticality", "value": "2" },
+        { "name": "contrast:openIssuesTotal", "value": "2" },
+        { "name": "contrast:serverCount", "value": "1" },
+        { "name": "contrast:libraryCount", "value": "68" }
+      ],
+      "externalReferences": [
+        {
+          "type": "runtime-analysis-report",
+          "url": "https://acme.contrastsecurity.com/Contrast/cs/index.html#/test-org-0000/explorer?detailsId=-100002&applicationId=app-acme-analytics-0001",
+          "comment": "Contrast Application Explorer"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "app-acme-docsearch",
+      "name": "acme-docsearch",
+      "description": "acme-docsearch is a Java service that indexes and semantically searches internal documentation using a self-hosted Ollama model, keeping document content and embeddings entirely within the organization's own infrastructure.",
+      "properties": [
+        { "name": "contrast:language", "value": "JAVA" },
+        { "name": "contrast:postureScore", "value": "8.4" },
+        { "name": "contrast:postureSeverity", "value": "LOW" },
+        { "name": "contrast:criticality", "value": "3" },
+        { "name": "contrast:openIssuesTotal", "value": "1" },
+        { "name": "contrast:serverCount", "value": "2" },
+        { "name": "contrast:libraryCount", "value": "97" },
+        { "name": "contrast:connectedApplications", "value": "acme-frontend" }
+      ],
+      "externalReferences": [
+        {
+          "type": "runtime-analysis-report",
+          "url": "https://acme.contrastsecurity.com/Contrast/cs/index.html#/test-org-0000/explorer?detailsId=-100003&applicationId=app-acme-docsearch-0001",
+          "comment": "Contrast Application Explorer"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "app-acme-support-bot",
+      "dependsOn": ["ai-openai-gpt-4o"]
+    },
+    {
+      "ref": "app-acme-analytics",
+      "dependsOn": ["ai-anthropic-claude-3-5-sonnet"]
+    },
+    {
+      "ref": "app-acme-docsearch",
+      "dependsOn": ["ai-ollama-llama3-8b"]
+    },
+    {
+      "ref": "contrast-ai-inventory",
+      "dependsOn": ["app-acme-support-bot", "app-acme-analytics", "app-acme-docsearch"]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-package com.contrastsecurity.quantum;
+package com.contrastsecurity.bomsquad;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -97,13 +97,26 @@ public class AlgorithmParser {
         // Parse the base algorithm
         parseBaseAlgorithm(baseAlgo);
 
+        // JCA transformations for asymmetric ciphers conventionally include a "mode"
+        // segment (e.g. "RSA/ECB/OAEPWithSHA-256AndMGF1Padding") that is a string-format
+        // artifact, not a real block cipher mode - RSA/EC primitives don't have one.
+        if (isAsymmetricPrimitive(this.primitive)) {
+            this.mode = null;
+        }
+
         // Look up OID
         this.oid = lookupOid();
     }
 
     private void parseBaseAlgorithm(String algo) {
+        // Password-based encryption, e.g. "PBEWithMD5AndDES", "PBEWithHmacSHA256AndAES_128".
+        // Must be checked first since these names contain "AES"/"DES"/"SHA" substrings that
+        // would otherwise match those algorithms' own branches below.
+        if (algo.startsWith("PBE")) {
+            parsePbe(algo);
+        }
         // AES variants
-        if (algo.startsWith("AES")) {
+        else if (algo.startsWith("AES")) {
             this.family = "aes";
             this.primitive = isAuthenticatedMode() ? "ae" : "block-cipher";
             this.keySize = extractKeySize(algo, 128); // Default to 128 if not specified
@@ -203,6 +216,37 @@ public class AlgorithmParser {
             this.classicalSecurityLevel = 0;
             this.nistQuantumSecurityLevel = 0;
         }
+    }
+
+    private void parsePbe(String algo) {
+        this.family = "pbe";
+        this.primitive = "block-cipher";
+        if (algo.contains("AES")) {
+            this.keySize = extractKeySize(algo, 128);
+        } else if (algo.contains("3DES") || algo.contains("DESEDE")) {
+            this.keySize = 168;
+        } else if (algo.contains("DES")) {
+            this.keySize = 56;
+        } else {
+            this.keySize = 0;
+        }
+        // PBE constructions from the legacy JCA providers (MD5/SHA-1 digest, DES/3DES
+        // cipher) are broken regardless of nominal key size; only flag modern
+        // AES-based PBE as having real security margin.
+        boolean weakDigest = algo.contains("MD5") || algo.contains("SHA1") || algo.contains("SHA-1");
+        boolean weakCipher = algo.contains("DES") && !algo.contains("AES");
+        if (weakDigest || weakCipher) {
+            this.classicalSecurityLevel = 0;
+            this.nistQuantumSecurityLevel = 0;
+        } else {
+            this.classicalSecurityLevel = this.keySize;
+            this.nistQuantumSecurityLevel = calculateQuantumLevel(this.keySize, "symmetric");
+        }
+    }
+
+    private boolean isAsymmetricPrimitive(String primitive) {
+        return "pke".equals(primitive) || "signature".equals(primitive)
+            || "kex".equals(primitive) || "kem".equals(primitive);
     }
 
     private boolean isAuthenticatedMode() {
