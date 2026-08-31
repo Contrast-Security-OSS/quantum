@@ -52,10 +52,10 @@ contrast.api_key=your-api-key
 mvn clean package
 
 # CBOM
-java -jar target/bom-squad-1.0-SNAPSHOT.jar cbom
+java -jar target/bom-squad-1.0.jar cbom
 
 # AI-BOM
-java -jar target/bom-squad-1.0-SNAPSHOT.jar aibom
+java -jar target/bom-squad-1.0.jar aibom
 ```
 
 ## Usage
@@ -174,7 +174,7 @@ Two sample AI-BOM files are included to try it with:
 mvn clean package
 ```
 
-Creates `target/bom-squad-1.0-SNAPSHOT.jar` (executable uber-jar; `Main` dispatches to `cbom`/`aibom` based on the first argument).
+Creates `target/bom-squad-1.0.jar` (executable uber-jar; `Main` dispatches to `cbom`/`aibom` based on the first argument).
 
 ## Configuration
 

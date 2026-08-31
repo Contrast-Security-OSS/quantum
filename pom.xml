@@ -6,7 +6,7 @@
 
     <groupId>com.contrastsecurity</groupId>
     <artifactId>bom-squad</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>BOM Squad</name>
     <description>Generates CycloneDX CBOM/AI-BOM inventories from Contrast Security runtime observability data, with an AI-powered advisor for each.</description>
 
