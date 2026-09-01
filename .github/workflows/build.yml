@@ -25,5 +25,5 @@ jobs:
       - name: Upload jar artifact
         uses: actions/upload-artifact@v4
         with:
-          name: bom-squad-jar
-          path: target/bom-squad-*.jar
+          name: runtime-analyst-jar
+          path: target/runtime-analyst-*.jar

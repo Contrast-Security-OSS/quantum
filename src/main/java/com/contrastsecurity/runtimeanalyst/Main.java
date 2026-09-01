@@ -1,4 +1,4 @@
-package com.contrastsecurity.bomsquad;
+package com.contrastsecurity.runtimeanalyst;
 
 import java.util.Arrays;
 
@@ -7,8 +7,8 @@ import java.util.Arrays;
  * based on the first argument.
  *
  * Usage:
- *   java -jar bom-squad.jar cbom [options]    # Cryptography Bill of Materials
- *   java -jar bom-squad.jar aibom [options]   # AI/LLM usage Bill of Materials
+ *   java -jar runtime-analyst.jar cbom [options]    # Cryptography Bill of Materials
+ *   java -jar runtime-analyst.jar aibom [options]   # AI/LLM usage Bill of Materials
  */
 public class Main {
 
@@ -46,16 +46,16 @@ public class Main {
     }
 
     private static void printUsage() {
-        System.out.println("\nBOM Squad - Contrast Security Bill of Materials generator");
+        System.out.println("\nRuntime Analyst - Contrast Security Bill of Materials generator");
         System.out.println("\nUsage:");
-        System.out.println("  java -jar bom-squad.jar cbom [options]              Generate a Cryptography Bill of Materials");
-        System.out.println("  java -jar bom-squad.jar aibom [options]             Generate an AI/LLM usage Bill of Materials");
-        System.out.println("  java -jar bom-squad.jar cbom-advisor <cbom.json>    Re-run the Quantum Advisor against an existing CBOM");
-        System.out.println("  java -jar bom-squad.jar aibom-advisor <aibom.json>  Re-run the AI Advisor against an existing AI-BOM");
+        System.out.println("  java -jar runtime-analyst.jar cbom [options]              Generate a Cryptography Bill of Materials");
+        System.out.println("  java -jar runtime-analyst.jar aibom [options]             Generate an AI/LLM usage Bill of Materials");
+        System.out.println("  java -jar runtime-analyst.jar cbom-advisor <cbom.json>    Re-run the Quantum Advisor against an existing CBOM");
+        System.out.println("  java -jar runtime-analyst.jar aibom-advisor <aibom.json>  Re-run the AI Advisor against an existing AI-BOM");
         System.out.println("\n`cbom --analyze` / `aibom --analyze` already run the matching advisor automatically after generation -");
         System.out.println("the standalone cbom-advisor/aibom-advisor commands are for re-running the advisor without regenerating the BOM.");
         System.out.println("\nRun with -h after a subcommand for its options, e.g.:");
-        System.out.println("  java -jar bom-squad.jar cbom -h");
-        System.out.println("  java -jar bom-squad.jar aibom -h");
+        System.out.println("  java -jar runtime-analyst.jar cbom -h");
+        System.out.println("  java -jar runtime-analyst.jar aibom -h");
     }
 }

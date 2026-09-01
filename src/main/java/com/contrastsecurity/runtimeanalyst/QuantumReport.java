@@ -1,4 +1,4 @@
-package com.contrastsecurity.bomsquad;
+package com.contrastsecurity.runtimeanalyst;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -53,7 +53,7 @@ public class QuantumReport {
             }
             log = new File( args[0] );
         } catch ( Exception e ) {
-            System.err.println( "  Usage: java -jar bom-squad.jar contrast.log" );
+            System.err.println( "  Usage: java -jar runtime-analyst.jar contrast.log" );
             System.exit( -1 );
         }
         System.out.println( "  Loading data from " + log );
