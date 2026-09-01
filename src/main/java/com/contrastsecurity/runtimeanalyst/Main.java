@@ -22,6 +22,9 @@ public class Main {
         String[] rest = Arrays.copyOfRange(args, 1, args.length);
 
         switch (subcommand) {
+            case "auth":
+                AuthCommand.main(rest);
+                break;
             case "cbom":
                 CBOMGenerator.main(rest);
                 break;
@@ -48,6 +51,7 @@ public class Main {
     private static void printUsage() {
         System.out.println("\nRuntime Analyst - Contrast Security Bill of Materials generator");
         System.out.println("\nUsage:");
+        System.out.println("  java -jar runtime-analyst.jar auth [options]              Connect to Contrast and generate contrast.properties");
         System.out.println("  java -jar runtime-analyst.jar cbom [options]              Generate a Cryptography Bill of Materials");
         System.out.println("  java -jar runtime-analyst.jar aibom [options]             Generate an AI/LLM usage Bill of Materials");
         System.out.println("  java -jar runtime-analyst.jar cbom-advisor <cbom.json>    Re-run the Quantum Advisor against an existing CBOM");
