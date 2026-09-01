@@ -183,7 +183,7 @@ public class AIBOMGenerator {
         System.out.println("  java -jar runtime-analyst.jar aibom -o <file.json>    Specify output filename");
         System.out.println("  java -jar runtime-analyst.jar aibom -c <config.properties>  Use custom config file");
         System.out.println("\nConfig file (contrast.properties):");
-        System.out.println("  contrast.url=https://eval.contrastsecurity.com/api/ns-ui/v1");
+        System.out.println("  contrast.url=https://your-instance.contrastsecurity.com/api/ns-ui/v1");
         System.out.println("  contrast.org_id=your-org-id");
         System.out.println("  contrast.auth_header=base64-encoded-credentials");
         System.out.println("  contrast.api_key=your-api-key");

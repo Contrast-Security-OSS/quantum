@@ -58,7 +58,7 @@ import com.google.gson.JsonObject;
  *   java -jar runtime-analyst.jar cbom -c config.properties # Use custom config file
  *
  * Config file (contrast.properties):
- *   contrast.url=https://eval.contrastsecurity.com/api/ns-ui/v1
+ *   contrast.url=https://your-instance.contrastsecurity.com/api/ns-ui/v1
  *   contrast.org_id=your-org-id
  *   contrast.auth_header=base64-encoded-credentials
  *   contrast.api_key=your-api-key
@@ -194,7 +194,7 @@ public class CBOMGenerator {
         System.out.println("  java -jar runtime-analyst.jar cbom -o <file.json>     Specify output filename");
         System.out.println("  java -jar runtime-analyst.jar cbom -c <config.properties>  Use custom config file");
         System.out.println("\nConfig file (contrast.properties):");
-        System.out.println("  contrast.url=https://eval.contrastsecurity.com/api/ns-ui/v1");
+        System.out.println("  contrast.url=https://your-instance.contrastsecurity.com/api/ns-ui/v1");
         System.out.println("  contrast.org_id=your-org-id");
         System.out.println("  contrast.auth_header=base64-encoded-credentials");
         System.out.println("  contrast.api_key=your-api-key");
