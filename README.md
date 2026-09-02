@@ -196,10 +196,17 @@ Deliberately does **not** generate threats, controls, or risks (TM-BOM) - the dr
 A standard CycloneDX 1.6 document with a top-level `vulnerabilities[]` array, one entry per (application, library, CVE) with:
 
 - `id` - the CVE identifier, `source` - NVD reference
+- `description` - the CVE description, as reported by Contrast
 - `ratings[]` - CVSS v3.1 score/severity/vector as reported by Contrast
+- `advisories[]` - any reference URLs Contrast has on file for the CVE (omitted when there are none)
 - `affects[].ref` - a best-effort `pkg:maven/...` purl for the affected library
+- `affects[].versions[]` - the deployed version (`affected`) and, when Contrast has upgrade guidance for the library, the recommended fixed version (`unaffected`)
+- `recommendation` - the remediation action: Contrast's own minimal-upgrade guidance for the library when available, falling back to "no newer release identified" when it isn't
 - `analysis.state`/`analysis.justification`/`analysis.detail` - the VEX claim itself and why it was made (see the policy in the [`vex` examples](#vex) above)
-- `properties[]` - the underlying evidence (`contrast:classesUsed`/`classCount`, `contrast:daysObserved`, `contrast:acceptAfterDays`, `contrast:devStatus`/`qaStatus`/`prodStatus`)
+- `analysis.response[]` - `update` when a fix version is known, `workaround_available` for `protected_at_runtime` claims (the active Shield/Protect control **is** the workaround), omitted otherwise
+- `properties[]` - the underlying evidence (`contrast:classesUsed`/`classCount`, `contrast:daysObserved`, `contrast:acceptAfterDays`, `contrast:devStatus`/`qaStatus`/`prodStatus`, `contrast:latestVersion`) plus exploitability signals (`contrast:epssScore`/`epssPercentile`, `contrast:cisaKev` - CISA Known Exploited Vulnerabilities catalog membership)
+
+All of the above is deterministic, pulled directly from Contrast's own CVE/library data - nothing here is AI-generated, since a VEX claim is an attestation and needs to stay auditable back to its source evidence. The EPSS/CISA KEV signals are new inputs to the **VEX Advisor**'s AI judgment (below), not to the claim itself.
 
 ```
 Contrast VEX
@@ -214,7 +221,7 @@ Note: `PROTECTED_AT_RUNTIME` (CVE Shield/Protect actively mitigating) is impleme
 
 - **Quantum Advisor** - findings grouped by risk level (CRITICAL/HIGH/MEDIUM/LOW/NOT_QUANTUM_ISSUE), with an "Application Context" section describing each app from its architecture graph data
 - **AI Advisor** - organized as an inventory of AI-enabled applications (one section per app, not per finding): an AI-generated description of what the app does, then each AI usage instance with model/provider/endpoint and a description of what that specific call is doing, inferred from the key methods around it in the stack trace
-- **VEX Advisor** - not a second opinion on whether a CVE exists (Contrast's runtime data already establishes that), but a soundness check on whether each `not_affected`/`in_triage` claim is safe to rely on given the CVE's severity/exploitability. Flags claims that rest purely on "N days without observed execution" for a CRITICAL/HIGH-severity CVE in a heavily-loaded library as `needs_review`, while treating `code_not_reachable`/`protected_at_runtime` claims as structurally sound regardless of severity. Organized one section per application, with a per-CVE table plus rationale for anything flagged.
+- **VEX Advisor** - not a second opinion on whether a CVE exists (Contrast's runtime data already establishes that), but a soundness check on whether each `not_affected`/`in_triage` claim is safe to rely on given the CVE's severity/exploitability. Flags claims that rest purely on "N days without observed execution" for a CRITICAL/HIGH-severity CVE in a heavily-loaded library as `needs_review`, while treating `code_not_reachable`/`protected_at_runtime` claims as structurally sound regardless of severity. Weighs each CVE's EPSS score/percentile and CISA KEV (Known Exploited Vulnerabilities catalog) status alongside CVSS severity - a duration-only claim on a KEV-listed or high-EPSS CVE is judged more harshly than the same claim on a CVE with no evidence of real-world exploitation. Organized one section per application, with a per-CVE table plus rationale for anything flagged.
 
 Both the Quantum and AI Advisors write their generated application descriptions back into the source BOM's `Component.description` field, so the BOM itself stays self-describing even without the report. The Quantum Advisor also writes `quantum:*` risk properties (risk level, recommendation, code source, etc.) back onto each crypto algorithm component. The VEX Advisor writes `contrast:vexAdvisorAssessment` (`sound`/`needs_review`) and `contrast:vexAdvisorRationale` back onto each vulnerability's `properties[]`. All of this happens automatically as part of every `--analyze` run, no separate step needed.
 

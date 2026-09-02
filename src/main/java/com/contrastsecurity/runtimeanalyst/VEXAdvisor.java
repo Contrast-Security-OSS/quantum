@@ -80,6 +80,10 @@ public class VEXAdvisor {
         String state;
         String justification;
         String detail;
+        String recommendation;
+        Double epssScore;
+        Double epssPercentile;
+        Boolean cisaKev;
         long classesUsed;
         long classCount;
         long daysObserved;
@@ -228,10 +232,15 @@ public class VEXAdvisor {
                 s.justification = getString(analysis, "justification", null);
                 s.detail = getString(analysis, "detail", null);
             }
+            s.recommendation = getString(v, "recommendation", null);
             s.classesUsed = parseLong(props.get("contrast:classesUsed"));
             s.classCount = parseLong(props.get("contrast:classCount"));
             s.daysObserved = parseLong(props.get("contrast:daysObserved"));
             s.acceptAfterDays = parseLong(props.get("contrast:acceptAfterDays"));
+            s.epssScore = parseDouble(props.get("contrast:epssScore"));
+            s.epssPercentile = parseDouble(props.get("contrast:epssPercentile"));
+            String cisaProp = props.get("contrast:cisaKev");
+            s.cisaKev = cisaProp != null ? Boolean.parseBoolean(cisaProp) : null;
 
             byApp.computeIfAbsent(appName, k -> {
                 AppEntry e = new AppEntry();
@@ -249,6 +258,15 @@ public class VEXAdvisor {
             return Long.parseLong(s);
         } catch (NumberFormatException e) {
             return 0L;
+        }
+    }
+
+    private Double parseDouble(String s) {
+        if (s == null || s.isEmpty()) return null;
+        try {
+            return Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 
@@ -279,9 +297,17 @@ public class VEXAdvisor {
             sb.append("Library: ").append(s.purl != null ? s.purl : "unknown").append("\n");
             sb.append("Severity: ").append(s.severity != null ? s.severity : "unknown")
               .append(s.score != null ? " (score " + s.score + ")" : "").append("\n");
+            if (s.epssScore != null) {
+                sb.append("EPSS: ").append(s.epssScore)
+                  .append(s.epssPercentile != null ? " (percentile " + s.epssPercentile + ")" : "").append("\n");
+            }
+            if (s.cisaKev != null) {
+                sb.append("CISA Known Exploited Vulnerabilities (KEV) catalog: ").append(s.cisaKev ? "YES" : "no").append("\n");
+            }
             sb.append("Claimed state: ").append(s.state).append("\n");
             if (s.justification != null) sb.append("Justification: ").append(s.justification).append("\n");
             sb.append("Detail: ").append(s.detail != null ? s.detail : "(none)").append("\n");
+            if (s.recommendation != null) sb.append("Recommendation on record: ").append(s.recommendation).append("\n");
             sb.append("Classes used: ").append(s.classesUsed).append(" of ").append(s.classCount).append("\n");
             sb.append("Days observed: ").append(s.daysObserved).append(" (acceptance threshold: ").append(s.acceptAfterDays).append(")\n");
         }

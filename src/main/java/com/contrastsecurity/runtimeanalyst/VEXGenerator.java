@@ -27,14 +27,17 @@ import org.cyclonedx.model.Component;
 import org.cyclonedx.model.Metadata;
 import org.cyclonedx.model.Property;
 import org.cyclonedx.model.vulnerability.Vulnerability;
+import org.cyclonedx.model.vulnerability.Vulnerability.Advisory;
 import org.cyclonedx.model.vulnerability.Vulnerability.Affect;
 import org.cyclonedx.model.vulnerability.Vulnerability.Analysis;
 import org.cyclonedx.model.vulnerability.Vulnerability.Analysis.Justification;
+import org.cyclonedx.model.vulnerability.Vulnerability.Analysis.Response;
 import org.cyclonedx.model.vulnerability.Vulnerability.Analysis.State;
 import org.cyclonedx.model.vulnerability.Vulnerability.Rating;
 import org.cyclonedx.model.vulnerability.Vulnerability.Rating.Method;
 import org.cyclonedx.model.vulnerability.Vulnerability.Rating.Severity;
 import org.cyclonedx.model.vulnerability.Vulnerability.Source;
+import org.cyclonedx.model.vulnerability.Vulnerability.Version.Status;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -406,6 +409,9 @@ public class VEXGenerator {
                 String hash = getStringOrNull(lib, "hash");
                 long classesUsed = lib.has("classes_used") ? lib.get("classes_used").getAsLong() : 0L;
                 long classCount = lib.has("class_count") ? lib.get("class_count").getAsLong() : 0L;
+                JsonObject remediationGuidance = lib.has("remediationGuidance") && lib.get("remediationGuidance").isJsonObject()
+                    ? lib.getAsJsonObject("remediationGuidance") : null;
+                String latestVersion = getStringOrNull(lib, "latest_version");
 
                 if (!lib.has("vulns")) {
                     continue;
@@ -420,7 +426,8 @@ public class VEXGenerator {
 
                     Vulnerability v = buildVulnerability(
                         app, group, fileName, fileVersion, hash, classesUsed, classCount,
-                        cveId, vuln, cveIssues.get(cveId + "|" + fileVersion), daysObserved);
+                        cveId, vuln, cveIssues.get(cveId + "|" + fileVersion), daysObserved,
+                        remediationGuidance, latestVersion);
 
                     if (v != null) {
                         vulnerabilities.add(v);
@@ -448,11 +455,16 @@ public class VEXGenerator {
     /** Returns null when the CVE shouldn't get a VEX statement at all (exposed/exploited/unrecognized status). */
     private Vulnerability buildVulnerability(AppInfo app, String group, String fileName, String fileVersion,
             String hash, long classesUsed, long classCount, String cveId, JsonObject vuln,
-            CveIssue issue, long daysObserved) {
+            CveIssue issue, long daysObserved, JsonObject remediationGuidance, String latestVersion) {
 
         Vulnerability v = new Vulnerability();
         v.setBomRef(sanitizeBomRef(app.id + "-" + cveId + "-" + hash));
         v.setId(cveId);
+
+        String description = getStringOrNull(vuln, "description");
+        if (description != null) {
+            v.setDescription(description);
+        }
 
         Source source = new Source();
         source.setName("NVD");
@@ -477,12 +489,67 @@ public class VEXGenerator {
         ratings.add(rating);
         v.setRatings(ratings);
 
+        if (vuln.has("references") && vuln.getAsJsonArray("references").size() > 0) {
+            List<Advisory> advisories = new ArrayList<>();
+            for (JsonElement refEl : vuln.getAsJsonArray("references")) {
+                String refUrl = refEl.isJsonPrimitive() ? refEl.getAsString() : getStringOrNull(refEl.getAsJsonObject(), "url");
+                if (refUrl == null || refUrl.isEmpty()) {
+                    continue;
+                }
+                Advisory advisory = new Advisory();
+                advisory.setUrl(refUrl);
+                advisories.add(advisory);
+            }
+            if (!advisories.isEmpty()) {
+                v.setAdvisories(advisories);
+            }
+        }
+
         String purl = "pkg:maven/" + (group != null ? group : "unknown") + "/" + artifactNameFrom(fileName) + "@" + fileVersion;
         Affect affect = new Affect();
         affect.setRef(purl);
+
+        // Contrast's own remediation guidance (minUpgrade = smallest version that clears this library's
+        // vulnerabilities) is more actionable than the library's raw latest_version, which may be newer
+        // than necessary or not actually address this CVE - prefer it when available.
+        String minUpgradeVersion = remediationGuidance != null
+            ? getStringOrNull(nestedObject(remediationGuidance, "minUpgrade"), "version") : null;
+        String maxUpgradeVersion = remediationGuidance != null
+            ? getStringOrNull(nestedObject(remediationGuidance, "maxUpgrade"), "version") : null;
+        String recommendedVersion = minUpgradeVersion != null ? minUpgradeVersion : latestVersion;
+
+        List<org.cyclonedx.model.vulnerability.Vulnerability.Version> versions = new ArrayList<>();
+        org.cyclonedx.model.vulnerability.Vulnerability.Version affectedVersion =
+            new org.cyclonedx.model.vulnerability.Vulnerability.Version();
+        affectedVersion.setVersion(fileVersion);
+        affectedVersion.setStatus(Status.AFFECTED);
+        versions.add(affectedVersion);
+        boolean fixAvailable = recommendedVersion != null && !recommendedVersion.equals(fileVersion);
+        if (fixAvailable) {
+            org.cyclonedx.model.vulnerability.Vulnerability.Version fixedVersion =
+                new org.cyclonedx.model.vulnerability.Vulnerability.Version();
+            fixedVersion.setVersion(recommendedVersion);
+            fixedVersion.setStatus(Status.UNAFFECTED);
+            versions.add(fixedVersion);
+        }
+        affect.setVersions(versions);
+
         List<Affect> affects = new ArrayList<>();
         affects.add(affect);
         v.setAffects(affects);
+
+        String artifactName = artifactNameFrom(fileName);
+        if (fixAvailable) {
+            StringBuilder rec = new StringBuilder("Upgrade " + artifactName + " from " + fileVersion + " to "
+                + recommendedVersion + " to remediate " + cveId + ".");
+            if (maxUpgradeVersion != null && !maxUpgradeVersion.equals(recommendedVersion)) {
+                rec.append(" Latest available release is ").append(maxUpgradeVersion).append(".");
+            }
+            v.setRecommendation(rec.toString());
+        } else {
+            v.setRecommendation("No newer release of " + artifactName + " is currently identified; monitor for a "
+                + "fix and re-run VEX generation periodically.");
+        }
 
         Analysis analysis = new Analysis();
         String detail;
@@ -529,6 +596,18 @@ public class VEXGenerator {
         }
 
         analysis.setDetail(detail);
+
+        List<Response> responses = new ArrayList<>();
+        if (analysis.getJustification() == Justification.PROTECTED_AT_RUNTIME) {
+            // The active Shield/Protect control is itself the mitigation in place.
+            responses.add(Response.WORKAROUND_AVAILABLE);
+        } else if (analysis.getJustification() != Justification.CODE_NOT_REACHABLE && fixAvailable) {
+            responses.add(Response.UPDATE);
+        }
+        if (!responses.isEmpty()) {
+            analysis.setResponses(responses);
+        }
+
         v.setAnalysis(analysis);
 
         List<Property> properties = new ArrayList<>();
@@ -539,6 +618,18 @@ public class VEXGenerator {
         properties.add(property("contrast:daysObserved", String.valueOf(daysObserved)));
         properties.add(property("contrast:acceptAfterDays", String.valueOf(acceptAfterDays)));
         properties.add(property("contrast:envFilter", envFilter != null ? envFilter : "ALL"));
+        if (vuln.has("epss_score") && !vuln.get("epss_score").isJsonNull()) {
+            properties.add(property("contrast:epssScore", String.valueOf(vuln.get("epss_score").getAsDouble())));
+        }
+        if (vuln.has("epss_percentile") && !vuln.get("epss_percentile").isJsonNull()) {
+            properties.add(property("contrast:epssPercentile", String.valueOf(vuln.get("epss_percentile").getAsDouble())));
+        }
+        if (vuln.has("cisa") && !vuln.get("cisa").isJsonNull()) {
+            properties.add(property("contrast:cisaKev", String.valueOf(vuln.get("cisa").getAsBoolean())));
+        }
+        if (latestVersion != null) {
+            properties.add(property("contrast:latestVersion", latestVersion));
+        }
         if (issue != null) {
             properties.add(property("contrast:devStatus", issue.dev));
             properties.add(property("contrast:qaStatus", issue.qa));
@@ -601,6 +692,10 @@ public class VEXGenerator {
         return withoutExt.replaceAll("-\\d.*$", "");
     }
 
+    private JsonObject nestedObject(JsonObject obj, String field) {
+        return obj.has(field) && obj.get(field).isJsonObject() ? obj.getAsJsonObject(field) : null;
+    }
+
     private Property property(String name, String value) {
         Property p = new Property();
         p.setName(name);
@@ -616,7 +711,7 @@ public class VEXGenerator {
     }
 
     private String getStringOrNull(JsonObject obj, String field) {
-        return obj.has(field) && !obj.get(field).isJsonNull() ? obj.get(field).getAsString() : null;
+        return obj != null && obj.has(field) && !obj.get(field).isJsonNull() ? obj.get(field).getAsString() : null;
     }
 
     public void writeVEX(Bom bom, String filename) throws Exception {
