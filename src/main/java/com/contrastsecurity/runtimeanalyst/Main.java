@@ -1,5 +1,6 @@
 package com.contrastsecurity.runtimeanalyst;
 
+import java.io.File;
 import java.util.Arrays;
 
 /**
@@ -26,9 +27,11 @@ public class Main {
                 AuthCommand.main(rest);
                 break;
             case "cbom":
+                ensureAuthenticated(rest);
                 CBOMGenerator.main(rest);
                 break;
             case "aibom":
+                ensureAuthenticated(rest);
                 AIBOMGenerator.main(rest);
                 break;
             case "cbom-advisor":
@@ -45,6 +48,29 @@ public class Main {
                 System.err.println("Unknown command: " + subcommand);
                 printUsage();
                 System.exit(1);
+        }
+    }
+
+    /**
+     * cbom/aibom/blueprint all need a contrast.properties to run - rather than making a user
+     * run `auth` themselves first, run it for them automatically the first time there's no
+     * config file yet at the path they'd otherwise be pointed at (respecting -c if given).
+     * Skipped when the command is just asking for help - that shouldn't require logging in.
+     */
+    private static void ensureAuthenticated(String[] rest) {
+        if (Arrays.asList(rest).contains("-h") || Arrays.asList(rest).contains("--help")) {
+            return;
+        }
+        String configPath = "contrast.properties";
+        for (int i = 0; i < rest.length - 1; i++) {
+            if ("-c".equals(rest[i])) {
+                configPath = rest[i + 1];
+                break;
+            }
+        }
+        if (!new File(configPath).exists()) {
+            System.out.println("No " + configPath + " found - connecting to Contrast first.\n");
+            AuthCommand.main(new String[] { "-o", configPath });
         }
     }
 

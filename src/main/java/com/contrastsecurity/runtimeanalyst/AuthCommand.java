@@ -6,6 +6,7 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -112,13 +113,37 @@ public class AuthCommand {
         }
     }
 
-    private static Browser launchChromium(Playwright playwright, boolean headless) {
+    /**
+     * Playwright's Java library is bundled in this jar, but the actual Chromium binary it drives
+     * (~150-300MB) isn't - it has to exist on disk separately. Rather than making a first-time
+     * user run a separate install command themselves, download it automatically and transparently
+     * the first time it's missing, then retry.
+     */
+    private static Browser launchChromium(Playwright playwright, boolean headless) throws Exception {
         try {
             return playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
-        } catch (Exception e) {
-            System.err.println("Couldn't launch a browser. If this is the first run, install Playwright's browser with:");
-            System.err.println("  mvn com.microsoft.playwright:playwright:1.49.0:install");
-            throw new IllegalStateException(e.getMessage(), e);
+        } catch (Exception firstAttempt) {
+            System.out.println("Chromium isn't installed yet - downloading it now (one-time, ~150MB)...");
+            installChromium();
+            return playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
+        }
+    }
+
+    /**
+     * Runs Playwright's browser installer in a separate JVM, not in-process - CLI.main() calls
+     * System.exit() internally (confirmed directly: code after the call never ran), which would
+     * kill this whole auth run right after installing, before ever getting to actually launch
+     * the browser it just downloaded.
+     */
+    private static void installChromium() throws Exception {
+        String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+        String jarPath = new File(AuthCommand.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath();
+        Process installer = new ProcessBuilder(javaBin, "-cp", jarPath, "com.microsoft.playwright.CLI", "install", "chromium")
+                .inheritIO()
+                .start();
+        int result = installer.waitFor();
+        if (result != 0) {
+            throw new IllegalStateException("Chromium install exited with code " + result);
         }
     }
 
