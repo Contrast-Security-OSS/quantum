@@ -3,7 +3,7 @@
   "specVersion": "1.6",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-02T21:36:56Z",
+    "timestamp": "2026-09-02T22:10:38Z",
     "component": {
       "type": "application",
       "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2",
@@ -117,7 +117,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical (10.0) jackson-databind CVE accepted purely on 288 days without observed execution, not structural unreachability."
+          "value": "Critical (10.0) accepted solely on 288 days of non-execution with no structural non-reachability; jackson-databind deserialization CVEs of this class are historically found reachable unexpectedly."
         }
       ]
     },
@@ -227,7 +227,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only justification on a partially-loaded library (263/582 classes)."
+          "value": "Critical (9.8) accepted on duration alone; no code_not_reachable backing."
         }
       ]
     },
@@ -337,7 +337,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical, EPSS 0.5 (high exploit likelihood), duration-only acceptance is weak evidence for this deserialization CVE."
+          "value": "Critical (9.8) with elevated EPSS (0.5, 98.8th pct) accepted purely on non-execution duration; warrants a closer look."
         }
       ]
     },
@@ -447,7 +447,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical jackson-databind gadget-chain CVE relying only on absence-of-observed-execution."
+          "value": "Critical (9.8), EPSS 0.27, duration-only justification - worth a manual check."
         }
       ]
     },
@@ -557,7 +557,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only reasoning, library actively loaded."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -667,7 +667,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity accepted on runtime silence alone."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -777,7 +777,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical jackson-databind deserialization CVE, duration-only justification."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -887,7 +887,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, no structural reachability guarantee provided."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -997,7 +997,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, absence-of-execution is the sole basis for not_affected."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -1107,7 +1107,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-based claim on library with substantial class usage."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -1217,7 +1217,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity jackson-databind CVE, duration-only reasoning."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -1327,7 +1327,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only justification."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -1437,7 +1437,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, no code_not_reachable or protected_at_runtime backing."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -1547,7 +1547,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity gadget-chain CVE accepted on runtime silence alone."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -1657,7 +1657,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only reasoning."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -1767,7 +1767,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only justification."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -1877,7 +1877,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, absence-of-evidence acceptance."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -1987,7 +1987,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only justification."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -2097,7 +2097,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity gadget-chain CVE, no structural guarantee."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -2207,7 +2207,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical, EPSS 0.38, duration-only reasoning on a well-known deserialization CVE."
+          "value": "Critical (9.8), EPSS 0.38, duration-only - the well-known jackson polymorphic-deserialization gadget class, worth verifying."
         }
       ]
     },
@@ -2317,7 +2317,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, EPSS 0.2, duration-only justification."
+          "value": "Critical (9.8), EPSS 0.2, accepted solely on non-execution duration."
         }
       ]
     },
@@ -2427,7 +2427,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, no structural reachability evidence."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -2537,7 +2537,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only acceptance."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -2647,7 +2647,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity jackson-databind CVE, duration-only justification."
+          "value": "Critical (9.8) accepted solely on non-execution duration."
         }
       ]
     },
@@ -2753,11 +2753,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity (8.8), duration-only reasoning without structural backing."
+          "value": "High severity but low EPSS (0.08); 288 days is well past the 30-day threshold, acceptable to rely on."
         }
       ]
     },
@@ -2863,11 +2863,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, EPSS 0.13, duration comfortably exceeds threshold; reasonable to accept."
         }
       ]
     },
@@ -2973,11 +2973,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.09); acceptable duration-based claim."
         }
       ]
     },
@@ -3083,11 +3083,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.08); acceptable duration-based claim."
         }
       ]
     },
@@ -3193,11 +3193,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.1); acceptable duration-based claim."
         }
       ]
     },
@@ -3303,11 +3303,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.05); acceptable."
         }
       ]
     },
@@ -3413,11 +3413,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.05); acceptable."
         }
       ]
     },
@@ -3523,11 +3523,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.05); acceptable."
         }
       ]
     },
@@ -3633,11 +3633,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.05); acceptable."
         }
       ]
     },
@@ -3747,7 +3747,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity with EPSS 0.21 (97th pct) accepted on duration alone; worth a closer look."
         }
       ]
     },
@@ -3853,11 +3853,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, very low EPSS (0.03); acceptable."
         }
       ]
     },
@@ -3963,11 +3963,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.05); acceptable."
         }
       ]
     },
@@ -4073,11 +4073,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, EPSS 0.11; acceptable given long observation window."
         }
       ]
     },
@@ -4183,11 +4183,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.05); acceptable."
         }
       ]
     },
@@ -4293,11 +4293,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.05); acceptable."
         }
       ]
     },
@@ -4403,11 +4403,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.05); acceptable."
         }
       ]
     },
@@ -4513,11 +4513,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.07); acceptable."
         }
       ]
     },
@@ -4623,11 +4623,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.07); acceptable."
         }
       ]
     },
@@ -4733,11 +4733,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.09); acceptable."
         }
       ]
     },
@@ -4843,11 +4843,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.07); acceptable."
         }
       ]
     },
@@ -4953,11 +4953,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity (7.5), low EPSS (0.03); acceptable."
         }
       ]
     },
@@ -5063,11 +5063,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity (7.5), low EPSS (0.03); acceptable."
         }
       ]
     },
@@ -5177,7 +5177,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity with EPSS 0.18 (97th pct) accepted purely on duration; worth verifying."
         }
       ]
     },
@@ -5283,11 +5283,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.09); acceptable."
         }
       ]
     },
@@ -5393,11 +5393,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.05); acceptable."
         }
       ]
     },
@@ -5503,11 +5503,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, EPSS 0.11; acceptable."
         }
       ]
     },
@@ -5613,11 +5613,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.07); acceptable."
         }
       ]
     },
@@ -5727,7 +5727,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.22, duration-only justification."
+          "value": "High severity with EPSS 0.22 (97th pct) accepted purely on non-execution duration; worth verifying."
         }
       ]
     },
@@ -5837,7 +5837,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity; duration-based acceptance is acceptable at this stakes level."
+          "value": "Medium severity; duration-based acceptance is reasonable at this severity."
         }
       ]
     },
@@ -5947,7 +5947,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity; duration-based acceptance is reasonable."
+          "value": "Medium severity; duration-based acceptance is reasonable at this severity."
         }
       ]
     },
@@ -6055,7 +6055,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable with 0 of 1295 classes loaded is a structural fact, safe regardless of critical severity."
+          "value": "code_not_reachable, 0 of 1295 classes ever loaded - a structural fact, safe regardless of critical severity."
         }
       ]
     },
@@ -6163,7 +6163,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability, safe to rely on."
+          "value": "code_not_reachable, zero classes loaded - structural, safe to rely on."
         }
       ]
     },
@@ -6273,7 +6273,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity dom4j XXE CVE accepted on duration alone; only 1 of 190 classes loaded but that single class could be the vulnerable path."
+          "value": "Critical (9.8) dom4j XXE, only 1 of 190 classes ever used, but that one class is loaded and the claim relies purely on non-execution duration - worth confirming that class isn\u0027t the vulnerable entry point."
         }
       ]
     },
@@ -6379,11 +6379,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification with minimal (1/190) class usage - worth confirming that one class isn\u0027t the vulnerable path."
+          "value": "High severity but low EPSS (0.07); duration-based acceptance reasonable."
         }
       ]
     },
@@ -6491,7 +6491,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable (0 of 206 classes) is structural, safe despite critical severity/EPSS 1.0."
+          "value": "code_not_reachable despite very high EPSS (1.0) - zero classes loaded is a structural fact independent of exploit prevalence."
         }
       ]
     },
@@ -6599,7 +6599,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -6707,7 +6707,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -6815,7 +6815,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, medium severity, low stakes."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -6923,7 +6923,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, medium severity."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -7031,7 +7031,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, medium severity."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -7139,7 +7139,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, medium severity."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -7247,7 +7247,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, medium severity."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -7355,7 +7355,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For spring-beans: Spring4Shell, critical, KEV-listed, duration-only justification with library substantially loaded (202/408 classes)."
+          "value": "KEV-listed Spring4Shell (EPSS 1.0) on spring-beans - library IS loaded (202/408 classes) and accepted purely on non-execution duration. High priority for manual review."
         }
       ]
     },
@@ -7465,7 +7465,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical, KEV-listed, EPSS 0.97 spring-data-commons RCE accepted purely on duration with the library substantially loaded (152/554 classes) - high priority for human review."
+          "value": "KEV-listed, critical (9.8), EPSS 0.97 (99.9th pct) - one of the most exploitable CVEs in this VEX set, yet accepted purely on non-execution duration. Requires explicit human verification, not automated acceptance."
         }
       ]
     },
@@ -7571,11 +7571,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification on same actively-loaded library."
+          "value": "High severity but low EPSS (0.02); acceptable given long observation."
         }
       ]
     },
@@ -7681,11 +7681,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity CVE accepted on duration alone, though EPSS is negligible."
+          "value": "High severity, negligible EPSS (0.0); acceptable."
         }
       ]
     },
@@ -7795,7 +7795,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -7905,7 +7905,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -8013,7 +8013,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown/no severity score, low stakes."
+          "value": "Unscored/unknown severity; low stakes."
         }
       ]
     },
@@ -8123,7 +8123,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity hsqldb CVE accepted purely on duration, library substantially loaded (229/601 classes)."
+          "value": "Critical (9.8) accepted solely on non-execution duration despite substantial hsqldb usage (229/601 classes) - worth confirming."
         }
       ]
     },
@@ -8233,7 +8233,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For logback-classic: critical severity, duration-only justification with library actively loaded (63/178 classes)."
+          "value": "Critical (9.8) on logback-classic, same underlying gap as the logback-core instance: accepted purely on non-execution duration."
         }
       ]
     },
@@ -8339,11 +8339,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For logback-classic: high severity, duration-only justification."
+          "value": "High severity but very low EPSS (0.01); acceptable."
         }
       ]
     },
@@ -8453,7 +8453,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -8561,7 +8561,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes."
+          "value": "Unscored severity; low stakes."
         }
       ]
     },
@@ -8669,7 +8669,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes."
+          "value": "Unscored severity; low stakes."
         }
       ]
     },
@@ -8777,7 +8777,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes."
+          "value": "Unscored severity; low stakes."
         }
       ]
     },
@@ -8885,7 +8885,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes."
+          "value": "Unscored severity; low stakes."
         }
       ]
     },
@@ -8993,7 +8993,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes."
+          "value": "Unscored severity; low stakes."
         }
       ]
     },
@@ -9101,7 +9101,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes."
+          "value": "Unscored severity; low stakes."
         }
       ]
     },
@@ -9211,7 +9211,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity spring-web CVE, EPSS 0.32, duration-only justification."
+          "value": "Critical (9.8) spring-web deserialization CVE accepted solely on non-execution duration despite meaningful library usage (211/559 classes); worth verifying."
         }
       ]
     },
@@ -9317,11 +9317,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.04); acceptable."
         }
       ]
     },
@@ -9427,11 +9427,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, very low EPSS (0.01); acceptable."
         }
       ]
     },
@@ -9537,11 +9537,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.03); acceptable."
         }
       ]
     },
@@ -9651,7 +9651,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -9761,7 +9761,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For spring-context: medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity on spring-context; acceptable."
         }
       ]
     },
@@ -9871,7 +9871,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -9981,7 +9981,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For spring-beans: Spring4Shell, critical, KEV-listed, duration-only justification with library substantially loaded (202/408 classes)."
+          "value": "KEV-listed Spring4Shell (EPSS 1.0) on spring-beans - library IS loaded (202/408 classes) and accepted purely on non-execution duration. High priority for manual review."
         }
       ]
     },
@@ -10087,11 +10087,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, negligible EPSS (0.0); acceptable."
         }
       ]
     },
@@ -10201,7 +10201,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.55, duration-only justification."
+          "value": "High severity with elevated EPSS (0.55, 99th pct) accepted purely on non-execution duration; worth verifying."
         }
       ]
     },
@@ -10311,7 +10311,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -10421,7 +10421,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -10531,7 +10531,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -10641,7 +10641,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -10751,7 +10751,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -10861,7 +10861,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -10971,7 +10971,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -11081,7 +11081,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low severity, duration-based acceptance is fine."
+          "value": "Low severity; acceptable."
         }
       ]
     },
@@ -11191,7 +11191,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For logback-classic: critical severity, duration-only justification with library actively loaded (63/178 classes)."
+          "value": "Critical (9.8) on logback-classic, same underlying gap as the logback-core instance: accepted purely on non-execution duration."
         }
       ]
     },
@@ -11297,11 +11297,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For logback-classic: high severity, duration-only justification."
+          "value": "High severity but very low EPSS (0.01); acceptable."
         }
       ]
     },
@@ -11411,7 +11411,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For spring-beans: Spring4Shell, critical, KEV-listed, duration-only justification with library substantially loaded (202/408 classes)."
+          "value": "KEV-listed Spring4Shell (EPSS 1.0) on spring-beans - library IS loaded (202/408 classes) and accepted purely on non-execution duration. High priority for manual review."
         }
       ]
     },
@@ -11521,7 +11521,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -11631,7 +11631,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity tomcat-embed-core CVE, duration-only justification, library heavily loaded (387/1481 classes)."
+          "value": "Critical (9.8) on heavily-used tomcat-embed-core (387/1481 classes), accepted purely on non-execution duration."
         }
       ]
     },
@@ -11741,7 +11741,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical, KEV-listed, EPSS 1.0 Tomcat path equality RCE accepted purely on duration despite heavy library usage - top priority review."
+          "value": "KEV-listed, critical (9.8), EPSS 1.0 - among the most exploitable CVEs in this set, accepted purely on duration; requires human verification."
         }
       ]
     },
@@ -11851,7 +11851,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only justification."
+          "value": "Critical (9.8) accepted purely on non-execution duration on a heavily-loaded library."
         }
       ]
     },
@@ -11961,7 +11961,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical, KEV-listed (Ghostcat), EPSS 0.99, accepted purely on duration - top priority review."
+          "value": "KEV-listed (Ghostcat), critical (9.8), EPSS 0.99 - requires human verification rather than duration-only acceptance."
         }
       ]
     },
@@ -12071,7 +12071,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only justification."
+          "value": "Critical (9.8) accepted purely on non-execution duration."
         }
       ]
     },
@@ -12181,7 +12181,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, EPSS 0.44, duration-only justification."
+          "value": "Critical (9.8), EPSS 0.44, accepted purely on non-execution duration."
         }
       ]
     },
@@ -12291,7 +12291,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only justification."
+          "value": "Critical (9.1) accepted purely on non-execution duration."
         }
       ]
     },
@@ -12401,7 +12401,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 1.0, duration-only justification."
+          "value": "High severity with EPSS 1.0 (near-certain exploitation observed elsewhere) accepted purely on non-execution duration."
         }
       ]
     },
@@ -12511,7 +12511,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, KEV-listed, EPSS 1.0, duration-only justification - top priority review."
+          "value": "KEV-listed, EPSS 1.0 - requires human verification rather than duration-only acceptance."
         }
       ]
     },
@@ -12621,7 +12621,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.73, duration-only justification."
+          "value": "High severity, EPSS 0.73, accepted purely on non-execution duration."
         }
       ]
     },
@@ -12731,7 +12731,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, EPSS 0.21, accepted purely on non-execution duration."
         }
       ]
     },
@@ -12837,11 +12837,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity but EPSS below 0.15 (0.11); acceptable given long observation."
         }
       ]
     },
@@ -12947,11 +12947,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.03); acceptable."
         }
       ]
     },
@@ -13061,7 +13061,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.67, duration-only justification."
+          "value": "High severity, EPSS 0.67, accepted purely on non-execution duration."
         }
       ]
     },
@@ -13167,11 +13167,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.01); acceptable."
         }
       ]
     },
@@ -13281,7 +13281,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.73, duration-only justification."
+          "value": "High severity, EPSS 0.73, accepted purely on non-execution duration."
         }
       ]
     },
@@ -13387,11 +13387,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, negligible EPSS (0.0); acceptable."
         }
       ]
     },
@@ -13501,7 +13501,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, EPSS 0.18, accepted purely on non-execution duration."
         }
       ]
     },
@@ -13607,11 +13607,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.05); acceptable."
         }
       ]
     },
@@ -13721,7 +13721,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.57, duration-only justification."
+          "value": "High severity, EPSS 0.57, accepted purely on non-execution duration."
         }
       ]
     },
@@ -13827,11 +13827,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.03); acceptable."
         }
       ]
     },
@@ -13937,11 +13937,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.02); acceptable."
         }
       ]
     },
@@ -14047,11 +14047,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.02); acceptable."
         }
       ]
     },
@@ -14157,11 +14157,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.02); acceptable."
         }
       ]
     },
@@ -14267,11 +14267,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.02); acceptable."
         }
       ]
     },
@@ -14381,7 +14381,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.6, duration-only justification."
+          "value": "High severity, EPSS 0.6, accepted purely on non-execution duration."
         }
       ]
     },
@@ -14491,7 +14491,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.23, duration-only justification."
+          "value": "High severity, EPSS 0.23, accepted purely on non-execution duration."
         }
       ]
     },
@@ -14601,7 +14601,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, KEV-listed (HTTP/2 Rapid Reset), EPSS 1.0, duration-only justification - priority review."
+          "value": "KEV-listed (HTTP/2 Rapid Reset), EPSS 1.0 - requires human verification rather than duration-only acceptance."
         }
       ]
     },
@@ -14711,7 +14711,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, EPSS 0.21, accepted purely on non-execution duration."
         }
       ]
     },
@@ -14817,11 +14817,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.03); acceptable."
         }
       ]
     },
@@ -14927,11 +14927,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, very low EPSS (0.01); acceptable."
         }
       ]
     },
@@ -15037,11 +15037,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.09); acceptable."
         }
       ]
     },
@@ -15151,7 +15151,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.57, duration-only justification."
+          "value": "High severity, EPSS 0.57, accepted purely on non-execution duration."
         }
       ]
     },
@@ -15261,7 +15261,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -15371,7 +15371,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -15481,7 +15481,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -15591,7 +15591,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -15701,7 +15701,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -15811,7 +15811,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -15921,7 +15921,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -16031,7 +16031,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -16141,7 +16141,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity; despite unusually high EPSS (0.94), lower stakes than critical/high per policy, acceptable on duration."
+          "value": "Medium severity despite high EPSS; below the critical/high threshold the rubric targets, and duration is well past policy minimum."
         }
       ]
     },
@@ -16249,7 +16249,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability, safe despite critical severity."
+          "value": "code_not_reachable, structural, safe to rely on despite critical severity."
         }
       ]
     },
@@ -16357,7 +16357,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -16465,7 +16465,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -16573,7 +16573,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -16681,7 +16681,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability, safe despite critical severity."
+          "value": "code_not_reachable, structural, safe to rely on despite critical severity."
         }
       ]
     },
@@ -16789,7 +16789,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -16897,7 +16897,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -17005,7 +17005,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -17113,7 +17113,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -17221,7 +17221,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -17329,7 +17329,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -17437,7 +17437,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -17545,7 +17545,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -17651,7 +17651,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -17759,7 +17759,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability, safe despite critical severity."
+          "value": "code_not_reachable, structural, safe to rely on despite critical severity."
         }
       ]
     },
@@ -17867,7 +17867,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -17975,7 +17975,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -18083,7 +18083,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -18191,7 +18191,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -18301,7 +18301,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity thymeleaf CVE, duration-only justification, library heavily loaded (367/549 classes)."
+          "value": "Critical (9.0) thymeleaf CVE accepted solely on non-execution duration despite substantial library usage (367/549 classes); worth verifying."
         }
       ]
     },
@@ -18411,7 +18411,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only justification."
+          "value": "Critical (9.0) accepted solely on non-execution duration."
         }
       ]
     },
@@ -18521,7 +18521,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, duration-only justification."
+          "value": "Critical (9.0) accepted solely on non-execution duration."
         }
       ]
     },
@@ -18627,11 +18627,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity mysql-connector CVE, duration-only justification."
+          "value": "High severity, low EPSS (0.04); acceptable, and library usage is minimal (4/347 classes)."
         }
       ]
     },
@@ -18737,11 +18737,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, very low EPSS (0.01); acceptable."
         }
       ]
     },
@@ -18851,7 +18851,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -18959,7 +18959,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes."
+          "value": "Unscored severity; low stakes."
         }
       ]
     },
@@ -19067,7 +19067,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable (0 of 0 classes), consistent with starter POM containing no code, safe despite high severity."
+          "value": "code_not_reachable, 0 of 0 classes loaded, structural, safe to rely on."
         }
       ]
     },
@@ -19173,11 +19173,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity spring-boot CVE, duration-only justification."
+          "value": "High severity, very low EPSS (0.01); acceptable."
         }
       ]
     },
@@ -19283,11 +19283,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, negligible EPSS (0.0); acceptable."
         }
       ]
     },
@@ -19393,11 +19393,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, negligible EPSS (0.0); acceptable."
         }
       ]
     },
@@ -19507,7 +19507,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -19615,7 +19615,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -19723,7 +19723,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -19829,11 +19829,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity gson CVE, duration-only justification with library actively loaded (36/174 classes)."
+          "value": "High severity but EPSS just under the 0.15 flag threshold (0.12); acceptable given long observation, though close enough to note if reviewing anyway."
         }
       ]
     },
@@ -19941,7 +19941,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -20049,7 +20049,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -20157,7 +20157,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -20265,7 +20265,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -20373,7 +20373,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, medium severity."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -20481,7 +20481,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, medium severity."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -20591,7 +20591,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.81 xalan CVE, duration-only justification despite very low class usage (7/1501) - worth confirming those 7 classes aren\u0027t the vulnerable path."
+          "value": "High severity with very high EPSS (0.81, 99.6th pct) accepted purely on non-execution duration despite the library being loaded (7/1501 classes) - worth verifying given the strong exploitability signal."
         }
       ]
     },
@@ -20697,11 +20697,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity spring-core CVE, duration-only justification, library heavily loaded (334/791 classes)."
+          "value": "High severity, low EPSS (0.03); acceptable."
         }
       ]
     },
@@ -20807,11 +20807,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, EPSS 0.09; acceptable."
         }
       ]
     },
@@ -20917,11 +20917,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, negligible EPSS; acceptable."
         }
       ]
     },
@@ -21027,11 +21027,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, low EPSS (0.03); acceptable."
         }
       ]
     },
@@ -21141,7 +21141,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -21251,7 +21251,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable despite elevated EPSS (0.35)."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -21361,7 +21361,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -21471,7 +21471,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -21577,11 +21577,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity spring-expression CVE, duration-only justification, library heavily loaded (91/142 classes)."
+          "value": "High severity, negligible EPSS; acceptable."
         }
       ]
     },
@@ -21687,11 +21687,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, negligible EPSS; acceptable."
         }
       ]
     },
@@ -21797,11 +21797,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, duration-only justification."
+          "value": "High severity, negligible EPSS; acceptable."
         }
       ]
     },
@@ -21911,7 +21911,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -22021,7 +22021,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -22131,7 +22131,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable despite EPSS 0.36."
+          "value": "Medium severity (despite EPSS 0.36); below the critical/high threshold the rubric targets."
         }
       ]
     },
@@ -22241,7 +22241,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -22351,7 +22351,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -22457,11 +22457,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity spring-boot-autoconfigure CVE, duration-only justification, library well-loaded (195/848 classes)."
+          "value": "High severity, very low EPSS (0.01); acceptable."
         }
       ]
     },
@@ -22571,7 +22571,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -22677,11 +22677,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity hibernate-core CVE, duration-only justification, library heavily loaded (1563/3787 classes)."
+          "value": "High severity, low EPSS (0.03); acceptable."
         }
       ]
     },
@@ -22791,7 +22791,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -22897,11 +22897,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity hibernate-validator CVE, duration-only justification, library well-loaded (225/459 classes)."
+          "value": "High severity, negligible EPSS (0.0); acceptable."
         }
       ]
     },
@@ -23007,11 +23007,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity guava CVE, duration-only justification, though usage is minimal (5/1717 classes)."
+          "value": "High severity, negligible EPSS (0.0); acceptable, and library usage is minimal (5/1717 classes)."
         }
       ]
     },
@@ -23121,7 +23121,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low severity, duration-based acceptance reasonable."
+          "value": "Low severity; acceptable."
         }
       ]
     },
@@ -23229,7 +23229,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes."
+          "value": "Unscored severity; low stakes."
         }
       ]
     },
@@ -23337,7 +23337,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes."
+          "value": "Unscored severity; low stakes."
         }
       ]
     },
@@ -23447,7 +23447,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -23557,7 +23557,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -23667,7 +23667,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -23775,7 +23775,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -23883,7 +23883,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -23991,7 +23991,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -24099,7 +24099,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -24207,7 +24207,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -24315,7 +24315,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -24423,7 +24423,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability (test-scope library)."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -24531,7 +24531,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For commons-lang3: code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable on commons-lang3 (0/152 classes), structural, safe to rely on."
         }
       ]
     },
@@ -24639,7 +24639,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For commons-lang3: code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable on commons-lang3 (0/152 classes), structural, safe to rely on."
         }
       ]
     },
@@ -24749,7 +24749,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -24859,7 +24859,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -24969,7 +24969,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -25079,7 +25079,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "For spring-context: medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity on spring-context; acceptable."
         }
       ]
     },
@@ -25189,7 +25189,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low severity, duration-based acceptance reasonable."
+          "value": "Low severity; acceptable."
         }
       ]
     },
@@ -25297,7 +25297,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -25405,7 +25405,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -25513,7 +25513,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, structural non-reachability."
+          "value": "code_not_reachable, structural, safe to rely on."
         }
       ]
     },
@@ -25623,7 +25623,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, duration-based acceptance reasonable."
+          "value": "Medium severity; acceptable."
         }
       ]
     },
@@ -25731,7 +25731,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes."
+          "value": "Unscored severity; low stakes."
         }
       ]
     }

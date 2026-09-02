@@ -373,7 +373,14 @@ public class VEXAdvisor {
             if (byCve == null || cveId == null || !byCve.containsKey(cveId)) continue;
 
             JsonObject assessment = byCve.get(cveId);
-            JsonArray properties = v.has("properties") ? v.getAsJsonArray("properties") : new JsonArray();
+            JsonArray oldProperties = v.has("properties") ? v.getAsJsonArray("properties") : new JsonArray();
+            JsonArray properties = new JsonArray();
+            for (JsonElement propEl : oldProperties) {
+                String name = getString(propEl.getAsJsonObject(), "name", "");
+                if (!"contrast:vexAdvisorAssessment".equals(name) && !"contrast:vexAdvisorRationale".equals(name)) {
+                    properties.add(propEl);
+                }
+            }
             properties.add(propertyJson("contrast:vexAdvisorAssessment", getString(assessment, "assessment", "unknown")));
             properties.add(propertyJson("contrast:vexAdvisorRationale", getString(assessment, "rationale", "")));
             v.add("properties", properties);
@@ -404,6 +411,20 @@ public class VEXAdvisor {
         Map<String, AppEntry> entriesByName = new LinkedHashMap<>();
         for (AppEntry e : entries) entriesByName.put(e.name, e);
 
+        // One assessment lookup per (app, cve), built once - avoids re-deriving it per section below.
+        Map<String, Map<String, JsonObject>> assessmentsByApp = new LinkedHashMap<>();
+        for (JsonObject r : appResults) {
+            String app = getString(r, "application", null);
+            if (app == null || !r.has("statements")) continue;
+            Map<String, JsonObject> byCve = new LinkedHashMap<>();
+            for (JsonElement el : r.getAsJsonArray("statements")) {
+                JsonObject s = el.getAsJsonObject();
+                String cveId = getString(s, "cve_id", null);
+                if (cveId != null) byCve.put(cveId, s);
+            }
+            assessmentsByApp.put(app, byCve);
+        }
+
         Map<String, Integer> riskCounts = new LinkedHashMap<>();
         Map<String, String> riskByApp = new LinkedHashMap<>();
         for (JsonObject r : appResults) {
@@ -415,12 +436,29 @@ public class VEXAdvisor {
 
         int totalApps = appResults.size();
         int totalStatements = 0;
-        int needsReviewCount = 0;
         for (AppEntry e : entries) totalStatements += e.statements.size();
+
+        int needsReviewCount = 0;
+        List<VexStatement> kevFlagged = new ArrayList<>();
+        List<VexStatement> highEpssFlagged = new ArrayList<>();
+        for (AppEntry entry : entries) {
+            Map<String, JsonObject> byCve = assessmentsByApp.getOrDefault(entry.name, Map.of());
+            for (VexStatement s : entry.statements) {
+                JsonObject assessment = byCve.get(s.cveId);
+                boolean flagged = assessment != null && "needs_review".equals(getString(assessment, "assessment", ""));
+                if (flagged) {
+                    needsReviewCount++;
+                    if (Boolean.TRUE.equals(s.cisaKev)) kevFlagged.add(s);
+                    else if (s.epssScore != null && s.epssScore >= 0.5) highEpssFlagged.add(s);
+                }
+            }
+        }
+
+        List<String> criticalOrHighApps = new ArrayList<>();
         for (JsonObject r : appResults) {
-            if (!r.has("statements")) continue;
-            for (JsonElement el : r.getAsJsonArray("statements")) {
-                if ("needs_review".equals(getString(el.getAsJsonObject(), "assessment", ""))) needsReviewCount++;
+            String level = getString(r, "risk_level", "UNKNOWN");
+            if ("CRITICAL".equals(level) || "HIGH".equals(level)) {
+                criticalOrHighApps.add(getString(r, "application", "Unknown"));
             }
         }
 
@@ -429,20 +467,34 @@ public class VEXAdvisor {
         sb.append("# Contrast VEX Advisor\n## Review of Automatically-Generated VEX Claims\n\n---\n\n");
         sb.append("**Report Date:** ").append(reportDate).append("\n");
         sb.append("**Assessment Type:** VEX Claim Soundness Review\n\n---\n\n");
-        sb.append("## Executive Summary\n\n");
+        sb.append("## Summary\n\n");
         sb.append("This report reviews VEX (Vulnerability Exploitability eXchange) claims generated from Contrast ")
           .append("Security runtime library-usage and CVE Shield/Protect data. It does not re-derive whether a CVE ")
           .append("exists - it judges whether each `not_affected`/`in_triage` claim is well-supported enough to rely ")
           .append("on as-is, or whether a human should look at it first.\n\n");
-        sb.append("**").append(totalApps).append("** application(s), **").append(totalStatements)
-          .append("** VEX statement(s) reviewed.\n\n");
+        sb.append("**Coverage:** ").append(totalApps).append(" application(s), ").append(totalStatements)
+          .append(" VEX statement(s) reviewed.\n\n");
 
+        sb.append("**Key Findings:**\n\n");
         if (needsReviewCount > 0) {
-            sb.append("> **").append(needsReviewCount).append(" claim(s) flagged for human review** before relying on them.\n");
+            sb.append("- **").append(needsReviewCount).append(" of ").append(totalStatements)
+              .append(" claim(s) flagged for human review** before relying on them.\n");
         } else {
-            sb.append("> No claims were flagged for review - all VEX statements look well-supported as generated.\n");
+            sb.append("- No claims were flagged for review - all VEX statements look well-supported as generated.\n");
         }
-
+        if (!kevFlagged.isEmpty()) {
+            sb.append("- **").append(kevFlagged.size())
+              .append(" flagged claim(s) are on CVEs in the CISA Known Exploited Vulnerabilities (KEV) catalog** - ")
+              .append("actively exploited in the wild: ").append(formatCveList(kevFlagged, 6)).append(".\n");
+        }
+        if (!highEpssFlagged.isEmpty()) {
+            sb.append("- **").append(highEpssFlagged.size())
+              .append(" flagged claim(s) have an EPSS score ≥ 0.5** (50%+ predicted exploitation likelihood): ")
+              .append(formatCveList(highEpssFlagged, 6)).append(".\n");
+        }
+        if (!criticalOrHighApps.isEmpty()) {
+            sb.append("- Application(s) rated CRITICAL/HIGH risk: ").append(String.join(", ", criticalOrHighApps)).append(".\n");
+        }
         sb.append("\n### Applications\n\n| Application | Risk Level | Statements |\n|-------------|------------|------------|\n");
         for (AppEntry e : entries) {
             sb.append("| ").append(e.name).append(" | ").append(riskByApp.getOrDefault(e.name, "UNKNOWN"))
@@ -456,7 +508,7 @@ public class VEXAdvisor {
             }
         }
 
-        sb.append("\n---\n\n## Application Review\n\n");
+        sb.append("\n---\n\n## Application Detail\n\n");
 
         List<String> order = java.util.Arrays.asList("CRITICAL", "HIGH", "MEDIUM", "LOW", "SOUND", "UNKNOWN");
         List<JsonObject> sortedResults = new ArrayList<>(appResults);
@@ -474,36 +526,44 @@ public class VEXAdvisor {
             sb.append(getString(r, "application_description", "No description available.")).append("\n\n");
             sb.append("**Risk Rationale:** ").append(getString(r, "risk_rationale", "Unknown")).append("\n\n");
             sb.append("**Recommendation:** ").append(getString(r, "recommendation", "None")).append("\n\n");
-            sb.append("#### VEX Statements\n\n");
 
-            Map<String, JsonObject> statementAssessments = new LinkedHashMap<>();
-            if (r.has("statements")) {
-                for (JsonElement sEl : r.getAsJsonArray("statements")) {
-                    JsonObject s = sEl.getAsJsonObject();
-                    statementAssessments.put(getString(s, "cve_id", ""), s);
-                }
-            }
+            Map<String, JsonObject> statementAssessments = assessmentsByApp.getOrDefault(appName, Map.of());
 
             if (entry != null) {
-                sb.append("| CVE | Library | Severity | State | Assessment |\n|-----|---------|----------|-------|------------|\n");
+                List<VexStatement> needsReview = new ArrayList<>();
+                List<VexStatement> sound = new ArrayList<>();
                 for (VexStatement s : entry.statements) {
                     JsonObject assessment = statementAssessments.get(s.cveId);
                     String assessLabel = assessment != null ? getString(assessment, "assessment", "unknown") : "unknown";
-                    sb.append("| ").append(s.cveId).append(" | `").append(s.purl != null ? s.purl : "unknown")
-                      .append("` | ").append(s.severity != null ? s.severity : "unknown").append(" | ")
-                      .append(s.state).append(" | ").append(assessLabel).append(" |\n");
+                    if ("needs_review".equals(assessLabel)) needsReview.add(s);
+                    else sound.add(s);
                 }
 
-                sb.append("\n");
-                for (VexStatement s : entry.statements) {
-                    JsonObject assessment = statementAssessments.get(s.cveId);
-                    if (assessment == null) continue;
-                    String rationale = getString(assessment, "rationale", null);
-                    if (rationale == null || rationale.isEmpty()) continue;
-                    sb.append("- **").append(s.cveId).append("** (").append(getString(assessment, "assessment", "unknown"))
-                      .append("): ").append(rationale).append("\n");
+                if (!needsReview.isEmpty()) {
+                    sb.append("#### Needs Review (").append(needsReview.size()).append(")\n\n");
+                    sb.append("| CVE | Library | Severity | State | Rationale |\n|-----|---------|----------|-------|-----------|\n");
+                    for (VexStatement s : needsReview) {
+                        JsonObject assessment = statementAssessments.get(s.cveId);
+                        String rationale = assessment != null ? getString(assessment, "rationale", "") : "";
+                        sb.append("| ").append(s.cveId).append(" | `").append(s.purl != null ? s.purl : "unknown")
+                          .append("` | ").append(s.severity != null ? s.severity : "unknown").append(" | ")
+                          .append(s.state).append(" | ").append(rationale.replace("|", "\\|")).append(" |\n");
+                    }
+                    sb.append("\n");
                 }
-                sb.append("\n");
+
+                if (!sound.isEmpty()) {
+                    sb.append("#### Sound (").append(sound.size()).append(")\n\n");
+                    sb.append("<details><summary>").append(sound.size())
+                      .append(" claim(s) assessed as sound as-is - expand for the full list</summary>\n\n");
+                    sb.append("| CVE | Library | Severity | State |\n|-----|---------|----------|-------|\n");
+                    for (VexStatement s : sound) {
+                        sb.append("| ").append(s.cveId).append(" | `").append(s.purl != null ? s.purl : "unknown")
+                          .append("` | ").append(s.severity != null ? s.severity : "unknown").append(" | ")
+                          .append(s.state).append(" |\n");
+                    }
+                    sb.append("\n</details>\n\n");
+                }
             }
 
             sb.append("---\n\n");
@@ -521,4 +581,20 @@ public class VEXAdvisor {
 
         return sb.toString();
     }
+
+    private String formatCveList(List<VexStatement> statements, int max) {
+        List<String> distinctCves = new ArrayList<>(new java.util.LinkedHashSet<>(
+            statements.stream().map(s -> s.cveId).collect(java.util.stream.Collectors.toList())));
+        StringBuilder sb = new StringBuilder();
+        int shown = Math.min(distinctCves.size(), max);
+        for (int i = 0; i < shown; i++) {
+            if (i > 0) sb.append(", ");
+            sb.append(distinctCves.get(i));
+        }
+        if (distinctCves.size() > max) {
+            sb.append(" (+").append(distinctCves.size() - max).append(" more)");
+        }
+        return sb.toString();
+    }
+
 }
