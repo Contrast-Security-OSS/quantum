@@ -1,4 +1,4 @@
-package com.contrastsecurity.bomsquad;
+package com.contrastsecurity.runtimeanalyst;
 
 import java.io.File;
 import java.io.FileReader;
@@ -29,7 +29,7 @@ import com.google.gson.JsonObject;
  * writes back a markdown report plus quantum:* risk properties on the CBOM itself.
  *
  * Usage:
- *   java -jar bom-squad.jar cbom-advisor cbom.json [-v] [-o report.md] [--json out.json] [--no-confirm] [--filter all|vulnerable|asymmetric]
+ *   java -jar runtime-analyst.jar cbom-advisor cbom.json [-v] [-o report.md] [--json out.json] [--no-confirm] [--filter all|vulnerable|asymmetric]
  */
 public class QuantumAdvisor {
 
@@ -158,7 +158,7 @@ public class QuantumAdvisor {
             else if (a.equals("--no-confirm")) noConfirm = true;
             else if (a.equals("--filter") && i + 1 < args.length) filter = args[++i];
             else if (a.equals("-h") || a.equals("--help")) {
-                System.out.println("Usage: java -jar bom-squad.jar cbom-advisor <cbom.json> [-v] [-o report.md] [--json out.json] [--no-confirm] [--filter all|vulnerable|asymmetric]");
+                System.out.println("Usage: java -jar runtime-analyst.jar cbom-advisor <cbom.json> [-v] [-o report.md] [--json out.json] [--no-confirm] [--filter all|vulnerable|asymmetric]");
                 return;
             } else if (!a.startsWith("-")) {
                 cbomPath = a;

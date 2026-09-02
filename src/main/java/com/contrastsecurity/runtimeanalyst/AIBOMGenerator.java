@@ -1,4 +1,4 @@
-package com.contrastsecurity.bomsquad;
+package com.contrastsecurity.runtimeanalyst;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,13 +31,6 @@ import org.cyclonedx.model.Component;
 import org.cyclonedx.model.Dependency;
 import org.cyclonedx.model.ExternalReference;
 import org.cyclonedx.model.Metadata;
-import org.cyclonedx.model.component.crypto.AlgorithmProperties;
-import org.cyclonedx.model.component.crypto.CryptoProperties;
-import org.cyclonedx.model.component.crypto.enums.AssetType;
-import org.cyclonedx.model.component.crypto.enums.CryptoFunction;
-import org.cyclonedx.model.component.crypto.enums.Mode;
-import org.cyclonedx.model.component.crypto.enums.Padding;
-import org.cyclonedx.model.component.crypto.enums.Primitive;
 import org.cyclonedx.model.component.evidence.Occurrence;
 import org.cyclonedx.model.Evidence;
 import org.cyclonedx.model.Property;
@@ -48,24 +41,24 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
- * Generates CycloneDX CBOM (Cryptography Bill of Materials) from Contrast API.
+ * Generates a CycloneDX AI-BOM (AI/ML usage inventory) from Contrast API observations.
  *
  * Usage:
- *   java -jar bom-squad.jar cbom                      # Fetch all apps, output cbom.json
- *   java -jar bom-squad.jar cbom --app "AppName"      # Fetch single app
- *   java -jar bom-squad.jar cbom --list               # List available apps
- *   java -jar bom-squad.jar cbom -o custom.json       # Custom output filename
- *   java -jar bom-squad.jar cbom -c config.properties # Use custom config file
+ *   java -jar runtime-analyst.jar aibom                # Fetch all apps, output aibom.json
+ *   java -jar runtime-analyst.jar aibom --app "AppName" # Fetch single app
+ *   java -jar runtime-analyst.jar aibom --list          # List available applications
+ *   java -jar runtime-analyst.jar aibom -o custom.json  # Custom output filename
+ *   java -jar runtime-analyst.jar aibom -c config.properties
  *
  * Config file (contrast.properties):
- *   contrast.url=https://eval.contrastsecurity.com/api/ns-ui/v1
+ *   contrast.url=https://your-instance.contrastsecurity.com/api/ns-ui/v1
  *   contrast.org_id=your-org-id
  *   contrast.auth_header=base64-encoded-credentials
  *   contrast.api_key=your-api-key
  */
-public class CBOMGenerator {
+public class AIBOMGenerator {
 
-    private static final String CRYPTO_ALGORITHM_RULE_ID = "crypto-algorithm";
+    private static final String AI_USAGE_RULE_ID = "ai-usage";
 
     private String baseUrl;
     private String orgId;
@@ -79,14 +72,13 @@ public class CBOMGenerator {
         this.envFilter = env;
     }
 
-    public CBOMGenerator(String configFile) throws IOException {
+    public AIBOMGenerator(String configFile) throws IOException {
         loadConfig(configFile);
     }
 
     private void loadConfig(String configFile) throws IOException {
         Properties props = new Properties();
 
-        // Load from specified file or contrast.properties in current directory
         File f;
         if (configFile != null) {
             f = new File(configFile);
@@ -127,12 +119,11 @@ public class CBOMGenerator {
     public static void main(String[] args) {
         String appFilter = null;
         String envFilter = null;
-        String outputFile = "cbom.json";
+        String outputFile = "aibom.json";
         String configFile = null;
         boolean listOnly = false;
         boolean runAnalysis = false;
 
-        // Parse args
         for (int i = 0; i < args.length; i++) {
             if ("--app".equals(args[i]) && i + 1 < args.length) {
                 appFilter = args[++i];
@@ -153,27 +144,25 @@ public class CBOMGenerator {
         }
 
         try {
-            CBOMGenerator generator = new CBOMGenerator(configFile);
+            AIBOMGenerator generator = new AIBOMGenerator(configFile);
             generator.setEnvFilter(envFilter);
             List<Observation> observations = generator.fetchObservations();
 
             if (listOnly) {
                 generator.listApplications(observations);
             } else {
-                CBOMResult result = generator.generateCBOM(observations, appFilter);
+                AIBOMResult result = generator.generateAIBOM(observations, appFilter);
 
-                // Auto-name output file using resolved app name
-                if (appFilter != null && "cbom.json".equals(outputFile)) {
+                if (appFilter != null && "aibom.json".equals(outputFile)) {
                     String nameForFile = result.resolvedAppName != null ? result.resolvedAppName : appFilter;
                     String safeAppName = nameForFile.replaceAll("[^a-zA-Z0-9-_]", "_");
-                    outputFile = "cbom-" + safeAppName + ".json";
+                    outputFile = "aibom-" + safeAppName + ".json";
                 }
 
-                generator.writeCBOM(result.bom, outputFile);
+                generator.writeAIBOM(result.bom, outputFile);
 
-                // Run Quantum Advisor analysis if requested
                 if (runAnalysis) {
-                    generator.runQuantumAdvisor(outputFile);
+                    generator.runAIAdvisor(outputFile);
                 }
             }
         } catch (Exception e) {
@@ -184,81 +173,72 @@ public class CBOMGenerator {
     }
 
     private static void printUsage() {
-        System.out.println("\nCBOM Generator - Create CycloneDX CBOM from Contrast observations");
+        System.out.println("\nAI-BOM Generator - Create CycloneDX AI-BOM from Contrast AI usage observations");
         System.out.println("\nUsage:");
-        System.out.println("  java -jar bom-squad.jar cbom                    Generate CBOM for all apps");
-        System.out.println("  java -jar bom-squad.jar cbom --app <id|name>    Filter by app (ID or name)");
-        System.out.println("  java -jar bom-squad.jar cbom --env <tier>       Filter by environment (PRODUCTION, DEVELOPMENT, QA)");
-        System.out.println("  java -jar bom-squad.jar cbom --list             List available applications with IDs");
-        System.out.println("  java -jar bom-squad.jar cbom --analyze          Run Quantum Advisor AI analysis after CBOM generation");
-        System.out.println("  java -jar bom-squad.jar cbom -o <file.json>     Specify output filename");
-        System.out.println("  java -jar bom-squad.jar cbom -c <config.properties>  Use custom config file");
+        System.out.println("  java -jar runtime-analyst.jar aibom                   Generate AI-BOM for all apps");
+        System.out.println("  java -jar runtime-analyst.jar aibom --app <id|name>   Filter by app (ID or name)");
+        System.out.println("  java -jar runtime-analyst.jar aibom --env <tier>      Filter by environment (PRODUCTION, DEVELOPMENT, QA)");
+        System.out.println("  java -jar runtime-analyst.jar aibom --list            List available applications with IDs");
+        System.out.println("  java -jar runtime-analyst.jar aibom --analyze         Run AI Advisor analysis after AI-BOM generation");
+        System.out.println("  java -jar runtime-analyst.jar aibom -o <file.json>    Specify output filename");
+        System.out.println("  java -jar runtime-analyst.jar aibom -c <config.properties>  Use custom config file");
         System.out.println("\nConfig file (contrast.properties):");
-        System.out.println("  contrast.url=https://eval.contrastsecurity.com/api/ns-ui/v1");
+        System.out.println("  contrast.url=https://your-instance.contrastsecurity.com/api/ns-ui/v1");
         System.out.println("  contrast.org_id=your-org-id");
         System.out.println("  contrast.auth_header=base64-encoded-credentials");
         System.out.println("  contrast.api_key=your-api-key");
-        System.out.println("\nExamples:");
-        System.out.println("  java -jar bom-squad.jar cbom                          # all apps -> cbom.json");
-        System.out.println("  java -jar bom-squad.jar cbom --env PRODUCTION         # only prod observations");
-        System.out.println("  java -jar bom-squad.jar cbom --app MyApp --env PRODUCTION");
-        System.out.println("  java -jar bom-squad.jar cbom --analyze                # generate CBOM + AI analysis report");
-        System.out.println("  java -jar bom-squad.jar cbom -c prod.properties --list");
     }
 
     /**
-     * Run the Quantum Advisor to analyze the CBOM and generate an AI-powered
-     * post-quantum cryptography readiness report, in-process (no Python required).
+     * Run the AI Advisor to analyze the AI-BOM and generate an AI-usage risk
+     * assessment report, in-process (no Python required).
      */
-    private void runQuantumAdvisor(String cbomFile) {
+    private void runAIAdvisor(String aiBomFile) {
         System.out.println("\n" + "=".repeat(60));
-        System.out.println("Running Quantum Advisor Analysis...");
+        System.out.println("Running AI Advisor Analysis...");
         System.out.println("=".repeat(60));
 
-        // Determine output filename (replace .json with -advisor.md)
-        String advisorOutput = cbomFile.replace(".json", "-advisor.md");
+        String advisorOutput = aiBomFile.replace(".json", "-advisor.md");
 
-        QuantumAdvisor.main(new String[]{cbomFile, "--no-confirm", "-o", advisorOutput});
-        System.out.println("\nQuantum Advisor report written to: " + advisorOutput);
+        AIAdvisor.main(new String[]{aiBomFile, "--no-confirm", "-o", advisorOutput});
+        System.out.println("\nAI Advisor report written to: " + advisorOutput);
     }
 
-    // Track raw counts per algorithm before deduplication
-    private Map<String, Integer> algorithmRawCounts = new HashMap<>();
+    // Track raw counts per model (provider + model) before deduplication
+    private Map<String, Integer> modelRawCounts = new HashMap<>();
 
     // Application-level architecture/connection info from the Contrast graph, keyed by applicationId
     private Map<String, AppGraphInfo> appGraphInfo = new HashMap<>();
 
     public List<Observation> fetchObservations() throws IOException {
-        System.out.println("\nFetching observations from Contrast API...");
+        System.out.println("\nFetching AI usage observations from Contrast API...");
 
-        algorithmRawCounts.clear();
+        modelRawCounts.clear();
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            // Fetch list of observations
             JsonArray observationList = fetchObservationsList(httpClient);
             System.out.println("  Found " + observationList.size() + " total observations");
 
-            // First pass: parse basic info, filter, count, and deduplicate
-            // Dedup key: algorithm + applicationId + route (before fetching details)
+            // First pass: parse basic info, filter to AI usage, count, and deduplicate.
+            // Dedup key: model + applicationId + route (before fetching details)
             Map<String, Observation> uniqueObservations = new HashMap<>();
             Set<String> environmentsSeen = new HashSet<>();
             int skipped = 0;
+            int nonAi = 0;
 
-            int nonCrypto = 0;
             for (JsonElement element : observationList) {
                 JsonObject obs = element.getAsJsonObject();
 
                 // The observations endpoint returns all OBSERVABILITY data (crypto, AI usage, etc.)
-                // so filter client-side to just crypto algorithm findings.
+                // so filter client-side to just the AI usage rule.
                 String ruleId = getStringOrNull(obs, "ruleId");
-                if (!CRYPTO_ALGORITHM_RULE_ID.equals(ruleId)) {
-                    nonCrypto++;
+                if (!AI_USAGE_RULE_ID.equals(ruleId)) {
+                    nonAi++;
                     continue;
                 }
 
                 Observation observation = parseObservationFromList(obs);
 
-                // Filter by environment if specified
                 if (envFilter != null && !envFilter.equals(observation.environment)) {
                     skipped++;
                     continue;
@@ -268,25 +248,21 @@ public class CBOMGenerator {
                     environmentsSeen.add(observation.environment);
                 }
 
-                // Track raw count per algorithm (before dedup)
-                if (observation.algorithm != null) {
-                    algorithmRawCounts.merge(observation.algorithm, 1, Integer::sum);
-                }
+                String modelKey = observation.provider + "/" + observation.model;
+                modelRawCounts.merge(modelKey, 1, Integer::sum);
 
-                // Deduplicate by algorithm + app + route
-                String dedupKey = observation.algorithm + "|" + observation.applicationId + "|" + observation.route;
+                String dedupKey = modelKey + "|" + observation.applicationId + "|" + observation.route;
                 if (!uniqueObservations.containsKey(dedupKey)) {
                     uniqueObservations.put(dedupKey, observation);
                 }
             }
 
-            System.out.println("  Filtered to " + (observationList.size() - nonCrypto) + " crypto algorithm observations");
+            System.out.println("  Filtered to " + (observationList.size() - nonAi) + " AI usage observations");
             if (skipped > 0) {
-                System.out.println("  Filtered to " + (observationList.size() - nonCrypto - skipped) + " (env: " + envFilter + ")");
+                System.out.println("  Filtered to " + (observationList.size() - nonAi - skipped) + " (env: " + envFilter + ")");
             }
             System.out.println("  Deduplicated to " + uniqueObservations.size() + " unique observations");
 
-            // Second pass: fetch details only for unique observations
             System.out.print("  Fetching details for unique observations");
             for (Observation observation : uniqueObservations.values()) {
                 JsonObject details = fetchObservationDetails(httpClient, observation.id);
@@ -309,8 +285,8 @@ public class CBOMGenerator {
         }
     }
 
-    public int getRawCount(String algorithm) {
-        return algorithmRawCounts.getOrDefault(algorithm, 0);
+    public int getRawCount(String provider, String model) {
+        return modelRawCounts.getOrDefault(provider + "/" + model, 0);
     }
 
     private JsonArray fetchObservationsList(CloseableHttpClient httpClient) throws IOException {
@@ -322,10 +298,12 @@ public class CBOMGenerator {
         post.setHeader("Content-Type", "application/json");
         post.setHeader("Accept", "application/json");
 
+        // Note: the observations API does not support filtering by ruleId/behaviorType
+        // server-side, so we fetch everything and filter to AI usage client-side.
         String requestBody = "{"
             + "\"observationOrigins\":[\"OBSERVABILITY\"],"
-            + "\"values\":[\"MLKEM\",\"ML-KEM\",\"ML-DSA\",\"FN-DSA\"],"
-            + "\"excludeValues\":true,"
+            + "\"values\":[],"
+            + "\"excludeValues\":false,"
             + "\"pageable\":{"
             + "\"pageSize\":1000,"
             + "\"sort\":[{\"property\":\"EVENT_TIME\",\"direction\":\"desc\"}],"
@@ -372,17 +350,37 @@ public class CBOMGenerator {
     private Observation parseObservationFromList(JsonObject listItem) {
         Observation obs = new Observation();
         obs.id = getStringOrNull(listItem, "observationId");
-        obs.algorithm = getStringOrNull(listItem, "attackValue");
+        obs.attackValue = getStringOrNull(listItem, "attackValue");
         obs.eventTime = getStringOrNull(listItem, "detectedTime");
         obs.route = getStringOrNull(listItem, "httpRoute");
         obs.applicationId = getStringOrNull(listItem, "applicationId");
         obs.applicationName = getStringOrNull(listItem, "applicationName");
         obs.serverName = getStringOrNull(listItem, "serverName");
         obs.environment = getStringOrNull(listItem, "deploymentTier");
+
+        // Parse provider/model from attackValue now; endpoint gets refined once we
+        // have the details "summary" field.
+        AIUsageParser parser = new AIUsageParser(obs.attackValue, null);
+        obs.provider = parser.getProvider();
+        obs.model = parser.getModel();
+        obs.endpoint = parser.getEndpoint();
+        obs.hostCategory = parser.getHostCategory();
+
         return obs;
     }
 
     private void addDetailsToObservation(Observation obs, JsonObject details) {
+        String summary = getStringOrNull(details, "summary");
+        obs.summary = summary;
+
+        // Re-parse with the summary available - it carries the endpoint that the
+        // attackValue alone doesn't.
+        AIUsageParser parser = new AIUsageParser(obs.attackValue, summary);
+        obs.provider = parser.getProvider();
+        obs.model = parser.getModel();
+        obs.endpoint = parser.getEndpoint();
+        obs.hostCategory = parser.getHostCategory();
+
         if (details.has("stackTrace") && !details.get("stackTrace").isJsonNull()) {
             JsonElement stackTraceElement = details.get("stackTrace");
             if (stackTraceElement.isJsonArray()) {
@@ -402,22 +400,11 @@ public class CBOMGenerator {
             String[] frames = obs.stackTrace.split("\n");
             if (frames.length > 0) {
                 obs.callee = frames[0].trim();
-                obs.normalizedCallee = normalizeStackFrame(obs.callee);
             }
             if (frames.length > 1) {
                 obs.caller = frames[1].trim();
-                obs.normalizedCaller = normalizeStackFrame(obs.caller);
             }
         }
-    }
-
-    private String normalizeStackFrame(String frame) {
-        if (frame == null) return null;
-        int openParen = frame.indexOf('(');
-        if (openParen != -1) {
-            return frame.substring(0, openParen);
-        }
-        return frame;
     }
 
     private String getStringOrNull(JsonObject obj, String key) {
@@ -428,7 +415,6 @@ public class CBOMGenerator {
     }
 
     public void listApplications(List<Observation> observations) {
-        // Map app ID to name and count
         Map<String, String> appIdToName = new HashMap<>();
         Map<String, Integer> appIdToCount = new HashMap<>();
 
@@ -439,7 +425,7 @@ public class CBOMGenerator {
             }
         }
 
-        System.out.println("\nAvailable applications:");
+        System.out.println("\nApplications with AI usage:");
         System.out.println("  ID                                      Name                                                     Observations");
         System.out.println("  ---------------------------------------- -------------------------------------------------------- ------------");
         for (Map.Entry<String, String> entry : appIdToName.entrySet()) {
@@ -450,20 +436,18 @@ public class CBOMGenerator {
         }
     }
 
-    // Result wrapper for generateCBOM
-    static class CBOMResult {
+    static class AIBOMResult {
         Bom bom;
         String resolvedAppName;
-        CBOMResult(Bom bom, String resolvedAppName) {
+        AIBOMResult(Bom bom, String resolvedAppName) {
             this.bom = bom;
             this.resolvedAppName = resolvedAppName;
         }
     }
 
-    public CBOMResult generateCBOM(List<Observation> observations, String appFilter) {
-        System.out.println("\nGenerating CBOM" + (appFilter != null ? " for " + appFilter : " for all applications"));
+    public AIBOMResult generateAIBOM(List<Observation> observations, String appFilter) {
+        System.out.println("\nGenerating AI-BOM" + (appFilter != null ? " for " + appFilter : " for all applications"));
 
-        // Filter observations by app if specified (match by ID or name)
         List<Observation> filtered = new ArrayList<>();
         String resolvedAppName = null;
         for (Observation obs : observations) {
@@ -478,77 +462,75 @@ public class CBOMGenerator {
         }
         System.out.println("  Processing " + filtered.size() + " observations");
 
-        // Use resolved app name for CBOM metadata if filtering by ID
-        final String cbomAppName = resolvedAppName != null ? resolvedAppName : appFilter;
+        final String bomAppName = resolvedAppName != null ? resolvedAppName : appFilter;
 
-        // Group observations by app, then by algorithm
-        Map<String, Map<String, List<Observation>>> byAppThenAlgorithm = new HashMap<>();
+        // Group observations by app, then by model (provider + model)
+        Map<String, Map<String, List<Observation>>> byAppThenModel = new HashMap<>();
         Map<String, String> appIdToName = new HashMap<>();
-        Set<String> allAlgorithms = new HashSet<>();
+        Set<String> allModelKeys = new HashSet<>();
 
         for (Observation obs : filtered) {
-            if (obs.algorithm != null && !obs.algorithm.isEmpty()) {
-                String appKey = obs.applicationId != null ? obs.applicationId : obs.applicationName;
-                if (appKey != null) {
-                    byAppThenAlgorithm
-                        .computeIfAbsent(appKey, k -> new HashMap<>())
-                        .computeIfAbsent(obs.algorithm, k -> new ArrayList<>())
-                        .add(obs);
-                    appIdToName.put(appKey, obs.applicationName);
-                    allAlgorithms.add(obs.algorithm);
-                }
+            if (obs.model == null || obs.model.isEmpty()) {
+                continue;
             }
+            String appKey = obs.applicationId != null ? obs.applicationId : obs.applicationName;
+            if (appKey == null) {
+                continue;
+            }
+            String modelKey = (obs.provider != null ? obs.provider : "unknown") + "/" + obs.model;
+            byAppThenModel
+                .computeIfAbsent(appKey, k -> new HashMap<>())
+                .computeIfAbsent(modelKey, k -> new ArrayList<>())
+                .add(obs);
+            appIdToName.put(appKey, obs.applicationName);
+            allModelKeys.add(modelKey);
         }
 
-        System.out.println("  Found " + byAppThenAlgorithm.size() + " applications");
-        System.out.println("  Found " + allAlgorithms.size() + " unique algorithms");
+        System.out.println("  Found " + byAppThenModel.size() + " applications");
+        System.out.println("  Found " + allModelKeys.size() + " unique AI models");
 
-        // Create BOM
         Bom bom = new Bom();
         bom.setSerialNumber("urn:uuid:" + UUID.randomUUID().toString());
         bom.setVersion(1);
 
-        // Create metadata
         Metadata metadata = new Metadata();
         metadata.setTimestamp(new Date());
 
         Component rootComponent = new Component();
         rootComponent.setType(Component.Type.APPLICATION);
-        rootComponent.setName(cbomAppName != null ? cbomAppName : "Contrast Crypto Inventory");
+        rootComponent.setName(bomAppName != null ? bomAppName : "Contrast AI Usage Inventory");
         rootComponent.setVersion("1.0");
-        rootComponent.setBomRef(cbomAppName != null ? sanitizeBomRef(cbomAppName) : "contrast-crypto-inventory");
+        rootComponent.setBomRef(bomAppName != null ? sanitizeBomRef(bomAppName) : "contrast-ai-inventory");
         metadata.setComponent(rootComponent);
         bom.setMetadata(metadata);
 
         List<Component> components = new ArrayList<>();
         List<Dependency> dependencies = new ArrayList<>();
 
-        // Create crypto components for each unique algorithm
-        Map<String, String> algoBomRefs = new HashMap<>();
-        for (String algorithm : allAlgorithms) {
-            // Collect all observations for this algorithm across all apps
+        Map<String, String> modelBomRefs = new HashMap<>();
+        for (String modelKey : allModelKeys) {
             List<Observation> allOccurrences = new ArrayList<>();
-            for (Map<String, List<Observation>> appAlgos : byAppThenAlgorithm.values()) {
-                List<Observation> obs = appAlgos.get(algorithm);
+            for (Map<String, List<Observation>> appModels : byAppThenModel.values()) {
+                List<Observation> obs = appModels.get(modelKey);
                 if (obs != null) {
                     allOccurrences.addAll(obs);
                 }
             }
 
-            int rawCount = algorithmRawCounts.getOrDefault(algorithm, allOccurrences.size());
-            Component cryptoComponent = createCryptoComponent(algorithm, allOccurrences, rawCount);
-            components.add(cryptoComponent);
-            algoBomRefs.put(algorithm, cryptoComponent.getBomRef());
+            int rawCount = allOccurrences.isEmpty() ? 0 : getRawCount(allOccurrences.get(0).provider, allOccurrences.get(0).model);
+            if (rawCount == 0) rawCount = allOccurrences.size();
+
+            Component modelComponent = createModelComponent(modelKey, allOccurrences, rawCount);
+            components.add(modelComponent);
+            modelBomRefs.put(modelKey, modelComponent.getBomRef());
         }
 
-        // Create app components and their dependencies on crypto
         List<String> appBomRefs = new ArrayList<>();
-        for (Map.Entry<String, Map<String, List<Observation>>> appEntry : byAppThenAlgorithm.entrySet()) {
+        for (Map.Entry<String, Map<String, List<Observation>>> appEntry : byAppThenModel.entrySet()) {
             String appId = appEntry.getKey();
             String appName = appIdToName.get(appId);
-            Map<String, List<Observation>> appAlgorithms = appEntry.getValue();
+            Map<String, List<Observation>> appModels = appEntry.getValue();
 
-            // Create app component
             Component appComponent = new Component();
             appComponent.setType(Component.Type.APPLICATION);
             appComponent.setName(appName != null ? appName : appId);
@@ -587,18 +569,16 @@ public class CBOMGenerator {
             components.add(appComponent);
             appBomRefs.add(appComponent.getBomRef());
 
-            // Create dependency: app -> crypto algorithms it uses
             Dependency appDep = new Dependency(appComponent.getBomRef());
-            for (String algo : appAlgorithms.keySet()) {
-                String cryptoRef = algoBomRefs.get(algo);
-                if (cryptoRef != null) {
-                    appDep.addDependency(new Dependency(cryptoRef));
+            for (String modelKey : appModels.keySet()) {
+                String modelRef = modelBomRefs.get(modelKey);
+                if (modelRef != null) {
+                    appDep.addDependency(new Dependency(modelRef));
                 }
             }
             dependencies.add(appDep);
         }
 
-        // Root component depends on all apps (only if multiple apps)
         if (appFilter == null && appBomRefs.size() > 1) {
             Dependency rootDep = new Dependency(rootComponent.getBomRef());
             for (String appRef : appBomRefs) {
@@ -606,10 +586,9 @@ public class CBOMGenerator {
             }
             dependencies.add(rootDep);
         } else if (appBomRefs.size() == 1) {
-            // Single app - root depends directly on crypto
             Dependency rootDep = new Dependency(rootComponent.getBomRef());
-            for (String cryptoRef : algoBomRefs.values()) {
-                rootDep.addDependency(new Dependency(cryptoRef));
+            for (String modelRef : modelBomRefs.values()) {
+                rootDep.addDependency(new Dependency(modelRef));
             }
             dependencies.add(rootDep);
         }
@@ -618,74 +597,45 @@ public class CBOMGenerator {
         bom.setDependencies(dependencies);
 
         System.out.println("  Created " + components.size() + " components (" +
-                          byAppThenAlgorithm.size() + " apps + " + allAlgorithms.size() + " crypto)");
-        return new CBOMResult(bom, resolvedAppName);
+                          byAppThenModel.size() + " apps + " + allModelKeys.size() + " AI models)");
+        return new AIBOMResult(bom, resolvedAppName);
     }
 
-    private Component createCryptoComponent(String algorithm, List<Observation> occurrences, int rawCount) {
-        AlgorithmParser parser = new AlgorithmParser(algorithm);
+    private Component createModelComponent(String modelKey, List<Observation> occurrences, int rawCount) {
+        Observation sample = occurrences.get(0);
 
         Component component = new Component();
-        component.setType(Component.Type.CRYPTOGRAPHIC_ASSET);
-        component.setName(algorithm);
-        component.setBomRef("crypto-" + sanitizeBomRef(algorithm));
+        component.setType(Component.Type.MACHINE_LEARNING_MODEL);
+        component.setName(sample.model != null ? sample.model : modelKey);
+        if (sample.provider != null) {
+            component.setPublisher(sample.provider);
+        }
+        component.setBomRef("ai-" + sanitizeBomRef(modelKey));
 
-        // Add usage count as custom property
         List<Property> properties = new ArrayList<>();
-        Property usageCount = new Property();
-        usageCount.setName("contrast:usageCount");
-        usageCount.setValue(String.valueOf(rawCount));
-        properties.add(usageCount);
+        properties.add(property("contrast:usageCount", String.valueOf(rawCount)));
+        properties.add(property("contrast:uniqueLocations", String.valueOf(occurrences.size())));
+        if (sample.provider != null) {
+            properties.add(property("contrast:provider", sample.provider));
+        }
 
-        Property uniqueLocations = new Property();
-        uniqueLocations.setName("contrast:uniqueLocations");
-        uniqueLocations.setValue(String.valueOf(occurrences.size()));
-        properties.add(uniqueLocations);
+        // Prefer a real observed endpoint/host category if any occurrence has one
+        String endpoint = null;
+        String hostCategory = "unknown";
+        for (Observation obs : occurrences) {
+            if (obs.endpoint != null && !obs.endpoint.isEmpty()) {
+                endpoint = obs.endpoint;
+                hostCategory = obs.hostCategory;
+                break;
+            }
+        }
+        if (endpoint != null) {
+            properties.add(property("contrast:endpoint", endpoint));
+        }
+        properties.add(property("contrast:hostCategory", hostCategory));
 
         component.setProperties(properties);
 
-        CryptoProperties cryptoProps = new CryptoProperties();
-        cryptoProps.setAssetType(AssetType.ALGORITHM);
-
-        if (parser.getOid() != null) {
-            cryptoProps.setOid(parser.getOid());
-        }
-
-        AlgorithmProperties algoProps = new AlgorithmProperties();
-
-        Primitive primitive = mapPrimitive(parser.getPrimitive());
-        if (primitive != null) {
-            algoProps.setPrimitive(primitive);
-        }
-
-        Mode mode = mapMode(parser.getMode());
-        if (mode != null) {
-            algoProps.setMode(mode);
-        }
-
-        Padding padding = mapPadding(parser.getPadding());
-        if (padding != null) {
-            algoProps.setPadding(padding);
-        }
-
-        if (parser.getClassicalSecurityLevel() > 0) {
-            algoProps.setClassicalSecurityLevel(parser.getClassicalSecurityLevel());
-        }
-        algoProps.setNistQuantumSecurityLevel(parser.getNistQuantumSecurityLevel());
-
-        List<CryptoFunction> functions = getCryptoFunctions(parser.getPrimitive());
-        if (!functions.isEmpty()) {
-            algoProps.setCryptoFunctions(functions);
-        }
-
-        if (parser.getKeySize() > 0) {
-            algoProps.setParameterSetIdentifier(String.valueOf(parser.getKeySize()));
-        }
-
-        cryptoProps.setAlgorithmProperties(algoProps);
-        component.setCryptoProperties(cryptoProps);
-
-        // Add evidence
         Evidence evidence = new Evidence();
         List<Occurrence> evidenceOccurrences = new ArrayList<>();
 
@@ -728,100 +678,6 @@ public class CBOMGenerator {
         return component;
     }
 
-    private Primitive mapPrimitive(String primitive) {
-        if (primitive == null) return Primitive.UNKNOWN;
-        switch (primitive.toLowerCase()) {
-            case "ae": return Primitive.AE;
-            case "block-cipher": return Primitive.BLOCK_CIPHER;
-            case "stream-cipher": return Primitive.STREAM_CIPHER;
-            case "hash": return Primitive.HASH;
-            case "mac": return Primitive.MAC;
-            case "pke": return Primitive.PKE;
-            case "signature": return Primitive.SIGNATURE;
-            case "kex":
-            case "key-agree": return Primitive.KEY_AGREE;
-            case "kem": return Primitive.KEM;
-            case "kdf": return Primitive.KDF;
-            case "xof": return Primitive.XOF;
-            case "drbg": return Primitive.DRBG;
-            default: return Primitive.UNKNOWN;
-        }
-    }
-
-    private Mode mapMode(String mode) {
-        if (mode == null) return null;
-        switch (mode.toLowerCase()) {
-            case "gcm": return Mode.GCM;
-            case "cbc": return Mode.CBC;
-            case "ecb": return Mode.ECB;
-            case "ctr": return Mode.CTR;
-            case "cfb": return Mode.CFB;
-            case "ofb": return Mode.OFB;
-            case "ccm": return Mode.CCM;
-            default: return Mode.OTHER;
-        }
-    }
-
-    private Padding mapPadding(String padding) {
-        if (padding == null) return null;
-        switch (padding.toLowerCase()) {
-            case "pkcs5": return Padding.PKCS5;
-            case "pkcs7": return Padding.PKCS7;
-            case "pkcs1v15": return Padding.PKCS1V15;
-            case "oaep": return Padding.OAEP;
-            case "none":
-            case "nopadding": return Padding.RAW;
-            default: return Padding.OTHER;
-        }
-    }
-
-    private List<CryptoFunction> getCryptoFunctions(String primitive) {
-        List<CryptoFunction> functions = new ArrayList<>();
-        if (primitive == null) return functions;
-
-        switch (primitive.toLowerCase()) {
-            case "ae":
-            case "block-cipher":
-            case "stream-cipher":
-                functions.add(CryptoFunction.ENCRYPT);
-                functions.add(CryptoFunction.DECRYPT);
-                functions.add(CryptoFunction.KEYGEN);
-                break;
-            case "hash":
-                functions.add(CryptoFunction.DIGEST);
-                break;
-            case "mac":
-                functions.add(CryptoFunction.TAG);
-                functions.add(CryptoFunction.VERIFY);
-                functions.add(CryptoFunction.KEYGEN);
-                break;
-            case "signature":
-                functions.add(CryptoFunction.SIGN);
-                functions.add(CryptoFunction.VERIFY);
-                functions.add(CryptoFunction.KEYGEN);
-                break;
-            case "pke":
-                functions.add(CryptoFunction.ENCRYPT);
-                functions.add(CryptoFunction.DECRYPT);
-                functions.add(CryptoFunction.KEYGEN);
-                break;
-            case "kex":
-            case "key-agree":
-                functions.add(CryptoFunction.KEYDERIVE);
-                functions.add(CryptoFunction.KEYGEN);
-                break;
-            case "kem":
-                functions.add(CryptoFunction.ENCAPSULATE);
-                functions.add(CryptoFunction.DECAPSULATE);
-                functions.add(CryptoFunction.KEYGEN);
-                break;
-            case "kdf":
-                functions.add(CryptoFunction.KEYDERIVE);
-                break;
-        }
-        return functions;
-    }
-
     private Property property(String name, String value) {
         Property p = new Property();
         p.setName(name);
@@ -848,8 +704,8 @@ public class CBOMGenerator {
             .replaceAll("^-|-$", "");
     }
 
-    public void writeCBOM(Bom bom, String filename) throws Exception {
-        System.out.println("\nWriting CBOM to " + filename);
+    public void writeAIBOM(Bom bom, String filename) throws Exception {
+        System.out.println("\nWriting AI-BOM to " + filename);
 
         BomJsonGenerator generator = BomGeneratorFactory.createJson(Version.VERSION_16, bom);
         String json = generator.toJsonString();
@@ -860,80 +716,48 @@ public class CBOMGenerator {
 
         System.out.println("  Done!");
 
-        // Print summary
-        int quantumVulnerable = 0;
-        int quantumSafe = 0;
+        int cloudModels = 0;
+        int localModels = 0;
+        int unknownHost = 0;
         if (bom.getComponents() != null) {
             for (Component c : bom.getComponents()) {
-                if (c.getCryptoProperties() != null &&
-                    c.getCryptoProperties().getAlgorithmProperties() != null) {
-                    Integer level = c.getCryptoProperties().getAlgorithmProperties().getNistQuantumSecurityLevel();
-                    if (level != null && level == 0) {
-                        quantumVulnerable++;
-                    } else {
-                        quantumSafe++;
+                if (c.getType() != Component.Type.MACHINE_LEARNING_MODEL || c.getProperties() == null) {
+                    continue;
+                }
+                for (Property p : c.getProperties()) {
+                    if ("contrast:hostCategory".equals(p.getName())) {
+                        if ("cloud".equals(p.getValue())) cloudModels++;
+                        else if ("local".equals(p.getValue())) localModels++;
+                        else unknownHost++;
                     }
                 }
             }
         }
 
         System.out.println("\n  Summary:");
-        System.out.println("    Total algorithms: " + (bom.getComponents() != null ? bom.getComponents().size() : 0));
-        System.out.println("    Quantum vulnerable: " + quantumVulnerable);
-        System.out.println("    Quantum safe: " + quantumSafe);
+        System.out.println("    Total AI models: " + (cloudModels + localModels + unknownHost));
+        System.out.println("    Cloud/external provider: " + cloudModels);
+        System.out.println("    Local/self-hosted: " + localModels);
+        System.out.println("    Unknown host: " + unknownHost);
         System.out.println("\n  Output: " + filename);
     }
 
-    // Observation class for holding fetched data
     static class Observation {
         String id;
-        String algorithm;
+        String attackValue;
+        String summary;
         String eventTime;
         String route;
         String applicationId;
         String applicationName;
         String serverName;
         String environment;
+        String provider;
+        String model;
+        String endpoint;
+        String hostCategory;
         String caller;
         String callee;
         String stackTrace;
-        String normalizedCallee;
-        String normalizedCaller;
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((algorithm == null) ? 0 : algorithm.hashCode());
-            result = prime * result + ((route == null) ? 0 : route.hashCode());
-            result = prime * result + ((normalizedCallee == null) ? 0 : normalizedCallee.hashCode());
-            result = prime * result + ((normalizedCaller == null) ? 0 : normalizedCaller.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            Observation other = (Observation) obj;
-
-            if (algorithm == null) {
-                if (other.algorithm != null) return false;
-            } else if (!algorithm.equals(other.algorithm)) return false;
-
-            if (route == null) {
-                if (other.route != null) return false;
-            } else if (!route.equals(other.route)) return false;
-
-            if (normalizedCallee == null) {
-                if (other.normalizedCallee != null) return false;
-            } else if (!normalizedCallee.equals(other.normalizedCallee)) return false;
-
-            if (normalizedCaller == null) {
-                if (other.normalizedCaller != null) return false;
-            } else if (!normalizedCaller.equals(other.normalizedCaller)) return false;
-
-            return true;
-        }
     }
 }
