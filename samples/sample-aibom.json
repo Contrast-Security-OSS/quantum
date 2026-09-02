@@ -1,14 +1,14 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:05f38b34-af16-4e16-b8d8-9d826c828595",
+  "serialNumber": "urn:uuid:736dae4b-836e-4f0a-a706-3a5d9519923b",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-02T21:36:18Z",
+    "timestamp": "2026-09-02T21:55:47Z",
     "component": {
       "type": "application",
-      "bom-ref": "contrast-ai-inventory",
-      "name": "Contrast AI Usage Inventory",
+      "bom-ref": "robert-cargocats-aiservice",
+      "name": "Robert-cargocats-aiservice",
       "version": "1.0"
     }
   },
@@ -25,7 +25,7 @@
         },
         {
           "name": "contrast:uniqueLocations",
-          "value": "2"
+          "value": "1"
         },
         {
           "name": "contrast:provider",
@@ -45,10 +45,6 @@
           {
             "location": "com.openai.services.blocking.chat.ChatCompletionServiceImpl$WithRawResponseImpl.create(ChatCompletionServiceImpl.kt)",
             "additionalContext": "App: Robert-cargocats-aiservice Stack Trace: com.openai.services.blocking.chat.ChatCompletionServiceImpl$WithRawResponseImpl.create(ChatCompletionServiceImpl.kt) com.openai.services.blocking.chat.ChatCompletionServiceImpl.create(ChatCompletionServiceImpl.kt:63) com.openai.services.blocking.chat.ChatCompletionService.create(ChatCompletionService.kt:64) com.contrast.aiservice.AiService.chat(AiService.java:54) com.contrast.aiservice.AiController.openai(AiController.java:30) java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source) java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source) java.base/java.lang.reflect.Method.invoke(Unknown Source) org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258) org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191) org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986) org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891) org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903) jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:114) org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116) org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) org.apache.catalina.valves.RemoteIpValve.invoke(RemoteIpValve.java:732) org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398) org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740) org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189) org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658) org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) java.base/java.lang.Thread.run(Unknown Source)"
-          },
-          {
-            "location": "com.openai.services.blocking.chat.ChatCompletionServiceImpl$WithRawResponseImpl.create(ChatCompletionServiceImpl.kt)",
-            "additionalContext": "App: Robert-cargocats-reportservice Stack Trace: com.openai.services.blocking.chat.ChatCompletionServiceImpl$WithRawResponseImpl.create(ChatCompletionServiceImpl.kt) com.openai.services.blocking.chat.ChatCompletionServiceImpl.create(ChatCompletionServiceImpl.kt:63) com.openai.services.blocking.chat.ChatCompletionService.create(ChatCompletionService.kt:64) com.contrast.reportservice.LogisticsInsightService.getInsight(LogisticsInsightService.java:62) com.contrast.reportservice.InsightServlet.doPost(InsightServlet.java:36) javax.servlet.http.HttpServlet.service(HttpServlet.java:555) javax.servlet.http.HttpServlet.service(HttpServlet.java:623) org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:201) org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:146) org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:57) org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:170) org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:146) org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:166) org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88) org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:534) org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:129) org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:86) org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:764) org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:71) org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:350) org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:407) org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:71) org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1344) org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:2089) org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:74) org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:976) org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:494) org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:80) java.base/java.lang.Thread.run(Thread.java:840)"
           }
         ]
       }
@@ -98,54 +94,7 @@
           "value": "Robert-cargocats-frontgateservice"
         }
       ],
-      "description": "Robert-cargocats-aiservice is a Java Spring Boot backend that appears to expose AI/chat functionality to Robert-cargocats-frontgateservice, acting as an internal microservice that wraps LLM calls behind a REST API. Its name and connection graph suggest it\u0027s a dedicated AI service tier within a larger \u0027cargocats\u0027 application, sitting behind a gateway rather than facing the internet directly."
-    },
-    {
-      "type": "application",
-      "bom-ref": "app-robert-cargocats-reportservice",
-      "name": "Robert-cargocats-reportservice",
-      "externalReferences": [
-        {
-          "type": "runtime-analysis-report",
-          "url": "https://eval.contrastsecurity.com/Contrast/cs/index.html#/6a3073a5-5e68-40e5-9d7d-165340fff15a/explorer?detailsId\u003d-929795855\u0026applicationId\u003dd4b29958-8dca-4945-a9f7-bbae45e0f757",
-          "comment": "Contrast Application Explorer"
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:language",
-          "value": "JAVA"
-        },
-        {
-          "name": "contrast:postureScore",
-          "value": "6.7"
-        },
-        {
-          "name": "contrast:postureSeverity",
-          "value": "MEDIUM"
-        },
-        {
-          "name": "contrast:criticality",
-          "value": "3"
-        },
-        {
-          "name": "contrast:openIssuesTotal",
-          "value": "2"
-        },
-        {
-          "name": "contrast:serverCount",
-          "value": "1"
-        },
-        {
-          "name": "contrast:libraryCount",
-          "value": "31"
-        },
-        {
-          "name": "contrast:connectedApplications",
-          "value": "Robert-cargocats-frontgateservice"
-        }
-      ],
-      "description": "Robert-cargocats-reportservice is a Java-based Tomcat servlet application that appears to generate logistics reports for the CargoCats system, connected to a front gateway service that likely routes client requests to it. Its servlet-based structure (InsightServlet, LogisticsInsightService) suggests it produces analytical or insight-driven reporting on logistics data rather than handling raw transactional traffic itself."
+      "description": "Robert-cargocats-aiservice is a Java Spring Boot microservice that appears to provide AI/chat functionality as a backend for the Robert-cargocats-frontgateservice gateway. It exposes an endpoint that accepts requests and forwards them to a language model via an OpenAI-compatible client, acting as an internal AI integration layer within the CargoCats application suite."
     }
   ],
   "dependencies": [
@@ -156,16 +105,9 @@
       ]
     },
     {
-      "ref": "app-robert-cargocats-reportservice",
+      "ref": "robert-cargocats-aiservice",
       "dependsOn": [
         "ai-openai-smollm2-135m-tuned"
-      ]
-    },
-    {
-      "ref": "contrast-ai-inventory",
-      "dependsOn": [
-        "app-robert-cargocats-aiservice",
-        "app-robert-cargocats-reportservice"
       ]
     }
   ]

@@ -2,97 +2,21 @@
   "$schema": "https://cyclonedx.org/schema/2.0/cyclonedx-2.0.schema.json",
   "specFormat": "CycloneDX",
   "specVersion": "2.0",
-  "serialNumber": "urn:uuid:4777c422-3d4b-435c-bd82-87be40d6604f",
+  "serialNumber": "urn:uuid:c0876091-e05b-4bfb-bea5-e76d5c88112b",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-02T21:36:50.226Z"
+    "timestamp": "2026-09-02T21:56:06.331Z"
   },
   "blueprints": [
     {
       "bom-ref": "blueprint-1",
-      "name": "Contrast Architecture Blueprint",
+      "name": "Blueprint - Cargo-Crypto-contrast-cargo-cats-frontgateservice",
       "description": "Generated from Contrast runtime observability data: application architecture/connections (contrast-graph) and crypto/AI usage observations, mapped onto the CycloneDX behavior taxonomy. Does not include threats, controls, or risks - see TM-BOM.",
       "modelTypes": [
         "architecture",
         "behavioral"
       ],
       "assets": [
-        {
-          "bom-ref": "asset-app-robert-cargocats-aiservice",
-          "name": "Robert-cargocats-aiservice",
-          "type": "system",
-          "classification": {
-            "criticality": "moderate"
-          },
-          "properties": [
-            {
-              "name": "contrast:language",
-              "value": "JAVA"
-            },
-            {
-              "name": "contrast:postureScore",
-              "value": "7.4"
-            },
-            {
-              "name": "contrast:postureSeverity",
-              "value": "HIGH"
-            },
-            {
-              "name": "contrast:openIssuesTotal",
-              "value": "7"
-            },
-            {
-              "name": "contrast:serverCount",
-              "value": "1"
-            },
-            {
-              "name": "contrast:libraryCount",
-              "value": "56"
-            }
-          ],
-          "zone": "zone-env-qa"
-        },
-        {
-          "bom-ref": "asset-app-cargo-crypto-contrast-cargo-cats-dataservice",
-          "name": "Cargo-Crypto-contrast-cargo-cats-dataservice",
-          "type": "system",
-          "zone": "zone-env-development"
-        },
-        {
-          "bom-ref": "asset-app-robert-cargocats-reportservice",
-          "name": "Robert-cargocats-reportservice",
-          "type": "system",
-          "classification": {
-            "criticality": "moderate"
-          },
-          "properties": [
-            {
-              "name": "contrast:language",
-              "value": "JAVA"
-            },
-            {
-              "name": "contrast:postureScore",
-              "value": "6.7"
-            },
-            {
-              "name": "contrast:postureSeverity",
-              "value": "MEDIUM"
-            },
-            {
-              "name": "contrast:openIssuesTotal",
-              "value": "2"
-            },
-            {
-              "name": "contrast:serverCount",
-              "value": "1"
-            },
-            {
-              "name": "contrast:libraryCount",
-              "value": "31"
-            }
-          ],
-          "zone": "zone-env-qa"
-        },
         {
           "bom-ref": "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice",
           "name": "Cargo-Crypto-contrast-cargo-cats-frontgateservice",
@@ -110,51 +34,41 @@
           "name": "Robert-cargocats-dataservice",
           "type": "system",
           "description": "Known only as an architecture-graph connection target; no application-level data available."
+        },
+        {
+          "bom-ref": "asset-external-robert-cargocats-reportservice",
+          "name": "Robert-cargocats-reportservice",
+          "type": "system",
+          "description": "Known only as an architecture-graph connection target; no application-level data available."
+        },
+        {
+          "bom-ref": "asset-external-robert-cargocats-aiservice",
+          "name": "Robert-cargocats-aiservice",
+          "type": "system",
+          "description": "Known only as an architecture-graph connection target; no application-level data available."
         }
       ],
       "zones": [
-        {
-          "bom-ref": "zone-env-qa",
-          "name": "QA",
-          "type": "deployment"
-        },
         {
           "bom-ref": "zone-env-development",
           "name": "DEVELOPMENT",
           "type": "deployment"
         }
       ],
-      "flows": [
-        {
-          "bom-ref": "flow-1",
-          "name": "Robert-cargocats-reportservice \u003c-\u003e Robert-cargocats-frontgateservice",
-          "type": "data",
-          "source": "asset-app-robert-cargocats-reportservice",
-          "destination": "asset-external-robert-cargocats-frontgateservice",
-          "bidirectional": true
-        },
-        {
-          "bom-ref": "flow-2",
-          "name": "Robert-cargocats-aiservice \u003c-\u003e Robert-cargocats-frontgateservice",
-          "type": "data",
-          "source": "asset-app-robert-cargocats-aiservice",
-          "destination": "asset-external-robert-cargocats-frontgateservice",
-          "bidirectional": true
-        }
-      ],
+      "flows": [],
       "behaviors": {
         "instances": [
           {
             "bom-ref": "behavior-1",
-            "behavior": "ai:generative:processesPrompt",
+            "behavior": "security:cryptography:encryptsData",
             "actors": [
-              "asset-app-robert-cargocats-aiservice"
+              "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice"
             ],
             "trigger": "unknown"
           },
           {
             "bom-ref": "behavior-2",
-            "behavior": "security:cryptography:encryptsData",
+            "behavior": "security:cryptography:hashesData",
             "actors": [
               "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice"
             ],
@@ -164,7 +78,7 @@
             "bom-ref": "behavior-3",
             "behavior": "security:cryptography:hashesData",
             "actors": [
-              "asset-app-cargo-crypto-contrast-cargo-cats-dataservice"
+              "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice"
             ],
             "trigger": "unknown"
           },
@@ -173,46 +87,6 @@
             "behavior": "security:cryptography:hashesData",
             "actors": [
               "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice"
-            ],
-            "trigger": "unknown"
-          },
-          {
-            "bom-ref": "behavior-5",
-            "behavior": "ai:generative:processesPrompt",
-            "actors": [
-              "asset-app-robert-cargocats-reportservice"
-            ],
-            "trigger": "unknown"
-          },
-          {
-            "bom-ref": "behavior-6",
-            "behavior": "security:cryptography:encryptsData",
-            "actors": [
-              "asset-app-cargo-crypto-contrast-cargo-cats-dataservice"
-            ],
-            "trigger": "unknown"
-          },
-          {
-            "bom-ref": "behavior-7",
-            "behavior": "security:cryptography:hashesData",
-            "actors": [
-              "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice"
-            ],
-            "trigger": "unknown"
-          },
-          {
-            "bom-ref": "behavior-8",
-            "behavior": "security:cryptography:hashesData",
-            "actors": [
-              "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice"
-            ],
-            "trigger": "unknown"
-          },
-          {
-            "bom-ref": "behavior-9",
-            "behavior": "security:cryptography:hashesData",
-            "actors": [
-              "asset-app-cargo-crypto-contrast-cargo-cats-dataservice"
             ],
             "trigger": "unknown"
           }

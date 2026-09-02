@@ -242,16 +242,16 @@ Two sample AI-BOM files are included to try it with:
 
 ## Sample Reports
 
-`samples/` has one real, current output from each generator and its matching advisor report, all captured against a live org in a single run - useful as a reference for what each format actually looks like without running the tool yourself:
+`samples/` has one real, current output from each generator and its matching advisor report - useful as a reference for what each format actually looks like without running the tool yourself:
 
-| CycloneDX document | Advisor report |
-|---|---|
-| `sample-cbom.json` | `sample-cbom-advisor.md` |
-| `sample-aibom.json` | `sample-aibom-advisor.md` |
-| `sample-blueprint.json` | *(no advisor - see the Blueprint section above)* |
-| `sample-vex.json` | `sample-vex-advisor.md` |
+| CycloneDX document | Advisor report | Scoped to |
+|---|---|---|
+| `sample-cbom.json` | `sample-cbom-advisor.md` | `Cargo-Crypto-contrast-cargo-cats-frontgateservice` |
+| `sample-aibom.json` | `sample-aibom-advisor.md` | `Robert-cargocats-aiservice` |
+| `sample-blueprint.json` | *(no advisor - see the Blueprint section above)* | `Cargo-Crypto-contrast-cargo-cats-frontgateservice` |
+| `sample-vex.json` | `sample-vex-advisor.md` | `SAML-PetClinic-Demo` |
 
-`sample-vex.json` is scoped to one application (`SAML-PetClinic-Demo`, 235 statements) rather than the whole org - a full-org VEX run makes one CVE-issues API call per application and produces a much larger file, which isn't necessary to illustrate the format.
+Each is scoped with `--app` to one application rather than the whole org (smaller, more readable files, and a full-org VEX run makes one CVE-issues API call per application). They're deliberately *not* all the same app - in this org, crypto usage, AI usage, and vulnerable libraries happen to show up in three disjoint sets of applications, so no single app would produce non-empty output for all four generators. Each sample uses whichever app actually has real data for that report type.
 
 ## Configuration Reference
 

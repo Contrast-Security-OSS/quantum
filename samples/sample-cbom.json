@@ -1,20 +1,20 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:a49f9bc3-dafb-443e-a4d9-bbe6b14ccb42",
+  "serialNumber": "urn:uuid:9dbc0165-69f6-4e9f-a3a3-65d529d28dde",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-02T21:34:18Z",
+    "timestamp": "2026-09-02T21:54:40Z",
     "component": {
       "type": "application",
-      "bom-ref": "contrast-crypto-inventory",
-      "name": "Contrast Crypto Inventory",
+      "bom-ref": "cargo-crypto-contrast-cargo-cats-frontgateservice",
+      "name": "Cargo-Crypto-contrast-cargo-cats-frontgateservice",
       "version": "1.0"
     },
     "properties": [
       {
         "name": "quantum:enhancedAt",
-        "value": "2026-09-02T17:36:13.710929"
+        "value": "2026-09-02T17:55:43.336882"
       },
       {
         "name": "quantum:enhancedBy",
@@ -42,15 +42,15 @@
         },
         {
           "name": "quantum:title",
-          "value": "Replace SHA-1 in Cargo-Crypto-contrast-cargo-cats-frontgateservice"
+          "value": "Replace SHA-1 in cargo-cats-frontgateservice (classical break, not quantum)"
         },
         {
           "name": "quantum:usageSummary",
-          "value": "Application computes a SHA-1 hash, purpose unclear due to missing stack trace and entry point data"
+          "value": "Application computes a SHA-1 hash, purpose unclear due to missing stack trace and entry point details"
         },
         {
           "name": "quantum:dataSensitivity",
-          "value": "Unknown, no stack trace available to determine data type"
+          "value": "Unknown, no stack trace available to determine what data is being hashed"
         },
         {
           "name": "quantum:dataLifetime",
@@ -62,23 +62,23 @@
         },
         {
           "name": "quantum:sourcePackage",
-          "value": "Unknown, stack trace not provided"
+          "value": "Unknown, no stack trace provided in this observation"
         },
         {
           "name": "quantum:remediationOwner",
-          "value": "Application development team (pending stack trace confirmation)"
+          "value": "Application development team for cargo-cats-frontgateservice"
         },
         {
           "name": "quantum:quantumThreat",
-          "value": "SHA-1 is not a quantum-specific concern. Grover\u0027s algorithm only reduces effective security by a square-root factor, and SHA-1\u0027s 160-bit output would still nominally hit 80-bit quantum resistance, but SHA-1 is already classically broken via collision attacks (e.g., SHAttered) and should be replaced regardless of quantum considerations."
+          "value": "SHA-1 is a symmetric/hash primitive. Grover\u0027s algorithm only provides a quadratic speedup against hash preimage attacks, so SHA-1\u0027s quantum-adjusted strength would still be roughly 80 bits if it were otherwise sound. The real problem is that SHA-1 is already classically broken via practical collision attacks (e.g., SHAttered), which have nothing to do with quantum computing."
         },
         {
           "name": "quantum:recommendation",
-          "value": "Replace SHA-1 with SHA-256 or better for any security-relevant use (integrity checks, digital signatures, certificate fingerprints). If SHA-1 is used only for non-security purposes (e.g., cache keys, checksums for deduplication), it may be acceptable to leave in place, but this should be confirmed by reviewing the actual call site."
+          "value": "Treat this as a standard cryptographic hygiene finding, not a post-quantum migration item. Replace SHA-1 with SHA-256 or SHA-3-256 for any integrity, signature, or fingerprinting use. If SHA-1 is being used for password hashing, switch to a dedicated password hashing function such as bcrypt, scrypt, or Argon2 instead of a general-purpose hash."
         },
         {
           "name": "quantum:migrationNotes",
-          "value": "No stack trace or entry point was provided for this finding, so the exact code location and purpose of the SHA-1 call could not be determined. Re-run the observation with full stack trace capture enabled to identify the source package and calling class before assigning remediation ownership. Once located, swap MessageDigest.getInstance(\"SHA-1\") for \"SHA-256\" and verify no downstream systems depend on the specific 160-bit output length or format."
+          "value": "This finding is missing its stack trace and entry point, so the exact call site and use case (checksum, signature digest, password hash, cache key, etc.) can\u0027t be confirmed. Pull the full observation details from Contrast to identify the calling code before making changes, since the fix differs depending on whether SHA-1 is used for integrity checking versus password storage."
         },
         {
           "name": "quantum:findingsAnalyzed",
@@ -117,7 +117,7 @@
         },
         {
           "name": "contrast:uniqueLocations",
-          "value": "2"
+          "value": "1"
         },
         {
           "name": "quantum:riskLevel",
@@ -125,19 +125,19 @@
         },
         {
           "name": "quantum:title",
-          "value": "No action needed - SHA-256 usage in Cargo-Crypto-contrast-cargo-cats-frontgateservice"
+          "value": "No action needed for SHA-256 usage in Cargo-Crypto-contrast-cargo-cats-frontgateservice"
         },
         {
           "name": "quantum:usageSummary",
-          "value": "Application computes SHA-256 hashes, likely for integrity checks, checksums, or similar purposes."
+          "value": "Application computes SHA-256 hashes, likely for integrity checks, data fingerprinting, or similar purposes."
         },
         {
           "name": "quantum:dataSensitivity",
-          "value": "Unknown, no stack trace or entry point provided to determine specific data being hashed"
+          "value": "Unknown, stack trace not provided, likely general data integrity or identifier hashing"
         },
         {
           "name": "quantum:dataLifetime",
-          "value": "short-term"
+          "value": "unknown (insufficient stack trace detail to determine)"
         },
         {
           "name": "quantum:codeSource",
@@ -145,34 +145,31 @@
         },
         {
           "name": "quantum:sourcePackage",
-          "value": "Unknown - stack trace not provided, cannot determine exact origin package"
+          "value": "Unknown, no stack trace provided"
         },
         {
           "name": "quantum:remediationOwner",
-          "value": "No remediation owner needed at this time"
+          "value": "N/A, no action required"
         },
         {
           "name": "quantum:quantumThreat",
-          "value": "SHA-256 is a symmetric hash function. Grover\u0027s algorithm only provides a quadratic speedup against hash functions, reducing SHA-256\u0027s effective security from 256 bits to roughly 128 bits, which remains well above the security margin considered safe against quantum attacks. This is not vulnerable to Shor\u0027s algorithm since it isn\u0027t asymmetric."
+          "value": "SHA-256 is a symmetric primitive. Grover\u0027s algorithm provides at most a quadratic speedup against hash preimage/collision resistance, reducing effective security from 256 bits to roughly 128 bits, which remains well above the threshold considered secure. SHA-256 is not vulnerable to Shor\u0027s algorithm since it is not based on integer factorization or discrete logarithm problems."
         },
         {
           "name": "quantum:recommendation",
-          "value": "No remediation required. SHA-256 is quantum-resistant at current NIST security levels and does not need replacement as part of post-quantum migration planning."
+          "value": "No remediation needed for quantum resistance. SHA-256 remains quantum-safe at current and foreseeable quantum computing capabilities. Continue monitoring NIST guidance in case recommendations change."
         },
         {
           "name": "quantum:migrationNotes",
-          "value": "None required. If this hash is being used in a context involving digital signatures or key exchange elsewhere in the same code path, those adjacent mechanisms should be evaluated separately since they may carry quantum risk even though SHA-256 itself does not."
+          "value": "None required. If this SHA-256 usage is paired with an asymmetric algorithm elsewhere in the same workflow (e.g., signing a hash with RSA/ECDSA), that paired asymmetric operation is the actual quantum risk and should be evaluated separately, not this hash function itself."
         },
         {
           "name": "quantum:findingsAnalyzed",
-          "value": "2"
+          "value": "1"
         }
       ],
       "evidence": {
         "occurrences": [
-          {
-            "additionalContext": "App: Cargo-Crypto-contrast-cargo-cats-dataservice"
-          },
           {
             "additionalContext": "App: Cargo-Crypto-contrast-cargo-cats-frontgateservice"
           }
@@ -203,7 +200,7 @@
         },
         {
           "name": "contrast:uniqueLocations",
-          "value": "2"
+          "value": "1"
         },
         {
           "name": "quantum:riskLevel",
@@ -215,11 +212,11 @@
         },
         {
           "name": "quantum:usageSummary",
-          "value": "Application computes MD5 hashes, likely for checksums, cache keys, or similar non-cryptographic purposes."
+          "value": "Application uses MD5 hashing, observed 5 times, with no stack trace or entry point provided to determine the specific purpose."
         },
         {
           "name": "quantum:dataSensitivity",
-          "value": "Unknown, no stack trace or entry point provided to determine what data is being hashed"
+          "value": "Unknown - no stack trace context available to determine what data is being hashed"
         },
         {
           "name": "quantum:dataLifetime",
@@ -231,34 +228,31 @@
         },
         {
           "name": "quantum:sourcePackage",
-          "value": "Unknown, no stack trace provided"
+          "value": "Unknown - stack trace not provided in this observation"
         },
         {
           "name": "quantum:remediationOwner",
-          "value": "Application development team for Cargo-Crypto-contrast-cargo-cats-frontgateservice"
+          "value": "Application development team (assumed custom_code based on naming; verify actual call site once stack trace is available)"
         },
         {
           "name": "quantum:quantumThreat",
-          "value": "MD5 is not a quantum vulnerability. It\u0027s classically broken due to well-known collision attacks (Grover\u0027s algorithm only affects hash preimage resistance by a square root factor, which is not the issue here). This is a legacy cryptographic weakness unrelated to post-quantum migration planning."
+          "value": "MD5 is classically broken (collision attacks are practical today) but this is not a quantum-specific vulnerability. Grover\u0027s algorithm would only provide a quadratic speedup against a preimage attack, and MD5 is already broken well beyond that by classical cryptanalysis. This should be tracked as a standard cryptographic weakness, not a post-quantum migration item."
         },
         {
           "name": "quantum:recommendation",
-          "value": "Treat this as a classical crypto hygiene finding rather than a quantum migration item. If MD5 is used for any security purpose (integrity checks, password handling, digital signatures), replace it with SHA-256 or SHA-3. If it\u0027s used for non-security purposes (cache keys, checksums for non-adversarial data), it may be lower priority but should still be documented as a known weak algorithm."
+          "value": "Replace MD5 with SHA-256 or SHA-3 for any integrity, hashing, or fingerprinting use case. If MD5 is being used for password storage, replace it with a proper password hashing function (bcrypt, scrypt, or Argon2) instead. This is unrelated to quantum readiness and should be prioritized as a classical cryptographic hygiene fix."
         },
         {
           "name": "quantum:migrationNotes",
-          "value": "No stack trace or entry point was provided in this observation, so the exact code location and usage context couldn\u0027t be determined. Recommend pulling the full stack trace from the CBOM evidence to confirm whether this is a security-relevant use case before prioritizing remediation. If used for signatures or authentication, escalate to CRITICAL under classical crypto risk, separate from this quantum-specific assessment."
+          "value": "No stack trace or entry point was provided with this finding, so the exact call site and purpose (integrity check, password hashing, cache key, deduplication, etc.) can\u0027t be confirmed. Recommend re-pulling observation details (GET /observations/{id}/details) to get the stack trace before assigning to a team, since the fix differs significantly if this turns out to be password storage versus a non-security checksum use."
         },
         {
           "name": "quantum:findingsAnalyzed",
-          "value": "2"
+          "value": "1"
         }
       ],
       "evidence": {
         "occurrences": [
-          {
-            "additionalContext": "App: Cargo-Crypto-contrast-cargo-cats-dataservice"
-          },
           {
             "additionalContext": "App: Cargo-Crypto-contrast-cargo-cats-frontgateservice"
           }
@@ -288,7 +282,7 @@
         },
         {
           "name": "contrast:uniqueLocations",
-          "value": "2"
+          "value": "1"
         },
         {
           "name": "quantum:riskLevel",
@@ -296,19 +290,19 @@
         },
         {
           "name": "quantum:title",
-          "value": "No action needed for AES-GCM usage in Cargo-Crypto-contrast-cargo-cats-dataservice"
+          "value": "No action needed for AES/GCM usage in Cargo-Crypto-contrast-cargo-cats-frontgateservice"
         },
         {
           "name": "quantum:usageSummary",
-          "value": "The application uses AES/GCM/NoPadding for authenticated symmetric encryption, likely protecting data at rest or in transit."
+          "value": "The application uses AES/GCM/NoPadding for authenticated symmetric encryption."
         },
         {
           "name": "quantum:dataSensitivity",
-          "value": "Unknown, no stack trace or entry point provided to determine specific data type"
+          "value": "Unknown, no stack trace or entry point provided to identify what data is being encrypted"
         },
         {
           "name": "quantum:dataLifetime",
-          "value": "unknown"
+          "value": "short-term"
         },
         {
           "name": "quantum:codeSource",
@@ -316,34 +310,31 @@
         },
         {
           "name": "quantum:sourcePackage",
-          "value": "Unable to determine, no stack trace provided"
+          "value": "Unknown, no stack trace provided to identify the originating package or class"
         },
         {
           "name": "quantum:remediationOwner",
-          "value": "N/A, no fix required for quantum resistance"
+          "value": "No remediation required, application team should confirm key size during a routine review"
         },
         {
           "name": "quantum:quantumThreat",
-          "value": "AES-GCM is a symmetric algorithm. Grover\u0027s Algorithm only reduces its effective security by half, so AES-256-GCM remains at 128-bit security post-quantum, still considered secure. If this is AES-128-GCM, it would drop to an effective 64-bit security level, which is a concern independent of quantum computing and should be reviewed for key size."
+          "value": "AES is symmetric crypto, so it\u0027s only affected by Grover\u0027s algorithm, which halves effective key strength. AES/GCM at 256-bit keys remains secure at roughly AES-128 equivalent strength post-quantum. This is quantum-safe by design as long as a 256-bit key is used."
         },
         {
           "name": "quantum:recommendation",
-          "value": "Confirm the key size in use. If AES-256, no action is needed for quantum resistance. If AES-128, plan to upgrade to AES-256 to maintain long-term security margins, though this is a classical strength issue, not a quantum-specific one."
+          "value": "No replacement needed. Confirm the key size configured for this AES/GCM usage is 256-bit rather than 128-bit, since 128-bit keys drop to roughly 64-bit equivalent strength under Grover\u0027s algorithm, which is inadequate for long-term protection."
         },
         {
           "name": "quantum:migrationNotes",
-          "value": "No stack trace was provided in this instance, so the specific code location and key size could not be verified. Request the full stack trace and confirm the key length parameter passed to Cipher.getInstance or equivalent key generation call before closing this out."
+          "value": "Verify the key generation code (e.g., KeyGenerator.getInstance(\"AES\").init(256)) uses 256-bit keys. No stack trace was available for this instance, so the exact call site couldn\u0027t be confirmed. If this data has a long retention period, treat that as a separate finding requiring key-size verification, not a post-quantum migration issue."
         },
         {
           "name": "quantum:findingsAnalyzed",
-          "value": "2"
+          "value": "1"
         }
       ],
       "evidence": {
         "occurrences": [
-          {
-            "additionalContext": "App: Cargo-Crypto-contrast-cargo-cats-dataservice"
-          },
           {
             "additionalContext": "App: Cargo-Crypto-contrast-cargo-cats-frontgateservice"
           }
@@ -369,26 +360,12 @@
     },
     {
       "type": "application",
-      "bom-ref": "app-cargo-crypto-contrast-cargo-cats-dataservice",
-      "name": "Cargo-Crypto-contrast-cargo-cats-dataservice",
-      "description": "Based on its name, this is likely a data service component for an application called \"Cargo Cats,\" probably handling data persistence or retrieval for that system. With no observed connections or third-party libraries, it may be a newly instrumented, isolated, or lightly-used service, so this description should be treated as a low-confidence guess rather than a confirmed architectural role."
-    },
-    {
-      "type": "application",
       "bom-ref": "app-cargo-crypto-contrast-cargo-cats-frontgateservice",
       "name": "Cargo-Crypto-contrast-cargo-cats-frontgateservice",
-      "description": "Based on its name, this is most likely the front-facing API gateway for the \"Cargo Cats\" application suite, handling inbound traffic and routing requests toward backend services. Since no connected applications or third-party libraries were observed, its architecture graph data is likely incomplete or it operates in isolation from the instrumented environment."
+      "description": "Based on its name, this is likely the front gateway service for the \"cargo cats\" application, probably handling incoming requests and routing them to backend services within that system. It appears to be an isolated or minimally instrumented component, since no connected applications or third-party libraries were observed, which may reflect limited runtime visibility rather than an actual lack of dependencies."
     }
   ],
   "dependencies": [
-    {
-      "ref": "app-cargo-crypto-contrast-cargo-cats-dataservice",
-      "dependsOn": [
-        "crypto-sha-256",
-        "crypto-md5",
-        "crypto-aes-gcm-nopadding"
-      ]
-    },
     {
       "ref": "app-cargo-crypto-contrast-cargo-cats-frontgateservice",
       "dependsOn": [
@@ -399,10 +376,12 @@
       ]
     },
     {
-      "ref": "contrast-crypto-inventory",
+      "ref": "cargo-crypto-contrast-cargo-cats-frontgateservice",
       "dependsOn": [
-        "app-cargo-crypto-contrast-cargo-cats-dataservice",
-        "app-cargo-crypto-contrast-cargo-cats-frontgateservice"
+        "crypto-sha-1",
+        "crypto-sha-256",
+        "crypto-md5",
+        "crypto-aes-gcm-nopadding"
       ]
     }
   ]
