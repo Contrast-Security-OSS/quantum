@@ -34,11 +34,22 @@ public class Main {
                 ensureAuthenticated(rest);
                 AIBOMGenerator.main(rest);
                 break;
+            case "blueprint":
+                ensureAuthenticated(rest);
+                BlueprintGenerator.main(rest);
+                break;
+            case "vex":
+                ensureAuthenticated(rest);
+                VEXGenerator.main(rest);
+                break;
             case "cbom-advisor":
                 QuantumAdvisor.main(rest);
                 break;
             case "aibom-advisor":
                 AIAdvisor.main(rest);
+                break;
+            case "vex-advisor":
+                VEXAdvisor.main(rest);
                 break;
             case "--help":
             case "-h":
@@ -80,10 +91,13 @@ public class Main {
         System.out.println("  java -jar runtime-analyst.jar auth [options]              Connect to Contrast and generate contrast.properties");
         System.out.println("  java -jar runtime-analyst.jar cbom [options]              Generate a Cryptography Bill of Materials");
         System.out.println("  java -jar runtime-analyst.jar aibom [options]             Generate an AI/LLM usage Bill of Materials");
+        System.out.println("  java -jar runtime-analyst.jar blueprint [options]         Generate a CycloneDX Blueprint (ABOM + Bill of Behaviors)");
+        System.out.println("  java -jar runtime-analyst.jar vex [options]               Generate a CycloneDX VEX from library-usage and CVE Shield data");
         System.out.println("  java -jar runtime-analyst.jar cbom-advisor <cbom.json>    Re-run the Quantum Advisor against an existing CBOM");
         System.out.println("  java -jar runtime-analyst.jar aibom-advisor <aibom.json>  Re-run the AI Advisor against an existing AI-BOM");
-        System.out.println("\n`cbom --analyze` / `aibom --analyze` already run the matching advisor automatically after generation -");
-        System.out.println("the standalone cbom-advisor/aibom-advisor commands are for re-running the advisor without regenerating the BOM.");
+        System.out.println("  java -jar runtime-analyst.jar vex-advisor <vex.json>      Re-run the VEX Advisor against an existing VEX");
+        System.out.println("\n`cbom --analyze` / `aibom --analyze` / `vex --analyze` already run the matching advisor automatically after");
+        System.out.println("generation - the standalone *-advisor commands are for re-running the advisor without regenerating the file.");
         System.out.println("\nRun with -h after a subcommand for its options, e.g.:");
         System.out.println("  java -jar runtime-analyst.jar cbom -h");
         System.out.println("  java -jar runtime-analyst.jar aibom -h");

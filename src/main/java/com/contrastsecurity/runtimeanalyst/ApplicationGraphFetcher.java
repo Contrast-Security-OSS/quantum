@@ -142,6 +142,8 @@ public class ApplicationGraphFetcher {
             if (sourceAppId != null && targetAppId != null) {
                 addConnection(result, sourceAppId, appNameFor(nodesByGraphId, target));
                 addConnection(result, targetAppId, appNameFor(nodesByGraphId, source));
+                addConnectionId(result, sourceAppId, appNameFor(nodesByGraphId, target), targetAppId);
+                addConnectionId(result, targetAppId, appNameFor(nodesByGraphId, source), sourceAppId);
                 continue;
             }
 
@@ -166,6 +168,13 @@ public class ApplicationGraphFetcher {
         AppGraphInfo info = result.get(appId);
         if (info != null && connectedName != null) {
             info.connectedApplications.add(connectedName);
+        }
+    }
+
+    private static void addConnectionId(Map<String, AppGraphInfo> result, String appId, String connectedName, String connectedAppId) {
+        AppGraphInfo info = result.get(appId);
+        if (info != null && connectedName != null && connectedAppId != null) {
+            info.connectedApplicationIds.put(connectedName, connectedAppId);
         }
     }
 
