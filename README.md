@@ -240,6 +240,19 @@ Two sample AI-BOM files are included to try it with:
 - `sample-aibom.json` - real output from `AIBOMGenerator` against a live org (one model, both apps local/self-hosted)
 - `test-aibom.json` - a hand-crafted fixture covering cases the sample doesn't: multiple providers (OpenAI/Anthropic/Ollama), both cloud and local host categories, and an app with multiple call sites for the same model
 
+## Sample Reports
+
+`samples/` has one real, current output from each generator and its matching advisor report, all captured against a live org in a single run - useful as a reference for what each format actually looks like without running the tool yourself:
+
+| CycloneDX document | Advisor report |
+|---|---|
+| `sample-cbom.json` | `sample-cbom-advisor.md` |
+| `sample-aibom.json` | `sample-aibom-advisor.md` |
+| `sample-blueprint.json` | *(no advisor - see the Blueprint section above)* |
+| `sample-vex.json` | `sample-vex-advisor.md` |
+
+`sample-vex.json` is scoped to one application (`SAML-PetClinic-Demo`, 235 statements) rather than the whole org - a full-org VEX run makes one CVE-issues API call per application and produces a much larger file, which isn't necessary to illustrate the format.
+
 ## Configuration Reference
 
 | Property | Description |
