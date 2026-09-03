@@ -1,4 +1,4 @@
-package com.contrastsecurity.bomsquad;
+package com.contrastsecurity.runtimeanalyst;
 
 import java.io.BufferedReader;
 import java.io.IOException;

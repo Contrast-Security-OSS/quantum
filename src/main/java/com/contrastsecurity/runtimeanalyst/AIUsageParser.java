@@ -1,4 +1,4 @@
-package com.contrastsecurity.bomsquad;
+package com.contrastsecurity.runtimeanalyst;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

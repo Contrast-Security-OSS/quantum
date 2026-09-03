@@ -1,4 +1,4 @@
-package com.contrastsecurity.bomsquad;
+package com.contrastsecurity.runtimeanalyst;
 
 import java.util.ArrayList;
 import java.util.List;

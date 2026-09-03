@@ -19,6 +19,8 @@ CLAUDE.md
 # Generated files
 *.csv
 cbom*.json
+aibom*.json
+blueprint*.json
 
 # Shell scripts (may contain credentials)
 *.sh
