@@ -39,14 +39,21 @@ public class VEXAdvisor {
         "is to judge whether relying on each claim, as stated, is reasonable given the CVE's severity/exploitability, " +
         "or whether it's the kind of claim a human reviewer should double-check before trusting it.\n\n" +
         "You're also given whether Assess (the module that produces the runtime evidence every claim rests on) and " +
-        "Protect (the classic HTTP-rule-based RASP module, distinct from CVE Shield) are enabled per environment " +
-        "for this application. Weigh this directly: a duration-based claim scoped to an environment where Assess " +
-        "itself has no data or is disabled isn't weak evidence, it's NO evidence - flag it regardless of severity. " +
-        "A claim in an environment where Protect is disabled has one less active mitigating control as a backstop " +
-        "if the absence-of-execution reasoning turns out wrong, which raises the stakes of getting it wrong.\n\n" +
+        "ADR (the classic HTTP-rule-based RASP module, formerly branded \"Protect\" - distinct from CVE Shield) " +
+        "are enabled per environment for this application, and whether CVE Shield itself has any coverage for " +
+        "each specific CVE in that environment scope. Weigh all of this directly: a duration-based claim scoped " +
+        "to an environment where Assess has no data or is disabled isn't weak evidence, it's NO evidence - flag " +
+        "it regardless of severity. A claim where CVE Shield has no coverage for that CVE at all is weaker still " +
+        "than one where Shield exists and simply hasn't fired - \"we haven't seen it\" means less when nothing " +
+        "was capable of catching it in the first place. A claim in an environment where ADR is disabled has one " +
+        "less active mitigating control as a backstop if the absence-of-execution reasoning turns out wrong, " +
+        "which raises the stakes of getting it wrong.\n\n" +
         "## What makes a claim worth flagging for review\n\n" +
         "- Any duration-based claim scoped to an environment where Assess has no data or is disabled - there is no " +
         "runtime evidence behind it at all, regardless of the CVE's severity.\n" +
+        "- A duration-based claim on a CRITICAL/HIGH severity CVE where CVE Shield has no coverage at all for that " +
+        "CVE - there's no possibility of an active backstop catching an exploit attempt, so the claim rests " +
+        "entirely on absence-of-execution.\n" +
         "- A `not_affected` claim justified only by \"N days without observed execution\" (not by code_not_reachable " +
         "or protected_at_runtime) on a CRITICAL/HIGH severity CVE, especially one with a high EPSS score or KEV " +
         "(known-exploited) status - absence of evidence is weaker evidence the more severe/exploitable the CVE is.\n" +
@@ -56,7 +63,7 @@ public class VEXAdvisor {
         "## What's normally fine as-is\n\n" +
         "- `code_not_reachable` (zero classes of the library ever loaded) - this is a structural fact, not a " +
         "probabilistic one, regardless of severity.\n" +
-        "- `protected_at_runtime` (CVE Shield/Protect actively mitigating) - an active control, not an absence of " +
+        "- `protected_at_runtime` (CVE Shield actively mitigating) - an active control, not an absence of " +
         "evidence.\n" +
         "- Low/medium severity CVEs accepted on duration alone - lower stakes if the absence-of-evidence reasoning " +
         "turns out wrong.\n\n" +
@@ -92,6 +99,7 @@ public class VEXAdvisor {
         Double epssScore;
         Double epssPercentile;
         Boolean cisaKev;
+        Boolean shieldAvailable;
         long classesUsed;
         long classCount;
         long daysObserved;
@@ -101,9 +109,9 @@ public class VEXAdvisor {
     static class AppEntry {
         String name;
         List<VexStatement> statements = new ArrayList<>();
-        // "true"/"false"/"" (no agent ever seen in that environment) - see VEXGenerator.ProtectionStatus
+        // "true"/"false"/"" (no agent ever seen in that environment) - see VEXGenerator.ModuleStatus
         String assessEnabledDev, assessEnabledQa, assessEnabledProd;
-        String protectEnabledDev, protectEnabledQa, protectEnabledProd;
+        String adrEnabledDev, adrEnabledQa, adrEnabledProd;
     }
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -252,6 +260,8 @@ public class VEXAdvisor {
             s.epssPercentile = parseDouble(props.get("contrast:epssPercentile"));
             String cisaProp = props.get("contrast:cisaKev");
             s.cisaKev = cisaProp != null ? Boolean.parseBoolean(cisaProp) : null;
+            String shieldProp = props.get("contrast:shieldAvailable");
+            s.shieldAvailable = shieldProp != null && !shieldProp.isEmpty() ? Boolean.parseBoolean(shieldProp) : null;
 
             byApp.computeIfAbsent(appName, k -> {
                 AppEntry e = new AppEntry();
@@ -271,9 +281,9 @@ public class VEXAdvisor {
             entry.assessEnabledDev = props.get("contrast:assessEnabledDev");
             entry.assessEnabledQa = props.get("contrast:assessEnabledQa");
             entry.assessEnabledProd = props.get("contrast:assessEnabledProd");
-            entry.protectEnabledDev = props.get("contrast:protectEnabledDev");
-            entry.protectEnabledQa = props.get("contrast:protectEnabledQa");
-            entry.protectEnabledProd = props.get("contrast:protectEnabledProd");
+            entry.adrEnabledDev = props.get("contrast:adrEnabledDev");
+            entry.adrEnabledQa = props.get("contrast:adrEnabledQa");
+            entry.adrEnabledProd = props.get("contrast:adrEnabledProd");
         }
 
         return new ArrayList<>(byApp.values());
@@ -329,8 +339,8 @@ public class VEXAdvisor {
         sb.append("Application: ").append(entry.name).append("\n\n");
         sb.append("Assess (the module that produces the runtime evidence behind every claim below) enabled: ")
           .append(formatEnvFlags(entry.assessEnabledDev, entry.assessEnabledQa, entry.assessEnabledProd)).append("\n");
-        sb.append("Protect enabled (classic RASP module, not CVE Shield - no separate enablement flag for that is available): ")
-          .append(formatEnvFlags(entry.protectEnabledDev, entry.protectEnabledQa, entry.protectEnabledProd)).append("\n\n");
+        sb.append("ADR enabled (classic RASP module, formerly \"Protect\" - not CVE Shield): ")
+          .append(formatEnvFlags(entry.adrEnabledDev, entry.adrEnabledQa, entry.adrEnabledProd)).append("\n\n");
         sb.append("VEX Claims:");
 
         for (VexStatement s : entry.statements) {
@@ -344,6 +354,10 @@ public class VEXAdvisor {
             }
             if (s.cisaKev != null) {
                 sb.append("CISA Known Exploited Vulnerabilities (KEV) catalog: ").append(s.cisaKev ? "YES" : "no").append("\n");
+            }
+            if (s.shieldAvailable != null) {
+                sb.append("CVE Shield available for this CVE in this environment scope: ")
+                  .append(s.shieldAvailable ? "YES" : "NO - no virtual patch coverage at all").append("\n");
             }
             sb.append("Claimed state: ").append(s.state).append("\n");
             if (s.justification != null) sb.append("Justification: ").append(s.justification).append("\n");
@@ -510,7 +524,7 @@ public class VEXAdvisor {
         sb.append("**Assessment Type:** VEX Claim Soundness Review\n\n---\n\n");
         sb.append("## Summary\n\n");
         sb.append("This report reviews VEX (Vulnerability Exploitability eXchange) claims generated from Contrast ")
-          .append("Security runtime library-usage and CVE Shield/Protect data. It does not re-derive whether a CVE ")
+          .append("Security runtime library-usage and CVE Shield data. It does not re-derive whether a CVE ")
           .append("exists - it judges whether each `not_affected`/`in_triage` claim is well-supported enough to rely ")
           .append("on as-is, or whether a human should look at it first.\n\n");
         sb.append("**Coverage:** ").append(totalApps).append(" application(s), ").append(totalStatements)
@@ -551,19 +565,24 @@ public class VEXAdvisor {
 
         sb.append("\n### Legend\n\n");
         sb.append("**VEX** - `NA` = not_affected, `IT` = in_triage\n\n");
+        sb.append("**Shield** - whether CVE Shield could catch this specific CVE at all in the environment(s) ")
+          .append("considered: `Yes` (Shield exists there, even if it hasn't fired), `No` (no Shield coverage for ")
+          .append("this CVE at all - the claim rests entirely on absence-of-execution, with no possible active ")
+          .append("backstop), `-` (no signal either way).\n\n");
         sb.append("**Rationale** - why the claim was made, with the day count for the two duration-based reasons:\n\n");
         sb.append("| Rationale | Meaning |\n|-----------|---------|\n");
         sb.append("| `Library Unused` | Library never loaded at runtime (0 classes) - structural, not time-based |\n");
-        sb.append("| `CVE Shielded` | CVE Shield/Protect actively mitigating at runtime - an active control, not time-based |\n");
+        sb.append("| `CVE Shielded` | CVE Shield actively mitigating at runtime - an active control, not time-based |\n");
         sb.append("| `CVE Not Used Nd` | not_affected - library loaded, but zero observed executions of the vulnerable path in N days of runtime monitoring, past the acceptance threshold |\n");
         sb.append("| `CVE Watching Nd` | in_triage - zero observed executions in N days so far, still short of the acceptance threshold |\n\n");
         sb.append("Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, so the claims worth ")
           .append("a second look surface at the top - see the Key Findings above for which specific CVEs those are.\n\n");
         sb.append("**Protection Status** (shown per app below) - Assess is the module that produces the runtime ")
-          .append("evidence every claim in this report rests on; Protect is the classic HTTP-rule-based RASP module. ")
-          .append("Neither is CVE Shield - CVE Shield is a separate, newer product that defends specific CVEs via a ")
-          .append("microsandbox rather than HTTP rules, and Contrast's API exposes no distinct enablement flag for it. ")
-          .append("CVE Shield's own per-CVE verdicts still show up per-claim above as the `CVE Shielded` rationale.\n");
+          .append("evidence every claim in this report rests on; ADR (formerly branded \"Protect\") is the classic ")
+          .append("HTTP-rule-based RASP module. Neither is CVE Shield - CVE Shield is a separate product that defends ")
+          .append("specific CVEs via a microsandbox rather than HTTP rules. Its own coverage is the per-row **Shield** ")
+          .append("column above, sourced from the real per-app, per-environment NO_SHIELD/NOT_SEEN signal where ")
+          .append("available.\n");
 
         sb.append("\n---\n\n## Application Detail\n\n");
 
@@ -583,8 +602,8 @@ public class VEXAdvisor {
             if (entry != null) {
                 sb.append("**Protection Status:** Assess (runtime evidence): ")
                   .append(formatEnvFlags(entry.assessEnabledDev, entry.assessEnabledQa, entry.assessEnabledProd))
-                  .append(" · Protect (classic RASP, not CVE Shield): ")
-                  .append(formatEnvFlags(entry.protectEnabledDev, entry.protectEnabledQa, entry.protectEnabledProd))
+                  .append(" · ADR (classic RASP, formerly \"Protect\" - not CVE Shield): ")
+                  .append(formatEnvFlags(entry.adrEnabledDev, entry.adrEnabledQa, entry.adrEnabledProd))
                   .append("\n\n");
             }
             sb.append(getString(r, "application_description", "No description available.")).append("\n\n");
@@ -604,11 +623,12 @@ public class VEXAdvisor {
                     return Double.compare(bScore, aScore);
                 });
 
-                sb.append("| CVE | Library | Score | VEX | Rationale |\n|-----|---------|-------|-----|-----------|\n");
+                sb.append("| CVE | Library | Score | VEX | Shield | Rationale |\n|-----|---------|-------|-----|--------|-----------|\n");
                 for (VexStatement s : statements) {
                     sb.append("| ").append(s.cveId).append(" | ").append(plainLibrary(s.purl))
                       .append(" | ").append(s.score != null ? s.score : "-").append(" | ")
                       .append("in_triage".equals(s.state) ? "IT" : "NA").append(" | ")
+                      .append(shieldLabel(s.shieldAvailable)).append(" | ")
                       .append(rationaleWord(s)).append(" |\n");
                 }
                 sb.append("\n");
@@ -619,7 +639,7 @@ public class VEXAdvisor {
 
         sb.append("## Appendix: Methodology\n\n");
         sb.append("VEX claims were generated by `VEXGenerator` from Contrast runtime library class-usage data and ")
-          .append("per-environment CVE Shield/Protect status - see `vex --help` for the exact decision policy. This ")
+          .append("per-environment CVE Shield status - see `vex --help` for the exact decision policy. This ")
           .append("advisor does not change any claim; it only assesses whether relying on each claim as generated is ")
           .append("reasonable given the CVE's severity and exploitability - it doesn't offer a distinct action per ")
           .append("claim, since the real options (verify reachability, upgrade the library) are the same regardless of ")
@@ -640,6 +660,12 @@ public class VEXAdvisor {
         if ("protected_at_runtime".equals(s.justification)) return "CVE Shielded";
         if ("in_triage".equals(s.state)) return "CVE Watching " + s.daysObserved + "d";
         return "CVE Not Used " + s.daysObserved + "d";
+    }
+
+    /** Whether CVE Shield could even catch this CVE in this environment scope - "-" means no signal either way. */
+    private String shieldLabel(Boolean shieldAvailable) {
+        if (shieldAvailable == null) return "-";
+        return shieldAvailable ? "Yes" : "No";
     }
 
     /** Strips a purl down to "artifact@version" - drops the "pkg:maven/<group>/" prefix for a narrow column. */

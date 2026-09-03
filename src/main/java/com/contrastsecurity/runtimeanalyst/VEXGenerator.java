@@ -47,32 +47,39 @@ import com.google.gson.JsonObject;
 /**
  * Generates a CycloneDX VEX (Vulnerability Exploitability eXchange) document for an
  * application's library vulnerabilities, using Contrast's runtime library-usage and
- * CVE Shield/Protect observation data to justify "not affected"/"in triage" claims
+ * CVE Shield observation data to justify "not affected"/"in triage" claims
  * rather than fabricating them.
  *
- * Four data sources, all under the same contrast.properties credentials:
+ * Five data sources, all under the same contrast.properties credentials:
  *   - GET  /api/v4/organizations/{org}/applications                          app first/last seen
  *   - POST /Contrast/api/ng/{org}/libraries/filter                           per-library CVEs + runtime class-usage
- *   - GET  /api/ns-ui/v1/organizations/{org}/applications/{id}/cves/issues   per-CVE per-environment Shield/Protect status
- *   - GET  /Contrast/api/ng/{org}/applications/{id}/servers                  per-server Assess/Protect module enablement
+ *   - GET  /api/ns-ui/v1/organizations/{org}/applications/{id}/cves/issues   per-CVE per-environment CVE Shield status
+ *   - GET  /Contrast/api/ng/{org}/applications/{id}/servers                  per-server Assess/ADR module enablement
+ *   - GET  /api/ns-ui/v1/organizations/{org}/cves                            org-wide per-CVE Shield coverage (cveShieldExists)
  *
  * Decision rules (see CLAUDE.md discussion - these are policy, not spec):
  *   1. classes_used == 0 for the app+library -> not_affected / code_not_reachable, unconditional.
  *   2. classes_used > 0, CVE's env status is PROTECTING/BLOCKED -> not_affected / protected_at_runtime.
  *   3. classes_used > 0, CVE's env status is EXPOSED/EXPLOITED (or unrecognized) -> no VEX entry;
  *      never suppress a vulnerability we can't positively account for.
- *   4. classes_used > 0, CVE's env status is NOT_SEEN (or missing) in every environment observed:
+ *   4. classes_used > 0, CVE's env status is NOT_SEEN/NO_SHIELD (or missing) in every environment observed:
  *        - days observed >= acceptAfterDays -> not_affected (no justification), detail explains the
  *          day count and threshold as an operational risk-acceptance, not a structural guarantee.
  *        - days observed <  acceptAfterDays -> in_triage, detail explains the day count so far.
+ *      NO_SHIELD (confirmed by scanning every app in this org) means CVE Shield has no coverage for this CVE
+ *      in that environment at all, as opposed to NOT_SEEN (Shield exists there and just hasn't fired) - this
+ *      still uses the same duration-based logic as NOT_SEEN, but is reported separately (see
+ *      contrast:shieldAvailable below) since "we haven't seen it" is much weaker when nothing was watching.
  *
- * Not factored into the decision rules above (deliberately - see ProtectionStatus): whether Assess/Protect are
+ * Not factored into the decision rules above (deliberately - see ModuleStatus): whether Assess/ADR are
  * even enabled per environment. A "not seen" claim scoped to an environment where Assess itself isn't running
  * has no runtime evidence behind it at all, but rather than silently changing the claim, that fact is reported
- * as its own contrast:assessEnabled and contrast:protectEnabled property (per env) so a human (or the VEX
- * Advisor) can weigh it. Note "Protect" here is the classic HTTP-rule-based RASP module (the API's `defend`
- * flag) - CVE Shield is a separate, newer microsandbox-based product with no distinct enablement flag found
- * in this API; see ProtectionStatus below for what that means for this report.
+ * as its own contrast:assessEnabled and contrast:adrEnabled property (per env) so a human (or the VEX
+ * Advisor) can weigh it. ADR (formerly branded "Protect") is the classic HTTP-rule-based RASP module (the
+ * API's `defend` flag) - a separate product from CVE Shield, which defends specific CVEs via a microsandbox.
+ * Whether CVE Shield could even catch this CVE at all - contrast:shieldAvailable - prefers the per-app,
+ * per-environment NO_SHIELD/NOT_SEEN signal above (see shieldAvailability()), falling back to the org-wide
+ * cveShieldExists flag from /cves only when there's no per-app signal either way (e.g. issue == null).
  *
  * Usage:
  *   java -jar runtime-analyst.jar vex --app "MyApp"
@@ -82,7 +89,13 @@ import com.google.gson.JsonObject;
 public class VEXGenerator {
 
     private static final List<String> PROTECTED_STATUSES = List.of("PROTECTING", "BLOCKED");
-    private static final List<String> NOT_SEEN_STATUSES = List.of("NOT_SEEN");
+    // NO_SHIELD means CVE Shield has no coverage for this CVE in this environment (confirmed by scanning every
+    // app in this org - it's a real status value, not documented alongside NOT_SEEN/PROTECTING/BLOCKED/etc).
+    // It still belongs in the duration-based branch below (absence-of-execution is still the applicable
+    // reasoning), but is tracked separately so the claim can say "there's no Shield to catch this even if it
+    // did fire" instead of silently reading the same as a live-but-quiet Shield.
+    private static final List<String> NOT_SEEN_STATUSES = List.of("NOT_SEEN", "NO_SHIELD");
+    private static final String NO_SHIELD_STATUS = "NO_SHIELD";
 
     private String baseUrl; // e.g. https://host/api/ns-ui/v1
     private String host;    // e.g. https://host
@@ -293,7 +306,7 @@ public class VEXGenerator {
         }
     }
 
-    // ---- CVE Shield / Protect status, per app ----
+    // ---- CVE Shield status, per app (per-CVE per-environment, from cves/issues) ----
 
     private Map<String, CveIssue> fetchCveIssues(String appId) throws IOException {
         Map<String, CveIssue> issues = new HashMap<>();
@@ -336,22 +349,19 @@ public class VEXGenerator {
         return issues;
     }
 
-    // ---- Assess/Protect module enablement, per app ----
+    // ---- Assess/ADR module enablement, per app ----
 
     /**
-     * `defend` is the classic Protect module (HTTP-rule-based RASP) - a different, older product from CVE
-     * Shield (which defends specific CVEs via a microsandbox, not HTTP rules). This API exposes no separate
-     * enablement flag for CVE Shield or for "ADR" as a distinct product, so this only reports Protect/Assess
-     * enablement; it does NOT claim to say whether CVE Shield itself is available or enabled. CVE Shield's own
-     * per-CVE verdicts (PROTECTING/BLOCKED/etc, from cves/issues) still show up per-claim regardless - see the
-     * `protected_at_runtime` justification and the devStatus/qaStatus/prodStatus properties below.
+     * `defend` is ADR (formerly branded "Protect"), the HTTP-rule-based RASP module - a different, older
+     * product from CVE Shield, which defends specific CVEs via a microsandbox rather than HTTP rules. CVE
+     * Shield's own coverage/status is NOT derived from this flag - see fetchCveShieldStatus below for that.
      */
-    private static class ProtectionStatus {
+    private static class ModuleStatus {
         Boolean assessEnabledDev, assessEnabledQa, assessEnabledProd;
-        Boolean protectEnabledDev, protectEnabledQa, protectEnabledProd;
+        Boolean adrEnabledDev, adrEnabledQa, adrEnabledProd;
     }
 
-    private ProtectionStatus fetchProtectionStatus(String appId) throws IOException {
+    private ModuleStatus fetchModuleStatus(String appId) throws IOException {
         String url = host + "/Contrast/api/ng/" + orgId + "/applications/" + appId + "/servers";
         HttpGet get = new HttpGet(url);
         get.setHeader("Authorization", authHeader);
@@ -365,7 +375,7 @@ public class VEXGenerator {
             throw new IOException("Servers API returned status " + statusCode + ": " + body);
         }
 
-        ProtectionStatus ps = new ProtectionStatus();
+        ModuleStatus ps = new ModuleStatus();
         JsonObject json = gson.fromJson(body, JsonObject.class);
         if (!json.has("servers")) {
             return ps;
@@ -374,19 +384,66 @@ public class VEXGenerator {
             JsonObject server = el.getAsJsonObject();
             String env = getStringOrNull(server, "environment");
             boolean assess = server.has("assess") && !server.get("assess").isJsonNull() && server.get("assess").getAsBoolean();
-            boolean protect = server.has("defend") && !server.get("defend").isJsonNull() && server.get("defend").getAsBoolean();
+            boolean adr = server.has("defend") && !server.get("defend").isJsonNull() && server.get("defend").getAsBoolean();
             if ("DEVELOPMENT".equals(env)) {
                 ps.assessEnabledDev = orTrue(ps.assessEnabledDev, assess);
-                ps.protectEnabledDev = orTrue(ps.protectEnabledDev, protect);
+                ps.adrEnabledDev = orTrue(ps.adrEnabledDev, adr);
             } else if ("QA".equals(env)) {
                 ps.assessEnabledQa = orTrue(ps.assessEnabledQa, assess);
-                ps.protectEnabledQa = orTrue(ps.protectEnabledQa, protect);
+                ps.adrEnabledQa = orTrue(ps.adrEnabledQa, adr);
             } else if ("PRODUCTION".equals(env)) {
                 ps.assessEnabledProd = orTrue(ps.assessEnabledProd, assess);
-                ps.protectEnabledProd = orTrue(ps.protectEnabledProd, protect);
+                ps.adrEnabledProd = orTrue(ps.adrEnabledProd, adr);
             }
         }
         return ps;
+    }
+
+    // ---- CVE Shield coverage, org-wide (not per app - fetched once per run) ----
+
+    /**
+     * Whether Contrast even HAS a CVE Shield virtual patch for a given CVE at all - a different fact from
+     * whether it's actively catching that CVE for a specific app/environment (which is what the per-app
+     * devStatus/qaStatus/prodStatus properties, from cves/issues, already report).
+     */
+    private Map<String, Boolean> fetchCveShieldStatus() throws IOException {
+        Map<String, Boolean> cveShieldExists = new HashMap<>();
+        String cursor = "";
+        boolean hasMore = true;
+
+        while (hasMore) {
+            String url = baseUrl + "/organizations/" + orgId
+                + "/cves?size=100&sort=maxCvssScore,desc&pagination=cursor&cursor=" + cursor
+                + "&dateInterval%5BstartTime%5D=2000-01-01T00:00:00.000Z"
+                + "&dateInterval%5BendTime%5D=" + java.time.Instant.now();
+            HttpGet get = new HttpGet(url);
+            get.setHeader("Authorization", authHeader);
+            get.setHeader("API-Key", apiKey);
+            get.setHeader("Accept", "application/json");
+
+            HttpResponse response = httpClient.execute(get);
+            int statusCode = response.getStatusLine().getStatusCode();
+            String body = EntityUtils.toString(response.getEntity());
+            if (statusCode != 200) {
+                throw new IOException("CVEs API returned status " + statusCode + ": " + body);
+            }
+
+            JsonObject json = gson.fromJson(body, JsonObject.class);
+            for (JsonElement el : json.getAsJsonArray("items")) {
+                JsonObject item = el.getAsJsonObject();
+                String cveId = item.has("cve") ? getStringOrNull(item.getAsJsonObject("cve"), "id") : null;
+                if (cveId != null && item.has("cveShieldExists") && !item.get("cveShieldExists").isJsonNull()) {
+                    cveShieldExists.put(cveId, item.get("cveShieldExists").getAsBoolean());
+                }
+            }
+
+            hasMore = json.has("hasMore") && json.get("hasMore").getAsBoolean();
+            cursor = json.has("cursor") && !json.get("cursor").isJsonNull() ? json.get("cursor").getAsString() : "";
+            if (cursor.isEmpty()) {
+                hasMore = false;
+            }
+        }
+        return cveShieldExists;
     }
 
     /** Null (no server seen yet) stays null only if never set; otherwise ORs across multiple servers in the same env. */
@@ -458,12 +515,16 @@ public class VEXGenerator {
         List<Vulnerability> vulnerabilities = new ArrayList<>();
         List<Component> appComponents = new ArrayList<>();
 
+        System.out.println("\nFetching org-wide CVE Shield coverage...");
+        Map<String, Boolean> cveShieldExists = fetchCveShieldStatus();
+        System.out.println("  " + cveShieldExists.size() + " CVEs with known Shield coverage status");
+
         for (AppInfo app : apps) {
             System.out.println("\nProcessing " + app.name + " (" + app.id + ")...");
 
             Map<String, CveIssue> cveIssues = fetchCveIssues(app.id);
             JsonArray libraries = fetchLibraries(app.id);
-            ProtectionStatus protection = fetchProtectionStatus(app.id);
+            ModuleStatus protection = fetchModuleStatus(app.id);
             System.out.println("  " + libraries.size() + " vulnerable libraries, " + cveIssues.size() + " CVE issue records");
             appComponents.add(buildAppComponent(app, protection));
 
@@ -497,7 +558,7 @@ public class VEXGenerator {
                     Vulnerability v = buildVulnerability(
                         app, group, fileName, fileVersion, hash, classesUsed, classCount,
                         cveId, vuln, cveIssues.get(cveId + "|" + fileVersion), daysObserved,
-                        remediationGuidance, latestVersion);
+                        remediationGuidance, latestVersion, cveShieldExists.get(cveId));
 
                     if (v != null) {
                         vulnerabilities.add(v);
@@ -519,8 +580,8 @@ public class VEXGenerator {
         return bom;
     }
 
-    /** Carries Assess/Protect module-enablement facts (see ProtectionStatus) - one per app, not repeated per statement. */
-    private Component buildAppComponent(AppInfo app, ProtectionStatus protection) {
+    /** Carries Assess/ADR module-enablement facts (see ModuleStatus) - one per app, not repeated per statement. */
+    private Component buildAppComponent(AppInfo app, ModuleStatus protection) {
         Component appComponent = new Component();
         appComponent.setType(Component.Type.APPLICATION);
         appComponent.setName(app.name);
@@ -530,9 +591,9 @@ public class VEXGenerator {
         properties.add(property("contrast:assessEnabledDev", enabledLabel(protection.assessEnabledDev)));
         properties.add(property("contrast:assessEnabledQa", enabledLabel(protection.assessEnabledQa)));
         properties.add(property("contrast:assessEnabledProd", enabledLabel(protection.assessEnabledProd)));
-        properties.add(property("contrast:protectEnabledDev", enabledLabel(protection.protectEnabledDev)));
-        properties.add(property("contrast:protectEnabledQa", enabledLabel(protection.protectEnabledQa)));
-        properties.add(property("contrast:protectEnabledProd", enabledLabel(protection.protectEnabledProd)));
+        properties.add(property("contrast:adrEnabledDev", enabledLabel(protection.adrEnabledDev)));
+        properties.add(property("contrast:adrEnabledQa", enabledLabel(protection.adrEnabledQa)));
+        properties.add(property("contrast:adrEnabledProd", enabledLabel(protection.adrEnabledProd)));
         appComponent.setProperties(properties);
         return appComponent;
     }
@@ -545,7 +606,8 @@ public class VEXGenerator {
     /** Returns null when the CVE shouldn't get a VEX statement at all (exposed/exploited/unrecognized status). */
     private Vulnerability buildVulnerability(AppInfo app, String group, String fileName, String fileVersion,
             String hash, long classesUsed, long classCount, String cveId, JsonObject vuln,
-            CveIssue issue, long daysObserved, JsonObject remediationGuidance, String latestVersion) {
+            CveIssue issue, long daysObserved, JsonObject remediationGuidance, String latestVersion,
+            Boolean orgWideShieldExists) {
 
         Vulnerability v = new Vulnerability();
         v.setBomRef(sanitizeBomRef(app.id + "-" + cveId + "-" + hash));
@@ -652,7 +714,7 @@ public class VEXGenerator {
         } else if (issue != null && isProtected(issue)) {
             analysis.setState(State.NOT_AFFECTED);
             analysis.setJustification(Justification.PROTECTED_AT_RUNTIME);
-            detail = "CVE Shield/Protect is actively mitigating this vulnerability at runtime in " + app.name
+            detail = "CVE Shield is actively mitigating this vulnerability at runtime in " + app.name
                 + " (" + envScopeLabel() + ").";
         } else if (issue != null && isNotSeen(issue)) {
             detail = "Library loaded (" + classesUsed + " of " + classCount + " classes used) but this CVE's "
@@ -665,6 +727,10 @@ public class VEXGenerator {
             } else {
                 analysis.setState(State.IN_TRIAGE);
                 detail += " (below the " + acceptAfterDays + "-day acceptance threshold).";
+            }
+            if (Boolean.FALSE.equals(shieldAvailability(issue, orgWideShieldExists))) {
+                detail += " CVE Shield has no coverage for this CVE in this environment scope, so runtime "
+                    + "observation is the only signal available - there's no active mitigation as a backstop.";
             }
         } else if (issue == null) {
             // Library confirmed used, but no matching per-CVE environment record found at all -
@@ -689,7 +755,7 @@ public class VEXGenerator {
 
         List<Response> responses = new ArrayList<>();
         if (analysis.getJustification() == Justification.PROTECTED_AT_RUNTIME) {
-            // The active Shield/Protect control is itself the mitigation in place.
+            // The active CVE Shield control is itself the mitigation in place.
             responses.add(Response.WORKAROUND_AVAILABLE);
         } else if (analysis.getJustification() != Justification.CODE_NOT_REACHABLE && fixAvailable) {
             responses.add(Response.UPDATE);
@@ -716,6 +782,10 @@ public class VEXGenerator {
         }
         if (vuln.has("cisa") && !vuln.get("cisa").isJsonNull()) {
             properties.add(property("contrast:cisaKev", String.valueOf(vuln.get("cisa").getAsBoolean())));
+        }
+        Boolean shieldAvailable = shieldAvailability(issue, orgWideShieldExists);
+        if (shieldAvailable != null) {
+            properties.add(property("contrast:shieldAvailable", String.valueOf(shieldAvailable)));
         }
         if (latestVersion != null) {
             properties.add(property("contrast:latestVersion", latestVersion));
@@ -771,6 +841,28 @@ public class VEXGenerator {
 
     private boolean isNotSeenOrNull(String status) {
         return status == null || NOT_SEEN_STATUSES.contains(status);
+    }
+
+    /**
+     * Whether CVE Shield could have caught this CVE at all in the environment(s) being considered - true if any
+     * considered status is a real (non-null) signal other than NO_SHIELD (even NOT_SEEN implies Shield was
+     * watching and just hasn't fired), false if every considered status that has any data is explicitly
+     * NO_SHIELD, or null (unknown) when there's no per-app signal either way and no org-wide fact to fall
+     * back on.
+     */
+    private Boolean shieldAvailability(CveIssue issue, Boolean orgWideShieldExists) {
+        if (issue != null) {
+            boolean anyRealSignal = false;
+            boolean anyNoShield = false;
+            for (String status : statusesToConsider(issue)) {
+                if (status == null) continue;
+                if (NO_SHIELD_STATUS.equals(status)) anyNoShield = true;
+                else anyRealSignal = true;
+            }
+            if (anyRealSignal) return true;
+            if (anyNoShield) return false;
+        }
+        return orgWideShieldExists;
     }
 
     private String artifactNameFrom(String fileName) {
