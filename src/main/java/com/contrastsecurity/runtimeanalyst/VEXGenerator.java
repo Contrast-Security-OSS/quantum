@@ -64,10 +64,13 @@ import com.google.gson.JsonObject;
  *      never suppress a vulnerability we can't positively account for.
  *   4. classes_used > 0, CVE's env status is NOT_SEEN/NO_SHIELD (or missing) in every environment observed:
  *      NO_SHIELD (confirmed by scanning every app in this org) means CVE Shield has no coverage for this CVE
- *      in that environment at all, as opposed to NOT_SEEN (Shield exists there and just hasn't fired). This
- *      matters for the state, not just the reporting: elapsed time can never turn "no detector was watching"
- *      into "nothing happened," so:
- *        - shieldAvailability() is false (every considered env is NO_SHIELD) -> in_triage, permanently,
+ *      at all, as opposed to NOT_SEEN (Shield exists and just hasn't fired). Coverage is a per-CVE,
+ *      product-level fact, not an app/environment-scoped one - if Shield covers a CVE anywhere, it covers it
+ *      everywhere Shield/ADR is enabled - so this is decided by the org-wide cveShieldExists flag (see
+ *      shieldAvailability()), not by inferring it from per-app NO_SHIELD/NOT_SEEN status. This matters for
+ *      the state, not just the reporting: elapsed time can never turn "no detector was watching" into
+ *      "nothing happened," so:
+ *        - shieldAvailability() is false (no coverage for this CVE, org-wide) -> in_triage, permanently,
  *          regardless of daysObserved - this can never graduate to not_affected on duration alone.
  *        - shieldAvailability() is true/unknown and days observed >= acceptAfterDays -> not_affected (no
  *          justification), detail explains the day count and threshold as an operational risk-acceptance,
@@ -81,9 +84,8 @@ import com.google.gson.JsonObject;
  * as its own contrast:assessEnabled and contrast:adrEnabled property (per env) so a human (or the VEX
  * Advisor) can weigh it. ADR (formerly branded "Protect") is the classic HTTP-rule-based RASP module (the
  * API's `defend` flag) - a separate product from CVE Shield, which defends specific CVEs via a microsandbox.
- * Whether CVE Shield could even catch this CVE at all - contrast:shieldAvailable - prefers the per-app,
- * per-environment NO_SHIELD/NOT_SEEN signal above (see shieldAvailability()), falling back to the org-wide
- * cveShieldExists flag from /cves only when there's no per-app signal either way (e.g. issue == null).
+ * Whether CVE Shield could even catch this CVE at all - contrast:shieldAvailable - is the org-wide
+ * cveShieldExists flag from /cves, verbatim (see shieldAvailability()).
  *
  * Usage:
  *   java -jar runtime-analyst.jar vex --app "MyApp"
@@ -93,13 +95,12 @@ import com.google.gson.JsonObject;
 public class VEXGenerator {
 
     private static final List<String> PROTECTED_STATUSES = List.of("PROTECTING", "BLOCKED");
-    // NO_SHIELD means CVE Shield has no coverage for this CVE in this environment (confirmed by scanning every
-    // app in this org - it's a real status value, not documented alongside NOT_SEEN/PROTECTING/BLOCKED/etc).
-    // It still belongs in the duration-based branch below (absence-of-execution is still the applicable
-    // reasoning), but is tracked separately so the claim can say "there's no Shield to catch this even if it
-    // did fire" instead of silently reading the same as a live-but-quiet Shield.
+    // NO_SHIELD is a real per-app-per-environment status value (confirmed by scanning every app in this org -
+    // not documented alongside NOT_SEEN/PROTECTING/BLOCKED/etc). It belongs in the same duration-based branch
+    // as NOT_SEEN below (absence-of-execution is still the applicable reasoning for reaching that branch at
+    // all) - whether Shield actually has coverage for the CVE is a separate question, decided by the org-wide
+    // cveShieldExists fact instead (see shieldAvailability()), not by this per-app status.
     private static final List<String> NOT_SEEN_STATUSES = List.of("NOT_SEEN", "NO_SHIELD");
-    private static final String NO_SHIELD_STATUS = "NO_SHIELD";
 
     private String baseUrl; // e.g. https://host/api/ns-ui/v1
     private String host;    // e.g. https://host
@@ -721,7 +722,7 @@ public class VEXGenerator {
             detail = "CVE Shield is actively mitigating this vulnerability at runtime in " + app.name
                 + " (" + envScopeLabel() + ").";
         } else if (issue != null && isNotSeen(issue)) {
-            boolean shieldAvail = !Boolean.FALSE.equals(shieldAvailability(issue, orgWideShieldExists));
+            boolean shieldAvail = !Boolean.FALSE.equals(shieldAvailability(orgWideShieldExists));
             detail = "Library loaded (" + classesUsed + " of " + classCount + " classes used) but this CVE's "
                 + "vulnerable code path has not been observed executing in " + app.name + " (" + envScopeLabel()
                 + ") in " + daysObserved + " days of runtime monitoring";
@@ -744,7 +745,7 @@ public class VEXGenerator {
         } else if (issue == null) {
             // Library confirmed used, but no matching per-CVE environment record found at all -
             // treat the same as "not seen" using the same duration logic, but flag the missing join.
-            boolean shieldAvail = !Boolean.FALSE.equals(shieldAvailability(null, orgWideShieldExists));
+            boolean shieldAvail = !Boolean.FALSE.equals(shieldAvailability(orgWideShieldExists));
             detail = "Library loaded (" + classesUsed + " of " + classCount + " classes used); no per-environment "
                 + "CVE Shield/exposure record found for this CVE+version in " + app.name + ". Not observed "
                 + "executing in " + daysObserved + " days of runtime monitoring for this application";
@@ -798,7 +799,7 @@ public class VEXGenerator {
         if (vuln.has("cisa") && !vuln.get("cisa").isJsonNull()) {
             properties.add(property("contrast:cisaKev", String.valueOf(vuln.get("cisa").getAsBoolean())));
         }
-        Boolean shieldAvailable = shieldAvailability(issue, orgWideShieldExists);
+        Boolean shieldAvailable = shieldAvailability(orgWideShieldExists);
         if (shieldAvailable != null) {
             properties.add(property("contrast:shieldAvailable", String.valueOf(shieldAvailable)));
         }
@@ -859,24 +860,16 @@ public class VEXGenerator {
     }
 
     /**
-     * Whether CVE Shield could have caught this CVE at all in the environment(s) being considered - true if any
-     * considered status is a real (non-null) signal other than NO_SHIELD (even NOT_SEEN implies Shield was
-     * watching and just hasn't fired), false if every considered status that has any data is explicitly
-     * NO_SHIELD, or null (unknown) when there's no per-app signal either way and no org-wide fact to fall
-     * back on.
+     * Whether CVE Shield could catch this CVE at all - this is a per-CVE, product-level fact (does Contrast
+     * ship a virtual patch definition for it), NOT something that varies by app or environment: coverage
+     * existing anywhere means it's available everywhere Shield/ADR is enabled. So this is just the org-wide
+     * cveShieldExists flag from /cves, verbatim - no per-app inference. (An earlier version of this method
+     * tried to infer availability from per-environment NO_SHIELD/NOT_SEEN status instead, which happened to
+     * agree with the org-wide fact in every case checked so far, but was solving the wrong problem - it can't
+     * distinguish "no coverage exists" from "this app's agent hasn't received the rule yet," and coverage
+     * itself simply isn't an app/environment-scoped concept.)
      */
-    private Boolean shieldAvailability(CveIssue issue, Boolean orgWideShieldExists) {
-        if (issue != null) {
-            boolean anyRealSignal = false;
-            boolean anyNoShield = false;
-            for (String status : statusesToConsider(issue)) {
-                if (status == null) continue;
-                if (NO_SHIELD_STATUS.equals(status)) anyNoShield = true;
-                else anyRealSignal = true;
-            }
-            if (anyRealSignal) return true;
-            if (anyNoShield) return false;
-        }
+    private Boolean shieldAvailability(Boolean orgWideShieldExists) {
         return orgWideShieldExists;
     }
 

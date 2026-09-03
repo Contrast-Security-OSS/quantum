@@ -18,9 +18,9 @@ This report reviews VEX (Vulnerability Exploitability eXchange) claims generated
 
 **Key Findings:**
 
-- **141 of 251 claim(s) flagged for human review** before relying on them.
+- **37 of 251 claim(s) flagged for human review** before relying on them.
 - **8 flagged claim(s) are on CVEs in the CISA Known Exploited Vulnerabilities (KEV) catalog** - actively exploited in the wild: CVE-2022-22965, CVE-2018-1273, CVE-2025-24813, CVE-2020-1938, CVE-2017-12617, CVE-2023-44487.
-- **11 flagged claim(s) have an EPSS score ≥ 0.5** (50%+ predicted exploitation likelihood): CVE-2017-17485, CVE-2024-38819, CVE-2019-0232, CVE-2019-0199, CVE-2025-55752, CVE-2019-10072 (+5 more).
+- **12 flagged claim(s) have an EPSS score ≥ 0.5** (50%+ predicted exploitation likelihood): CVE-2017-17485, CVE-2024-38819, CVE-2019-0232, CVE-2019-0199, CVE-2025-55752, CVE-2019-10072 (+6 more).
 - Application(s) rated CRITICAL/HIGH risk: SAML-PetClinic-Demo.
 
 ### Applications
@@ -37,7 +37,7 @@ This report reviews VEX (Vulnerability Exploitability eXchange) claims generated
 
 **VEX** - `NA` = not_affected, `IT` = in_triage
 
-**Shield** - whether CVE Shield could catch this specific CVE at all in the environment(s) considered: `Yes` (Shield exists there, even if it hasn't fired), `No` (no Shield coverage for this CVE at all - the claim rests entirely on absence-of-execution, with no possible active backstop), `-` (no signal either way).
+**Shield** - whether CVE Shield has a virtual patch for this specific CVE at all (a per-CVE, product-level fact - coverage existing anywhere means it's available everywhere Shield is enabled): `Yes` (Shield covers it, even if it hasn't fired), `No` (no Shield coverage for this CVE at all - the claim rests entirely on absence-of-execution, with no possible active backstop), `-` (unknown).
 
 **Rationale** - why the claim was made, with the day count for the three duration-based reasons:
 
@@ -51,7 +51,7 @@ This report reviews VEX (Vulnerability Exploitability eXchange) claims generated
 
 Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, so the claims worth a second look surface at the top - see the Key Findings above for which specific CVEs those are.
 
-**Protection Status** (shown per app below) - Assess is the module that produces the runtime evidence every claim in this report rests on; ADR (formerly branded "Protect") is the classic HTTP-rule-based RASP module. Neither is CVE Shield - CVE Shield is a separate product that defends specific CVEs via a microsandbox rather than HTTP rules. Its own coverage is the per-row **Shield** column above, sourced from the real per-app, per-environment NO_SHIELD/NOT_SEEN signal where available.
+**Protection Status** (shown per app below) - Assess is the module that produces the runtime evidence every claim in this report rests on; ADR (formerly branded "Protect") is the classic HTTP-rule-based RASP module. Neither is CVE Shield - CVE Shield is a separate product that defends specific CVEs via a microsandbox rather than HTTP rules. Its own coverage is the per-row **Shield** column above - a per-CVE, product-level fact (coverage existing anywhere means it's available everywhere Shield is enabled), not an app- or environment-scoped one.
 
 ---
 
@@ -63,11 +63,11 @@ Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, s
 
 **Protection Status:** Assess (runtime evidence): dev=enabled, qa=no data, prod=enabled · ADR (classic RASP, formerly "Protect" - not CVE Shield): dev=disabled, qa=no data, prod=enabled
 
-SAML-PetClinic-Demo has roughly 210 VEX claims across ~40 vulnerable libraries (jackson-databind, tomcat-embed-core, spring-webmvc/web/beans/core/expression, spring-data-commons, hibernate, netty, snakeyaml, dom4j, guava, and others). Assess has real runtime data in dev and prod (qa has none), and ADR is active in prod but off in dev. A large minority of claims are code_not_reachable (structural, sound), but a much larger share are 'not_affected' resting solely on 288 days of no-observed-execution, including several critical/KEV CVEs (Spring4Shell CVE-2022-22965, CVE-2018-1273, CVE-2025-24813, CVE-2020-1938, CVE-2017-12617, CVE-2023-44487) and a long tail of critical/high tomcat-embed-core and jackson-databind CVEs.
+SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominated by a long tail of jackson-databind and tomcat-embed-core CVEs. The large majority are either structurally sound (code_not_reachable, zero classes loaded) or duration-based claims on low-EPSS CVEs backed by 288 days of Assess data from dev and prod, with Shield coverage and prod ADR as an active backstop. A meaningful subset, however, rests on duration alone for CVEs with very high EPSS or CISA KEV status, including three separate Spring4Shell (CVE-2022-22965) claims, Ghostcat (CVE-2020-1938), the Tomcat JSP-upload RCE (CVE-2017-12617), HTTP/2 Rapid Reset (CVE-2023-44487), and the 2025 Tomcat partial-PUT RCE (CVE-2025-24813).
 
-**Risk Rationale:** The code_not_reachable claims (htmlunit, snakeyaml, netty, jetty-http, plexus-utils, commons-compress, junit, commons-lang/lang3, commons-io, bootstrap, spring-boot-starter-web/actuator) are structural and sound regardless of severity. However, a very large number of critical and high severity CVEs - including six KEV entries - are resolved to not_affected using duration-only reasoning (288 days vs a 30-day threshold) rather than code_not_reachable or an active CVE Shield mitigation. CVE Shield exists for most of these but has not necessarily fired, so the claim still rests primarily on absence-of-execution for internet-facing, high-EPSS libraries (tomcat-embed-core, jackson-databind, spring-webmvc, spring-data-commons). A smaller set of in_triage claims (mostly on tomcat-embed-core, hibernate-validator, guava) have no CVE Shield coverage at all, meaning there is no backstop if the reachability assumption is wrong. ADR being disabled in dev further reduces the safety net for any of these in that environment.
+**Risk Rationale:** Most claims are well-supported, but a cluster of critical/high severity, actively-exploited (KEV or EPSS near 1.0) CVEs on spring-beans, spring-webmvc, spring-data-commons, and tomcat-embed-core are marked not_affected using only absence-of-execution reasoning, not code_not_reachable or protected_at_runtime. Given ADR is disabled in dev, any wrong call on these specific findings has no active backstop in that tier. Several tomcat-embed-core, hibernate-validator, and guava CVEs are also in_triage with zero CVE Shield coverage at all, meaning there is no active mitigation possible if the absence-of-execution assumption is wrong.
 
-**Recommendation:** Prioritize a human reachability review for the KEV-listed critical CVEs (CVE-2022-22965 on spring-webmvc/spring-beans, CVE-2018-1273, CVE-2025-24813, CVE-2020-1938, CVE-2017-12617, CVE-2023-44487) before relying on the VEX as-is, since these are actively exploited in the wild and currently rest on duration-only evidence. Also review the in_triage CVEs lacking CVE Shield coverage (tomcat-embed-core CVE-2026-41293/2025-66614/2020-11996/2026-24880/2026-42498/2023-45648/2020-1935/2026-43514, hibernate-validator CVE-2025-35036/2023-1932/2020-10693, guava CVE-2018-10237, jackson-databind CVE-2026-54515/2026-54514) since nothing would have caught an exploit attempt regardless of elapsed time. The code_not_reachable claims and the medium/low severity duration-based claims can be relied on without further review.
+**Recommendation:** Have a human re-verify reachability (not just runtime absence) for the KEV-listed and EPSS-near-1.0 claims before trusting them, especially the three CVE-2022-22965 (Spring4Shell) instances, CVE-2020-1938 (Ghostcat), CVE-2017-12617, CVE-2023-44487, CVE-2025-24813, and CVE-2018-1273. Also prioritize the tomcat-embed-core, hibernate-validator, and guava CVEs currently in_triage with no CVE Shield coverage, since those have no possible active backstop today.
 
 | CVE | Library | Score | VEX | Shield | Rationale |
 |-----|---------|-------|-----|--------|-----------|

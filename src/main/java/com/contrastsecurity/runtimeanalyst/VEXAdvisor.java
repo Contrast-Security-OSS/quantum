@@ -41,7 +41,8 @@ public class VEXAdvisor {
         "You're also given whether Assess (the module that produces the runtime evidence every claim rests on) and " +
         "ADR (the classic HTTP-rule-based RASP module, formerly branded \"Protect\" - distinct from CVE Shield) " +
         "are enabled per environment for this application, and whether CVE Shield itself has any coverage for " +
-        "each specific CVE in that environment scope. Weigh all of this directly: a duration-based claim scoped " +
+        "each specific CVE at all (a per-CVE, product-level fact - not something that varies by environment). " +
+        "Weigh all of this directly: a duration-based claim scoped " +
         "to an environment where Assess has no data or is disabled isn't weak evidence, it's NO evidence - flag " +
         "it regardless of severity. A claim where CVE Shield has no coverage for that CVE at all is weaker still " +
         "than one where Shield exists and simply hasn't fired - \"we haven't seen it\" means less when nothing " +
@@ -356,7 +357,7 @@ public class VEXAdvisor {
                 sb.append("CISA Known Exploited Vulnerabilities (KEV) catalog: ").append(s.cisaKev ? "YES" : "no").append("\n");
             }
             if (s.shieldAvailable != null) {
-                sb.append("CVE Shield available for this CVE in this environment scope: ")
+                sb.append("CVE Shield has coverage for this CVE at all (org-wide fact): ")
                   .append(s.shieldAvailable ? "YES" : "NO - no virtual patch coverage at all").append("\n");
             }
             sb.append("Claimed state: ").append(s.state).append("\n");
@@ -565,10 +566,11 @@ public class VEXAdvisor {
 
         sb.append("\n### Legend\n\n");
         sb.append("**VEX** - `NA` = not_affected, `IT` = in_triage\n\n");
-        sb.append("**Shield** - whether CVE Shield could catch this specific CVE at all in the environment(s) ")
-          .append("considered: `Yes` (Shield exists there, even if it hasn't fired), `No` (no Shield coverage for ")
-          .append("this CVE at all - the claim rests entirely on absence-of-execution, with no possible active ")
-          .append("backstop), `-` (no signal either way).\n\n");
+        sb.append("**Shield** - whether CVE Shield has a virtual patch for this specific CVE at all (a per-CVE, ")
+          .append("product-level fact - coverage existing anywhere means it's available everywhere Shield is ")
+          .append("enabled): `Yes` (Shield covers it, even if it hasn't fired), `No` (no Shield coverage for this ")
+          .append("CVE at all - the claim rests entirely on absence-of-execution, with no possible active ")
+          .append("backstop), `-` (unknown).\n\n");
         sb.append("**Rationale** - why the claim was made, with the day count for the three duration-based reasons:\n\n");
         sb.append("| Rationale | Meaning |\n|-----------|---------|\n");
         sb.append("| `Library Unused` | Library never loaded at runtime (0 classes) - structural, not time-based |\n");
@@ -582,8 +584,8 @@ public class VEXAdvisor {
           .append("evidence every claim in this report rests on; ADR (formerly branded \"Protect\") is the classic ")
           .append("HTTP-rule-based RASP module. Neither is CVE Shield - CVE Shield is a separate product that defends ")
           .append("specific CVEs via a microsandbox rather than HTTP rules. Its own coverage is the per-row **Shield** ")
-          .append("column above, sourced from the real per-app, per-environment NO_SHIELD/NOT_SEEN signal where ")
-          .append("available.\n");
+          .append("column above - a per-CVE, product-level fact (coverage existing anywhere means it's available ")
+          .append("everywhere Shield is enabled), not an app- or environment-scoped one.\n");
 
         sb.append("\n---\n\n## Application Detail\n\n");
 
@@ -672,7 +674,7 @@ public class VEXAdvisor {
         return "CVE Not Used " + s.daysObserved + "d";
     }
 
-    /** Whether CVE Shield could even catch this CVE in this environment scope - "-" means no signal either way. */
+    /** Whether CVE Shield has any coverage for this CVE at all (org-wide fact) - "-" means unknown. */
     private String shieldLabel(Boolean shieldAvailable) {
         if (shieldAvailable == null) return "-";
         return shieldAvailable ? "Yes" : "No";
