@@ -180,7 +180,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical severity (10.0) resolved to not_affected purely on 288 days of no observed execution; absence-of-evidence isn\u0027t a strong enough basis for a maximum-severity CVE."
+          "value": "Critical severity jackson-databind CVE resolved to not_affected on 288 days of no execution alone; CVE Shield exists but hasn\u0027t necessarily fired, so this rests on absence-of-evidence for a critical RCE-class library."
         }
       ]
     },
@@ -294,7 +294,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE resolved on duration alone with no structural reachability guarantee; should be reviewed before relying on it."
+          "value": "Same duration-only reasoning pattern on a critical jackson-databind deserialization CVE; worth a reachability check before trusting fully."
         }
       ]
     },
@@ -408,7 +408,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE with elevated EPSS (0.5) resolved purely on duration; the higher exploit probability makes absence-of-execution weaker evidence here."
+          "value": "Critical CVE with relatively high EPSS (98.8th percentile) resolved by duration alone rather than structural non-reachability."
         }
       ]
     },
@@ -522,7 +522,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical severity resolved on 288 days of non-execution alone; worth a human check given the severity."
+          "value": "Critical severity, high EPSS percentile, resolved only via elapsed-time observation rather than code_not_reachable or an active Shield mitigation."
         }
       ]
     },
@@ -636,7 +636,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Critical jackson-databind deserialization gadget CVE resting on duration-only reasoning."
         }
       ]
     },
@@ -750,7 +750,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Critical severity claim based solely on absence of observed execution over 288 days."
         }
       ]
     },
@@ -864,7 +864,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Duration-only justification for a critical jackson-databind CVE; deserves a closer look given severity."
         }
       ]
     },
@@ -978,7 +978,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Same pattern - critical severity resolved by elapsed time alone."
         }
       ]
     },
@@ -1092,7 +1092,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Critical CVE, duration-based not_affected claim, worth verifying before relying on it."
         }
       ]
     },
@@ -1206,7 +1206,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Critical severity gadget-chain CVE resolved via absence-of-execution reasoning only."
         }
       ]
     },
@@ -1320,7 +1320,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Duration-only claim on a critical jackson-databind CVE."
         }
       ]
     },
@@ -1434,7 +1434,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Critical severity, resolved solely by elapsed monitoring time rather than structural evidence."
         }
       ]
     },
@@ -1548,7 +1548,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Critical severity CVE resting on duration-only reasoning; should be double-checked."
         }
       ]
     },
@@ -1662,7 +1662,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Same duration-only pattern for a critical deserialization CVE."
         }
       ]
     },
@@ -1776,7 +1776,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Critical severity claim relying only on absence of observed execution."
         }
       ]
     },
@@ -1890,7 +1890,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Duration-only justification on a critical jackson-databind CVE."
         }
       ]
     },
@@ -2004,7 +2004,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Critical severity, resolved via elapsed time only, no code_not_reachable or Shield mitigation cited."
         }
       ]
     },
@@ -2118,7 +2118,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Same duration-only pattern for a critical gadget CVE."
         }
       ]
     },
@@ -2232,7 +2232,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Critical severity CVE resolved solely on absence-of-execution grounds."
         }
       ]
     },
@@ -2346,7 +2346,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE with high EPSS (0.38) resolved purely on duration; elevated exploit likelihood makes this worth a second look."
+          "value": "Critical CVE with a notably high EPSS (98.8th percentile) resolved only by duration; especially worth a second look given the exploitation likelihood."
         }
       ]
     },
@@ -2460,7 +2460,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE with elevated EPSS (0.2), duration-only justification."
+          "value": "Critical severity claim resting on elapsed-time reasoning alone."
         }
       ]
     },
@@ -2574,7 +2574,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Duration-only not_affected claim on a critical CVE."
         }
       ]
     },
@@ -2688,7 +2688,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Critical severity CVE resolved via absence-of-execution only."
         }
       ]
     },
@@ -2802,7 +2802,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: critical CVE, duration-only justification, no structural guarantee."
+          "value": "Same duration-only pattern for a critical jackson-databind CVE."
         }
       ]
     },
@@ -2916,7 +2916,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE resolved purely on 288 days without execution; no structural non-reachability backing it."
+          "value": "High severity CVE resolved solely by elapsed monitoring time rather than structural evidence."
         }
       ]
     },
@@ -3030,7 +3030,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -3144,7 +3144,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on absence of observed execution."
         }
       ]
     },
@@ -3258,7 +3258,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "Same duration-only pattern for a high severity jackson-databind CVE."
         }
       ]
     },
@@ -3372,7 +3372,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity, resolved via elapsed time only."
         }
       ]
     },
@@ -3486,7 +3486,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "Duration-only reasoning on a high severity CVE."
         }
       ]
     },
@@ -3600,7 +3600,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -3714,7 +3714,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "Same duration-only pattern for a high severity CVE."
         }
       ]
     },
@@ -3828,7 +3828,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -3942,7 +3942,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE with EPSS 0.21, duration-only justification."
+          "value": "High severity CVE with elevated EPSS (97.4th percentile) resolved only by elapsed time."
         }
       ]
     },
@@ -4056,7 +4056,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -4170,7 +4170,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "Same duration-only pattern for a high severity CVE."
         }
       ]
     },
@@ -4284,7 +4284,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -4398,7 +4398,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -4512,7 +4512,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "Same duration-only pattern for a high severity CVE."
         }
       ]
     },
@@ -4626,7 +4626,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity, resolved via absence-of-execution only."
         }
       ]
     },
@@ -4740,7 +4740,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on duration reasoning."
         }
       ]
     },
@@ -4854,7 +4854,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity CVE resolved only by elapsed time."
         }
       ]
     },
@@ -4968,7 +4968,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -5082,7 +5082,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -5196,7 +5196,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity, resolved via elapsed time only, no structural or active-control evidence."
         }
       ]
     },
@@ -5310,7 +5310,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "Same duration-only pattern for a high severity CVE."
         }
       ]
     },
@@ -5424,7 +5424,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE with EPSS 0.18, duration-only justification."
+          "value": "High severity CVE with elevated EPSS resolved only by elapsed monitoring time."
         }
       ]
     },
@@ -5538,7 +5538,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -5652,7 +5652,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -5766,7 +5766,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "High severity CVE resolved only via elapsed time."
         }
       ]
     },
@@ -5880,7 +5880,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE, duration-only justification."
+          "value": "Same duration-only pattern for a high severity CVE."
         }
       ]
     },
@@ -5994,7 +5994,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: high-severity CVE with EPSS 0.22, duration-only justification."
+          "value": "High severity CVE with elevated EPSS (97.5th percentile) resolved only by duration."
         }
       ]
     },
@@ -6108,7 +6108,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: medium severity accepted on duration alone; lower stakes even with an elevated EPSS."
+          "value": "Medium severity; duration-only acceptance is acceptable at this risk level even with a moderately high EPSS."
         }
       ]
     },
@@ -6222,7 +6222,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: medium severity accepted on duration alone; acceptable as-is."
+          "value": "Medium severity claim; duration-based acceptance is reasonable at this stakes level."
         }
       ]
     },
@@ -6332,11 +6332,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: correctly left in_triage since Shield has no coverage; medium severity and negligible EPSS keep stakes low."
+          "value": "In_triage with no CVE Shield coverage at all - correctly left open rather than closed, but flagged as an unresolved risk needing attention."
         }
       ]
     },
@@ -6446,11 +6446,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-databind: correctly left in_triage since Shield has no coverage; medium severity, low EPSS, acceptable to leave open."
+          "value": "Same as above: in_triage, no Shield coverage, still an open item worth tracking."
         }
       ]
     },
@@ -6562,7 +6562,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "htmlunit: 0 of 1295 classes ever loaded is a structural fact, safe to rely on despite critical severity."
+          "value": "code_not_reachable with 0 of 1295 classes loaded is a structural fact, safe to rely on regardless of critical severity."
         }
       ]
     },
@@ -6674,7 +6674,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "htmlunit: code_not_reachable (0 classes loaded), a structural guarantee independent of severity."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -6788,7 +6788,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "dom4j: critical CVE resolved purely on duration (library barely used - 1 of 190 classes - but not code_not_reachable), so it still rests on absence-of-execution."
+          "value": "Critical severity dom4j XXE/RCE CVE resolved by duration only despite the library being loaded (1 of 190 classes)."
         }
       ]
     },
@@ -6902,7 +6902,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "dom4j: high-severity CVE, duration-only justification despite minimal library usage."
+          "value": "High severity, duration-only justification on a loaded library."
         }
       ]
     },
@@ -7014,7 +7014,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "snakeyaml: 0 of 206 classes ever loaded, code_not_reachable - structurally sound even at critical severity and near-max EPSS."
+          "value": "code_not_reachable (0 of 206 classes) is a structural fact; despite the very high EPSS, the justification type is sound and not duration-based."
         }
       ]
     },
@@ -7126,7 +7126,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "snakeyaml: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -7238,7 +7238,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "snakeyaml: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -7350,7 +7350,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "snakeyaml: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -7462,7 +7462,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "snakeyaml: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -7574,7 +7574,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "snakeyaml: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -7686,7 +7686,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "snakeyaml: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -7798,7 +7798,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "snakeyaml: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -7910,7 +7910,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-beans: critical severity AND KEV (Spring4Shell), resolved purely on duration with the library actively used (202/408 classes)."
+          "value": "On spring-beans, KEV critical Spring4Shell resolved by duration alone rather than structural non-reachability, despite active library usage."
         }
       ]
     },
@@ -8024,7 +8024,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-data-commons: critical severity AND KEV (actively exploited), resolved purely on 288 days without observed execution - this is exactly the combination flagged as weakest evidence."
+          "value": "KEV-listed critical CVE with 97%+ EPSS resolved on duration alone despite the library being actively loaded (152 of 554 classes) - this is exactly the pattern that warrants human verification."
         }
       ]
     },
@@ -8138,7 +8138,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-data-commons: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -8252,7 +8252,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-data-commons: high-severity CVE, duration-only justification."
+          "value": "High severity CVE resolved only by elapsed monitoring time."
         }
       ]
     },
@@ -8366,7 +8366,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-data-commons: medium severity accepted on duration alone, acceptable."
+          "value": "Medium severity; duration-only acceptance reasonable at this risk level."
         }
       ]
     },
@@ -8480,7 +8480,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-data-commons: medium severity accepted on duration alone, acceptable."
+          "value": "Medium severity; duration-only acceptance reasonable at this risk level."
         }
       ]
     },
@@ -8592,7 +8592,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-data-commons: unscored/unknown severity accepted on duration alone; low stakes."
+          "value": "Unscored/unknown severity; duration-based acceptance is low-stakes here."
         }
       ]
     },
@@ -8706,7 +8706,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "hsqldb: critical-severity CVE resolved purely on duration, no structural guarantee."
+          "value": "Critical severity hsqldb CVE resolved only by absence-of-execution over the observation window."
         }
       ]
     },
@@ -8820,7 +8820,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-classic: critical-severity CVE, duration-only justification."
+          "value": "On logback-classic, critical severity resolved solely via absence-of-execution over the observation window."
         }
       ]
     },
@@ -8934,7 +8934,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-classic: high-severity CVE, duration-only justification."
+          "value": "On logback-classic, high severity resting only on duration reasoning."
         }
       ]
     },
@@ -9048,7 +9048,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-core: medium severity accepted on duration alone, acceptable."
+          "value": "Medium severity; duration-based acceptance reasonable at this level."
         }
       ]
     },
@@ -9160,7 +9160,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-core: unscored severity, duration acceptance is low stakes."
+          "value": "Unscored severity; low stakes for duration-based acceptance."
         }
       ]
     },
@@ -9272,7 +9272,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-core: unscored severity, low stakes."
+          "value": "Unscored severity; low stakes for duration-based acceptance."
         }
       ]
     },
@@ -9384,7 +9384,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-core: unscored severity, low stakes."
+          "value": "Unscored severity; low stakes for duration-based acceptance."
         }
       ]
     },
@@ -9496,7 +9496,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-core: unscored severity, low stakes."
+          "value": "Unscored severity; low stakes for duration-based acceptance."
         }
       ]
     },
@@ -9608,7 +9608,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-core: unscored severity, low stakes."
+          "value": "Unscored severity; low stakes for duration-based acceptance."
         }
       ]
     },
@@ -9720,7 +9720,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-core: unscored severity, low stakes."
+          "value": "Unscored severity; low stakes for duration-based acceptance."
         }
       ]
     },
@@ -9834,7 +9834,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-web: critical severity with elevated EPSS (0.32), resolved purely on duration."
+          "value": "Critical severity spring-web CVE resolved solely by absence-of-execution despite active library usage."
         }
       ]
     },
@@ -9948,7 +9948,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-web: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on duration reasoning."
         }
       ]
     },
@@ -10062,7 +10062,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-web: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -10176,7 +10176,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-web: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -10290,7 +10290,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-web: medium severity accepted on duration alone, acceptable."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -10404,7 +10404,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-context: medium severity, duration acceptance is fine - distinct component from the spring-web finding above with the same CVE ID."
+          "value": "Medium severity; duration-based acceptance reasonable here (spring-context instance)."
         }
       ]
     },
@@ -10518,7 +10518,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-web: medium severity accepted on duration alone, acceptable."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -10632,7 +10632,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-beans: critical severity AND KEV (Spring4Shell), resolved purely on duration with the library actively used (202/408 classes)."
+          "value": "On spring-beans, KEV critical Spring4Shell resolved by duration alone rather than structural non-reachability, despite active library usage."
         }
       ]
     },
@@ -10746,7 +10746,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-webmvc: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -10860,7 +10860,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-webmvc: high-severity CVE with elevated EPSS (0.55), duration-only justification."
+          "value": "High severity CVE with elevated EPSS (98.9th percentile) resolved only by duration."
         }
       ]
     },
@@ -10974,7 +10974,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-webmvc: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -11088,7 +11088,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-webmvc: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -11202,7 +11202,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-webmvc: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -11316,7 +11316,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-webmvc: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -11430,7 +11430,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-webmvc: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -11544,7 +11544,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-webmvc: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -11658,7 +11658,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-webmvc: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -11772,7 +11772,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-webmvc: low severity, duration acceptance is fine."
+          "value": "Low severity; duration-based acceptance is low-stakes."
         }
       ]
     },
@@ -11886,7 +11886,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-classic: critical-severity CVE, duration-only justification."
+          "value": "On logback-classic, critical severity resolved solely via absence-of-execution over the observation window."
         }
       ]
     },
@@ -12000,7 +12000,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "logback-classic: high-severity CVE, duration-only justification."
+          "value": "On logback-classic, high severity resting only on duration reasoning."
         }
       ]
     },
@@ -12114,7 +12114,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-beans: critical severity AND KEV (Spring4Shell), resolved purely on duration with the library actively used (202/408 classes)."
+          "value": "On spring-beans, KEV critical Spring4Shell resolved by duration alone rather than structural non-reachability, despite active library usage."
         }
       ]
     },
@@ -12228,7 +12228,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-beans: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -12342,7 +12342,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: critical-severity CVE, duration-only justification."
+          "value": "Critical severity tomcat-embed-core CVE resolved solely on absence-of-execution grounds."
         }
       ]
     },
@@ -12456,7 +12456,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: critical severity AND KEV (actively exploited), resolved purely on duration - highest-stakes combination flagged."
+          "value": "KEV-listed critical CVE with EPSS near 1.0 resolved only by duration - a high-priority candidate for manual reachability verification given active exploitation in the wild."
         }
       ]
     },
@@ -12570,7 +12570,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: critical-severity CVE, duration-only justification."
+          "value": "Critical severity claim resting solely on elapsed monitoring time."
         }
       ]
     },
@@ -12684,7 +12684,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: critical CVE correctly left in_triage since CVE Shield has no coverage at all - no active backstop and no structural guarantee, worth surfacing rather than letting sit."
+          "value": "Critical severity, in_triage with no CVE Shield coverage - correctly left open, but a high-priority unresolved item."
         }
       ]
     },
@@ -12798,7 +12798,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: critical severity AND KEV (Ghostcat, actively exploited), resolved purely on duration - flagged combination."
+          "value": "KEV-listed critical CVE (Ghostcat) with EPSS 0.99 resolved only by duration - warrants manual verification given active exploitation history."
         }
       ]
     },
@@ -12912,7 +12912,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: critical-severity CVE, duration-only justification."
+          "value": "Critical severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -13026,7 +13026,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: critical CVE with elevated EPSS (0.44), duration-only justification."
+          "value": "Critical severity CVE with elevated EPSS (98.7th percentile) resolved only by duration."
         }
       ]
     },
@@ -13140,7 +13140,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: critical-severity CVE, duration-only justification."
+          "value": "Critical severity claim resting solely on elapsed monitoring time."
         }
       ]
     },
@@ -13254,7 +13254,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: critical CVE correctly left in_triage since CVE Shield has no coverage at all - no active backstop, worth surfacing."
+          "value": "Critical severity, in_triage with no CVE Shield coverage - open, high-priority item to track."
         }
       ]
     },
@@ -13368,7 +13368,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE with EPSS 1.0 (near-certain exploitation likelihood), resolved purely on duration."
+          "value": "High severity CVE with EPSS near 1.0 resolved solely on absence-of-execution."
         }
       ]
     },
@@ -13482,7 +13482,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high severity, KEV, and EPSS 1.0 - resolved purely on duration; among the strongest cases to double-check."
+          "value": "KEV-listed high severity CVE with EPSS near 1.0 resolved only by duration - warrants manual verification given confirmed exploitation."
         }
       ]
     },
@@ -13596,7 +13596,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high severity with EPSS 0.73, duration-only justification."
+          "value": "High severity CVE with elevated EPSS (99.4th percentile) resolved solely by duration."
         }
       ]
     },
@@ -13710,7 +13710,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -13824,7 +13824,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -13938,7 +13938,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -14052,7 +14052,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high severity with EPSS 0.67, duration-only justification."
+          "value": "High severity CVE with elevated EPSS (99.2nd percentile) resolved only by duration."
         }
       ]
     },
@@ -14166,7 +14166,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -14280,7 +14280,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high severity with EPSS 0.73, duration-only justification."
+          "value": "High severity CVE with elevated EPSS (99.4th percentile) resolved solely by duration."
         }
       ]
     },
@@ -14394,7 +14394,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -14508,7 +14508,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -14622,7 +14622,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -14736,7 +14736,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high severity with EPSS 0.57, duration-only justification."
+          "value": "High severity CVE with elevated EPSS (99th percentile) resolved only by duration."
         }
       ]
     },
@@ -14850,7 +14850,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -14964,7 +14964,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on elapsed monitoring time."
         }
       ]
     },
@@ -15078,7 +15078,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -15192,7 +15192,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -15306,7 +15306,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -15420,7 +15420,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high severity with EPSS 0.6, duration-only justification."
+          "value": "High severity CVE with elevated EPSS (99th percentile) resolved only by duration."
         }
       ]
     },
@@ -15534,7 +15534,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE with EPSS 0.27, correctly left in_triage since Shield has no coverage - no backstop, worth surfacing."
+          "value": "High severity, in_triage with no CVE Shield coverage - open item needing verification, elevated EPSS (97.9th percentile)."
         }
       ]
     },
@@ -15648,7 +15648,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high severity with EPSS 0.23, duration-only justification."
+          "value": "High severity CVE with elevated EPSS (97.6th percentile) resolved only by duration."
         }
       ]
     },
@@ -15762,7 +15762,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE correctly left in_triage since Shield has no coverage - no backstop, worth surfacing."
+          "value": "High severity, in_triage with no CVE Shield coverage - open item to track."
         }
       ]
     },
@@ -15876,7 +15876,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high severity, KEV (HTTP/2 Rapid Reset, actively exploited), EPSS 1.0, resolved purely on duration - among the strongest cases to double-check."
+          "value": "KEV-listed high severity CVE (HTTP/2 Rapid Reset) with EPSS at 100th percentile resolved only by duration - a priority candidate for manual verification."
         }
       ]
     },
@@ -15990,7 +15990,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity CVE with elevated EPSS (97.3th percentile) resolved solely by duration."
         }
       ]
     },
@@ -16104,7 +16104,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE correctly left in_triage since Shield has no coverage - no backstop, worth surfacing."
+          "value": "High severity, in_triage with no CVE Shield coverage - open item to track."
         }
       ]
     },
@@ -16218,7 +16218,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -16332,7 +16332,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -16446,7 +16446,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -16560,7 +16560,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: high severity with EPSS 0.57, duration-only justification."
+          "value": "High severity CVE with elevated EPSS (99th percentile) resolved only by duration."
         }
       ]
     },
@@ -16674,7 +16674,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -16784,11 +16784,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity correctly left in_triage with no Shield coverage; low enough stakes to leave open."
+          "value": "Medium severity, in_triage with no CVE Shield coverage - correctly left open, worth tracking."
         }
       ]
     },
@@ -16902,7 +16902,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity, duration acceptance is fine despite elevated EPSS."
+          "value": "Medium severity; duration-based acceptance reasonable despite elevated EPSS."
         }
       ]
     },
@@ -17016,7 +17016,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -17130,7 +17130,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -17244,7 +17244,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -17358,7 +17358,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -17472,7 +17472,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -17586,7 +17586,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -17696,11 +17696,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity correctly left in_triage with no Shield coverage; low enough stakes to leave open."
+          "value": "Medium severity, in_triage with no CVE Shield coverage - open item worth tracking."
         }
       ]
     },
@@ -17810,11 +17810,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity correctly left in_triage with no Shield coverage; low enough stakes to leave open."
+          "value": "Medium severity, in_triage with no CVE Shield coverage - open item worth tracking."
         }
       ]
     },
@@ -17928,7 +17928,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: medium severity, duration acceptance is fine despite high EPSS (0.94), lower stakes than critical/high."
+          "value": "Medium severity; duration-based acceptance reasonable despite high EPSS."
         }
       ]
     },
@@ -18038,11 +18038,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-core: low severity correctly left in_triage with no Shield coverage; acceptable to leave open."
+          "value": "Low severity but in_triage with no CVE Shield coverage - correctly left open rather than closed."
         }
       ]
     },
@@ -18154,7 +18154,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "plexus-utils: code_not_reachable (0 of 102 classes), structural fact regardless of critical severity."
+          "value": "code_not_reachable structural claim, safe as-is despite critical severity."
         }
       ]
     },
@@ -18266,7 +18266,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "plexus-utils: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -18378,7 +18378,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "plexus-utils: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -18490,7 +18490,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "plexus-utils: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -18602,7 +18602,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "netty: code_not_reachable (0 of 727 classes), structural fact regardless of critical severity."
+          "value": "code_not_reachable structural claim, safe as-is despite critical severity."
         }
       ]
     },
@@ -18714,7 +18714,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "netty: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is despite critical severity."
         }
       ]
     },
@@ -18826,7 +18826,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "netty: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -18938,7 +18938,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "netty: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -19050,7 +19050,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "netty: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -19162,7 +19162,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "netty: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -19274,7 +19274,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "netty: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -19386,7 +19386,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "netty: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -19498,7 +19498,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "netty: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -19608,7 +19608,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "netty: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -19720,7 +19720,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jetty-http: code_not_reachable (0 of 81 classes), structural fact regardless of critical severity."
+          "value": "code_not_reachable structural claim, safe as-is despite critical severity."
         }
       ]
     },
@@ -19832,7 +19832,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jetty-http: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -19944,7 +19944,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jetty-http: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -20056,7 +20056,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jetty-http: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -20168,7 +20168,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jetty-http: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -20282,7 +20282,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "thymeleaf: critical-severity CVE resolved purely on duration despite heavy library usage (367/549 classes)."
+          "value": "Critical severity thymeleaf CVE resolved solely on absence-of-execution despite heavy library usage (367 of 549 classes)."
         }
       ]
     },
@@ -20396,7 +20396,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "thymeleaf: critical-severity CVE, duration-only justification."
+          "value": "Critical severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -20510,7 +20510,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "thymeleaf: critical-severity CVE, duration-only justification."
+          "value": "Critical severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -20624,7 +20624,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "mysql-connector-java: high-severity CVE, duration-only justification."
+          "value": "High severity mysql-connector-java CVE resolved solely by duration."
         }
       ]
     },
@@ -20738,7 +20738,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "mysql-connector-java: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on absence-of-execution."
         }
       ]
     },
@@ -20852,7 +20852,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "mysql-connector-java: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -20964,7 +20964,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "mysql-connector-java: unscored severity, low stakes."
+          "value": "Unscored severity; low stakes for duration-based acceptance."
         }
       ]
     },
@@ -21076,7 +21076,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-boot-starter-actuator: code_not_reachable with 0 of 0 total classes - aggregator artifact with no classes of its own, trivially valid."
+          "value": "code_not_reachable structural claim, safe as-is despite high severity."
         }
       ]
     },
@@ -21190,7 +21190,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-boot: high-severity CVE, duration-only justification."
+          "value": "High severity spring-boot CVE resolved solely on absence-of-execution."
         }
       ]
     },
@@ -21304,7 +21304,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-boot: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -21418,7 +21418,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-boot: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -21532,7 +21532,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-boot: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -21644,7 +21644,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "neko-htmlunit: code_not_reachable (0 of 53 classes) - structural fact even though Shield has no coverage for this one, since reachability is not probabilistic."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -21756,7 +21756,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "neko-htmlunit: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -21870,7 +21870,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "gson: high-severity CVE, duration-only justification despite partial library usage (36/174 classes)."
+          "value": "High severity gson CVE resolved solely by duration despite active library usage."
         }
       ]
     },
@@ -21982,7 +21982,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "commons-compress: code_not_reachable (0 of 200 classes), structural fact regardless of high severity."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -22094,7 +22094,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "commons-compress: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -22206,7 +22206,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "commons-compress: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -22318,7 +22318,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "commons-compress: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -22430,7 +22430,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "commons-compress: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -22542,7 +22542,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "commons-compress: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -22656,7 +22656,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "xalan: high-severity CVE with high EPSS (0.81), resolved on duration alone though library barely used (7/1501 classes) - not code_not_reachable, so still absence-of-execution."
+          "value": "High severity xalan CVE with a notably high EPSS (99.6th percentile) resolved solely on duration despite active library usage."
         }
       ]
     },
@@ -22770,7 +22770,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-core: high-severity CVE, duration-only justification."
+          "value": "High severity spring-core CVE resolved solely on absence-of-execution."
         }
       ]
     },
@@ -22884,7 +22884,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-core: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -22998,7 +22998,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-core: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -23112,7 +23112,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-core: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting solely on absence-of-execution."
         }
       ]
     },
@@ -23226,7 +23226,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -23340,7 +23340,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-core: medium severity, duration acceptance is fine despite elevated EPSS (0.35)."
+          "value": "Medium severity; duration-based acceptance reasonable despite elevated EPSS."
         }
       ]
     },
@@ -23454,7 +23454,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -23568,7 +23568,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -23682,7 +23682,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-expression: high-severity CVE, duration-only justification."
+          "value": "High severity spring-expression CVE resolved solely on absence-of-execution."
         }
       ]
     },
@@ -23796,7 +23796,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-expression: high-severity CVE, duration-only justification."
+          "value": "High severity claim resting only on elapsed monitoring time."
         }
       ]
     },
@@ -23910,7 +23910,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-expression: high-severity CVE, duration-only justification."
+          "value": "High severity, duration-only justification."
         }
       ]
     },
@@ -24024,7 +24024,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-expression: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -24138,7 +24138,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-expression: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -24252,7 +24252,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-expression: medium severity, duration acceptance is fine despite elevated EPSS (0.36)."
+          "value": "Medium severity; duration-based acceptance reasonable despite elevated EPSS."
         }
       ]
     },
@@ -24366,7 +24366,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-expression: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -24480,7 +24480,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-expression: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -24594,7 +24594,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-boot-autoconfigure: high-severity CVE, duration-only justification."
+          "value": "High severity spring-boot-autoconfigure CVE resolved solely on absence-of-execution."
         }
       ]
     },
@@ -24708,7 +24708,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-websocket: high severity with EPSS 0.87 (near-certain exploitation likelihood), correctly left in_triage since Shield has no coverage - no backstop, this is the highest-priority in_triage item to review."
+          "value": "High severity, in_triage with no CVE Shield coverage and a very high EPSS (99.7th percentile) - a priority open item to verify."
         }
       ]
     },
@@ -24822,7 +24822,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "tomcat-embed-websocket: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -24936,7 +24936,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "hibernate-core: high-severity CVE, duration-only justification despite heavy library usage (1563/3787 classes)."
+          "value": "High severity hibernate-core CVE resolved solely by duration despite very heavy library usage (1563 of 3787 classes)."
         }
       ]
     },
@@ -25050,7 +25050,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "hibernate-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -25164,7 +25164,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "hibernate-validator: high-severity CVE correctly left in_triage since Shield has no coverage - no backstop, worth surfacing."
+          "value": "High severity, in_triage with no CVE Shield coverage - open item requiring verification."
         }
       ]
     },
@@ -25278,7 +25278,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "hibernate-validator: high-severity CVE, duration-only justification."
+          "value": "High severity hibernate-validator CVE resolved solely by duration."
         }
       ]
     },
@@ -25388,11 +25388,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "hibernate-validator: medium severity correctly left in_triage with no Shield coverage; low enough stakes to leave open."
+          "value": "Medium severity, in_triage with no CVE Shield coverage - open item worth tracking."
         }
       ]
     },
@@ -25502,11 +25502,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "hibernate-validator: medium severity correctly left in_triage with no Shield coverage; low enough stakes to leave open."
+          "value": "Medium severity, in_triage with no CVE Shield coverage - open item worth tracking."
         }
       ]
     },
@@ -25620,7 +25620,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "guava: high-severity CVE, duration-only justification (5/1717 classes used, not code_not_reachable)."
+          "value": "High severity guava CVE resolved solely by duration despite active library usage."
         }
       ]
     },
@@ -25730,11 +25730,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "guava: medium severity correctly left in_triage with no Shield coverage; low enough stakes to leave open."
+          "value": "Medium severity, in_triage with no CVE Shield coverage - open item worth tracking."
         }
       ]
     },
@@ -25848,7 +25848,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "guava: low severity, duration acceptance is fine."
+          "value": "Low severity; duration-based acceptance is low-stakes."
         }
       ]
     },
@@ -25960,7 +25960,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "xercesimpl: unscored severity, duration acceptance is low stakes."
+          "value": "Unscored severity; low stakes for duration-based acceptance despite elevated EPSS."
         }
       ]
     },
@@ -26072,7 +26072,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "xercesimpl: unscored severity, low stakes despite elevated EPSS."
+          "value": "Unscored severity; low stakes for duration-based acceptance despite elevated EPSS."
         }
       ]
     },
@@ -26186,7 +26186,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "xercesimpl: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -26300,7 +26300,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "xercesimpl: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -26414,7 +26414,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-boot-actuator: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -26526,7 +26526,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "bootstrap (webjar): code_not_reachable with 0 of 0 classes - a JS-only webjar has no Java classes to load, so this is trivially and structurally valid."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -26638,7 +26638,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "bootstrap (webjar): code_not_reachable, structural fact for a JS-only artifact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -26750,7 +26750,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "bootstrap (webjar): code_not_reachable, structural fact for a JS-only artifact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -26862,7 +26862,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "bootstrap (webjar): code_not_reachable, structural fact for a JS-only artifact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -26974,7 +26974,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "bootstrap (webjar): code_not_reachable, structural fact for a JS-only artifact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -27086,7 +27086,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "bootstrap (webjar): code_not_reachable, structural fact for a JS-only artifact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -27198,7 +27198,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "junit: code_not_reachable (0 of 286 classes), a test-scope library that\u0027s plausibly never loaded at runtime - structurally sound."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -27310,7 +27310,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "commons-lang3: code_not_reachable (0 of 152 classes), structural fact - distinct component from the commons-lang finding above with the same CVE ID."
+          "value": "code_not_reachable structural claim on commons-lang3, safe as-is (same CVE affecting a second library, separately verified as unreachable)."
         }
       ]
     },
@@ -27422,7 +27422,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "commons-lang3: code_not_reachable (0 of 152 classes), structural fact - distinct component from the commons-lang finding above with the same CVE ID."
+          "value": "code_not_reachable structural claim on commons-lang3, safe as-is (same CVE affecting a second library, separately verified as unreachable)."
         }
       ]
     },
@@ -27536,7 +27536,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-data-jpa: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -27650,7 +27650,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-data-jpa: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -27764,7 +27764,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-context: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -27878,7 +27878,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-context: medium severity, duration acceptance is fine - distinct component from the spring-web finding above with the same CVE ID."
+          "value": "Medium severity; duration-based acceptance reasonable here (spring-context instance)."
         }
       ]
     },
@@ -27992,7 +27992,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "spring-context: low severity, duration acceptance is fine."
+          "value": "Low severity; duration-based acceptance is low-stakes."
         }
       ]
     },
@@ -28104,7 +28104,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "httpclient: code_not_reachable (0 of 466 classes), structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -28216,7 +28216,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "commons-io: code_not_reachable (0 of 110 classes) - structural fact independent of the fact that Shield has no coverage here."
+          "value": "code_not_reachable structural claim; Shield coverage is irrelevant here since the justification is structural, not duration-based."
         }
       ]
     },
@@ -28328,7 +28328,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "commons-io: code_not_reachable, structural fact."
+          "value": "code_not_reachable structural claim, safe as-is."
         }
       ]
     },
@@ -28442,7 +28442,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-core: medium severity, duration acceptance is fine."
+          "value": "Medium severity; duration-based acceptance reasonable here."
         }
       ]
     },
@@ -28554,7 +28554,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "jackson-core: unscored severity, low stakes."
+          "value": "Unscored severity; low stakes for duration-based acceptance."
         }
       ]
     }

@@ -569,12 +569,13 @@ public class VEXAdvisor {
           .append("considered: `Yes` (Shield exists there, even if it hasn't fired), `No` (no Shield coverage for ")
           .append("this CVE at all - the claim rests entirely on absence-of-execution, with no possible active ")
           .append("backstop), `-` (no signal either way).\n\n");
-        sb.append("**Rationale** - why the claim was made, with the day count for the two duration-based reasons:\n\n");
+        sb.append("**Rationale** - why the claim was made, with the day count for the three duration-based reasons:\n\n");
         sb.append("| Rationale | Meaning |\n|-----------|---------|\n");
         sb.append("| `Library Unused` | Library never loaded at runtime (0 classes) - structural, not time-based |\n");
         sb.append("| `CVE Shielded` | CVE Shield actively mitigating at runtime - an active control, not time-based |\n");
         sb.append("| `CVE Not Used Nd` | not_affected - library loaded, but zero observed executions of the vulnerable path in N days of runtime monitoring, past the acceptance threshold |\n");
-        sb.append("| `CVE Watching Nd` | in_triage - zero observed executions in N days so far, still short of the acceptance threshold |\n\n");
+        sb.append("| `CVE Watching Nd` | in_triage - zero observed executions in N days so far, still short of the acceptance threshold - may still graduate to `CVE Not Used` |\n");
+        sb.append("| `No Shield Coverage Nd` | in_triage, permanently - CVE Shield has no coverage for this CVE here (Shield column is `No`), so elapsed time is never evidence of anything and this can never graduate, no matter how large Nd gets |\n\n");
         sb.append("Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, so the claims worth ")
           .append("a second look surface at the top - see the Key Findings above for which specific CVEs those are.\n\n");
         sb.append("**Protection Status** (shown per app below) - Assess is the module that produces the runtime ")
@@ -654,10 +655,19 @@ public class VEXAdvisor {
         return sb.toString();
     }
 
-    /** Library Unused/CVE Shielded are structural; CVE Not Used/CVE Watching are duration-based and carry the day count. */
+    /**
+     * Library Unused/CVE Shielded are structural. CVE Not Used/CVE Watching are duration-based and genuinely
+     * still accumulating toward (or past) the acceptance threshold. No Shield Coverage is also in_triage, but
+     * for a different reason - Shield has zero coverage for this CVE, so it stays in_triage forever regardless
+     * of daysObserved; using "CVE Watching Nd" for that case would make a 288-day-old in_triage claim look like
+     * a bug rather than the intended "can never graduate" state.
+     */
     private String rationaleWord(VexStatement s) {
         if ("code_not_reachable".equals(s.justification)) return "Library Unused";
         if ("protected_at_runtime".equals(s.justification)) return "CVE Shielded";
+        if ("in_triage".equals(s.state) && Boolean.FALSE.equals(s.shieldAvailable)) {
+            return "No Shield Coverage " + s.daysObserved + "d";
+        }
         if ("in_triage".equals(s.state)) return "CVE Watching " + s.daysObserved + "d";
         return "CVE Not Used " + s.daysObserved + "d";
     }
