@@ -508,6 +508,16 @@ public class VEXAdvisor {
             }
         }
 
+        sb.append("\n### Legend\n\n");
+        sb.append("**VEX** - `NA` = not_affected, `IT` = in_triage\n\n");
+        sb.append("**Rationale code:**\n\n");
+        sb.append("| Code | Meaning |\n|------|---------|\n");
+        sb.append("| `UNU` | Unused - library never loaded at runtime (0 classes) |\n");
+        sb.append("| `SHD` | Shielded - CVE Shield/Protect actively mitigating at runtime |\n");
+        sb.append("| `AGD` | Aged out - not_affected on duration alone (no observed execution past the acceptance threshold) |\n");
+        sb.append("| `WCH` | Watching - in_triage, still within the acceptance window |\n");
+        sb.append("| `!` suffix | Flagged `needs_review` by the VEX Advisor - see the app's Risk Rationale above |\n");
+
         sb.append("\n---\n\n## Application Detail\n\n");
 
         List<String> order = java.util.Arrays.asList("CRITICAL", "HIGH", "MEDIUM", "LOW", "SOUND", "UNKNOWN");
@@ -516,6 +526,7 @@ public class VEXAdvisor {
             int idx = order.indexOf(getString(r, "risk_level", "UNKNOWN"));
             return idx < 0 ? 99 : idx;
         }));
+        List<String> severityOrder = java.util.Arrays.asList("critical", "high", "medium", "low", "unknown");
 
         for (JsonObject r : sortedResults) {
             String appName = getString(r, "application", "Unknown");
@@ -530,40 +541,27 @@ public class VEXAdvisor {
             Map<String, JsonObject> statementAssessments = assessmentsByApp.getOrDefault(appName, Map.of());
 
             if (entry != null) {
-                List<VexStatement> needsReview = new ArrayList<>();
-                List<VexStatement> sound = new ArrayList<>();
-                for (VexStatement s : entry.statements) {
-                    JsonObject assessment = statementAssessments.get(s.cveId);
-                    String assessLabel = assessment != null ? getString(assessment, "assessment", "unknown") : "unknown";
-                    if ("needs_review".equals(assessLabel)) needsReview.add(s);
-                    else sound.add(s);
-                }
+                List<VexStatement> statements = new ArrayList<>(entry.statements);
+                statements.sort((a, b) -> {
+                    boolean aFlagged = isFlagged(statementAssessments, a);
+                    boolean bFlagged = isFlagged(statementAssessments, b);
+                    if (aFlagged != bFlagged) return aFlagged ? -1 : 1;
+                    int aSev = severityOrder.indexOf(a.severity != null ? a.severity.toLowerCase() : "unknown");
+                    int bSev = severityOrder.indexOf(b.severity != null ? b.severity.toLowerCase() : "unknown");
+                    if (aSev < 0) aSev = severityOrder.size();
+                    if (bSev < 0) bSev = severityOrder.size();
+                    return Integer.compare(aSev, bSev);
+                });
 
-                if (!needsReview.isEmpty()) {
-                    sb.append("#### Needs Review (").append(needsReview.size()).append(")\n\n");
-                    sb.append("| CVE | Library | Severity | State | Rationale |\n|-----|---------|----------|-------|-----------|\n");
-                    for (VexStatement s : needsReview) {
-                        JsonObject assessment = statementAssessments.get(s.cveId);
-                        String rationale = assessment != null ? getString(assessment, "rationale", "") : "";
-                        sb.append("| ").append(s.cveId).append(" | `").append(s.purl != null ? s.purl : "unknown")
-                          .append("` | ").append(s.severity != null ? s.severity : "unknown").append(" | ")
-                          .append(s.state).append(" | ").append(rationale.replace("|", "\\|")).append(" |\n");
-                    }
-                    sb.append("\n");
+                sb.append("| CVE | Library | Score | VEX | Rationale |\n|-----|---------|-------|-----|-----------|\n");
+                for (VexStatement s : statements) {
+                    boolean flagged = isFlagged(statementAssessments, s);
+                    sb.append("| ").append(s.cveId).append(" | ").append(plainLibrary(s.purl))
+                      .append(" | ").append(s.score != null ? s.score : "-").append(" | ")
+                      .append("in_triage".equals(s.state) ? "IT" : "NA").append(" | ")
+                      .append(rationaleCode(s)).append(flagged ? "!" : "").append(" |\n");
                 }
-
-                if (!sound.isEmpty()) {
-                    sb.append("#### Sound (").append(sound.size()).append(")\n\n");
-                    sb.append("<details><summary>").append(sound.size())
-                      .append(" claim(s) assessed as sound as-is - expand for the full list</summary>\n\n");
-                    sb.append("| CVE | Library | Severity | State |\n|-----|---------|----------|-------|\n");
-                    for (VexStatement s : sound) {
-                        sb.append("| ").append(s.cveId).append(" | `").append(s.purl != null ? s.purl : "unknown")
-                          .append("` | ").append(s.severity != null ? s.severity : "unknown").append(" | ")
-                          .append(s.state).append(" |\n");
-                    }
-                    sb.append("\n</details>\n\n");
-                }
+                sb.append("\n");
             }
 
             sb.append("---\n\n");
@@ -573,13 +571,34 @@ public class VEXAdvisor {
         sb.append("VEX claims were generated by `VEXGenerator` from Contrast runtime library class-usage data and ")
           .append("per-environment CVE Shield/Protect status - see `vex --help` for the exact decision policy. This ")
           .append("advisor does not change any claim; it only assesses whether relying on each claim as generated is ")
-          .append("reasonable given the CVE's severity and exploitability.\n\n");
-        sb.append("- **sound**: the claim's justification (structural fact or active control) supports relying on it as-is\n");
-        sb.append("- **needs_review**: the claim rests on absence-of-observed-execution for a severe/exploitable CVE, or ")
+          .append("reasonable given the CVE's severity and exploitability. See the Legend above for the VEX/Rationale ")
+          .append("codes used in the per-application tables.\n\n");
+        sb.append("- **sound** (no `!`): the claim's justification (structural fact or active control) supports relying on it as-is\n");
+        sb.append("- **needs_review** (`!` suffix): the claim rests on absence-of-observed-execution for a severe/exploitable CVE, or ")
           .append("is otherwise borderline - a human should confirm before treating it as resolved\n\n---\n\n");
         sb.append("*Report generated by Contrast VEX Advisor*\n*Powered by Contrast Security Runtime Observability*\n");
 
         return sb.toString();
+    }
+
+    private boolean isFlagged(Map<String, JsonObject> statementAssessments, VexStatement s) {
+        JsonObject assessment = statementAssessments.get(s.cveId);
+        return assessment != null && "needs_review".equals(getString(assessment, "assessment", ""));
+    }
+
+    /** UNU/SHD structural justifications are always sound; AGD/WCH are duration-based and may be flagged. */
+    private String rationaleCode(VexStatement s) {
+        if ("code_not_reachable".equals(s.justification)) return "UNU";
+        if ("protected_at_runtime".equals(s.justification)) return "SHD";
+        if ("in_triage".equals(s.state)) return "WCH";
+        return "AGD";
+    }
+
+    /** Strips a purl down to "artifact@version" - drops the "pkg:maven/<group>/" prefix for a narrow column. */
+    private String plainLibrary(String purl) {
+        if (purl == null) return "unknown";
+        int lastSlash = purl.lastIndexOf('/');
+        return lastSlash >= 0 ? purl.substring(lastSlash + 1) : purl;
     }
 
     private String formatCveList(List<VexStatement> statements, int max) {
