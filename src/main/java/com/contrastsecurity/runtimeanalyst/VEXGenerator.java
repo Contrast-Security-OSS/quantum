@@ -63,13 +63,17 @@ import com.google.gson.JsonObject;
  *   3. classes_used > 0, CVE's env status is EXPOSED/EXPLOITED (or unrecognized) -> no VEX entry;
  *      never suppress a vulnerability we can't positively account for.
  *   4. classes_used > 0, CVE's env status is NOT_SEEN/NO_SHIELD (or missing) in every environment observed:
- *        - days observed >= acceptAfterDays -> not_affected (no justification), detail explains the
- *          day count and threshold as an operational risk-acceptance, not a structural guarantee.
- *        - days observed <  acceptAfterDays -> in_triage, detail explains the day count so far.
  *      NO_SHIELD (confirmed by scanning every app in this org) means CVE Shield has no coverage for this CVE
- *      in that environment at all, as opposed to NOT_SEEN (Shield exists there and just hasn't fired) - this
- *      still uses the same duration-based logic as NOT_SEEN, but is reported separately (see
- *      contrast:shieldAvailable below) since "we haven't seen it" is much weaker when nothing was watching.
+ *      in that environment at all, as opposed to NOT_SEEN (Shield exists there and just hasn't fired). This
+ *      matters for the state, not just the reporting: elapsed time can never turn "no detector was watching"
+ *      into "nothing happened," so:
+ *        - shieldAvailability() is false (every considered env is NO_SHIELD) -> in_triage, permanently,
+ *          regardless of daysObserved - this can never graduate to not_affected on duration alone.
+ *        - shieldAvailability() is true/unknown and days observed >= acceptAfterDays -> not_affected (no
+ *          justification), detail explains the day count and threshold as an operational risk-acceptance,
+ *          not a structural guarantee.
+ *        - shieldAvailability() is true/unknown and days observed < acceptAfterDays -> in_triage, detail
+ *          explains the day count so far (may still graduate to not_affected later).
  *
  * Not factored into the decision rules above (deliberately - see ModuleStatus): whether Assess/ADR are
  * even enabled per environment. A "not seen" claim scoped to an environment where Assess itself isn't running
@@ -717,10 +721,19 @@ public class VEXGenerator {
             detail = "CVE Shield is actively mitigating this vulnerability at runtime in " + app.name
                 + " (" + envScopeLabel() + ").";
         } else if (issue != null && isNotSeen(issue)) {
+            boolean shieldAvail = !Boolean.FALSE.equals(shieldAvailability(issue, orgWideShieldExists));
             detail = "Library loaded (" + classesUsed + " of " + classCount + " classes used) but this CVE's "
                 + "vulnerable code path has not been observed executing in " + app.name + " (" + envScopeLabel()
                 + ") in " + daysObserved + " days of runtime monitoring";
-            if (daysObserved >= acceptAfterDays) {
+            if (!shieldAvail) {
+                // CVE Shield has no coverage for this CVE here at all, so there was never anything watching for
+                // an exploit attempt - elapsed time cannot turn "nothing detected" into "nothing happened." This
+                // can never graduate to not_affected on duration alone, no matter how long it's been.
+                analysis.setState(State.IN_TRIAGE);
+                detail += ". CVE Shield has no coverage for this CVE in this environment scope, so there is no "
+                    + "detection mechanism to have caught an exploit attempt - this cannot be resolved to "
+                    + "not_affected by elapsed time alone, regardless of the " + acceptAfterDays + "-day threshold.";
+            } else if (daysObserved >= acceptAfterDays) {
                 analysis.setState(State.NOT_AFFECTED);
                 detail += " (policy threshold: " + acceptAfterDays + " days). Operational risk acceptance based on "
                     + "runtime observation, not a structural non-reachability guarantee.";
@@ -728,17 +741,19 @@ public class VEXGenerator {
                 analysis.setState(State.IN_TRIAGE);
                 detail += " (below the " + acceptAfterDays + "-day acceptance threshold).";
             }
-            if (Boolean.FALSE.equals(shieldAvailability(issue, orgWideShieldExists))) {
-                detail += " CVE Shield has no coverage for this CVE in this environment scope, so runtime "
-                    + "observation is the only signal available - there's no active mitigation as a backstop.";
-            }
         } else if (issue == null) {
             // Library confirmed used, but no matching per-CVE environment record found at all -
             // treat the same as "not seen" using the same duration logic, but flag the missing join.
+            boolean shieldAvail = !Boolean.FALSE.equals(shieldAvailability(null, orgWideShieldExists));
             detail = "Library loaded (" + classesUsed + " of " + classCount + " classes used); no per-environment "
                 + "CVE Shield/exposure record found for this CVE+version in " + app.name + ". Not observed "
                 + "executing in " + daysObserved + " days of runtime monitoring for this application";
-            if (daysObserved >= acceptAfterDays) {
+            if (!shieldAvail) {
+                analysis.setState(State.IN_TRIAGE);
+                detail += ". CVE Shield has no coverage for this CVE at all (org-wide), so there is no detection "
+                    + "mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by "
+                    + "elapsed time alone, regardless of the " + acceptAfterDays + "-day threshold.";
+            } else if (daysObserved >= acceptAfterDays) {
                 analysis.setState(State.NOT_AFFECTED);
                 detail += " (policy threshold: " + acceptAfterDays + " days). Operational risk acceptance based on "
                     + "runtime observation, not a structural non-reachability guarantee.";
