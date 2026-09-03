@@ -18,7 +18,7 @@ This report reviews VEX (Vulnerability Exploitability eXchange) claims generated
 
 **Key Findings:**
 
-- **21 of 235 claim(s) flagged for human review** before relying on them.
+- **125 of 235 claim(s) flagged for human review** before relying on them.
 - **8 flagged claim(s) are on CVEs in the CISA Known Exploited Vulnerabilities (KEV) catalog** - actively exploited in the wild: CVE-2022-22965, CVE-2018-1273, CVE-2025-24813, CVE-2020-1938, CVE-2017-12617, CVE-2023-44487.
 - **10 flagged claim(s) have an EPSS score ≥ 0.5** (50%+ predicted exploitation likelihood): CVE-2017-17485, CVE-2024-38819, CVE-2019-0232, CVE-2019-0199, CVE-2025-55752, CVE-2019-10072 (+4 more).
 - Application(s) rated CRITICAL/HIGH risk: SAML-PetClinic-Demo.
@@ -27,11 +27,11 @@ This report reviews VEX (Vulnerability Exploitability eXchange) claims generated
 
 | Application | Risk Level | Statements |
 |-------------|------------|------------|
-| SAML-PetClinic-Demo | HIGH | 235 |
+| SAML-PetClinic-Demo | CRITICAL | 235 |
 
 | Risk Level | Applications |
 |------------|--------------|
-| HIGH | 1 |
+| CRITICAL | 1 |
 
 ### Legend
 
@@ -48,19 +48,23 @@ This report reviews VEX (Vulnerability Exploitability eXchange) claims generated
 
 Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, so the claims worth a second look surface at the top - see the Key Findings above for which specific CVEs those are.
 
+**Protection Status** (shown per app below) - Assess is the module that produces the runtime evidence every claim in this report rests on; Protect is the classic HTTP-rule-based RASP module. Neither is CVE Shield - CVE Shield is a separate, newer product that defends specific CVEs via a microsandbox rather than HTTP rules, and Contrast's API exposes no distinct enablement flag for it. CVE Shield's own per-CVE verdicts still show up per-claim above as the `CVE Shielded` rationale.
+
 ---
 
 ## Application Detail
 
 ### SAML-PetClinic-Demo
 
-**Risk Level:** HIGH
+**Risk Level:** CRITICAL
 
-SAML-PetClinic-Demo carries roughly 300 VEX claims spanning ~40 libraries, almost entirely dev/qa/prod runtime data collected over 288 days (well past the 30-day acceptance threshold). The large majority are either structurally sound (code_not_reachable, zero classes loaded) or duration-based acceptances on CVEs with low exploitability signals, but a meaningful subset of duration-only claims sit on CRITICAL/HIGH CVEs with very high EPSS or CISA KEV status, which is a materially weaker basis for 'not_affected.'
+**Protection Status:** Assess (runtime evidence): dev=enabled, qa=no data, prod=enabled · Protect (classic RASP, not CVE Shield): dev=disabled, qa=no data, prod=enabled
 
-**Risk Rationale:** 20 claims rely on 'absence of observed execution' alone to dismiss CVEs that are either in the CISA KEV catalog (e.g. CVE-2022-22965/Spring4Shell across spring-beans/spring-webmvc, CVE-2020-1938/Ghostcat, CVE-2025-24813, CVE-2017-12617, CVE-2023-44487 in tomcat-embed-core, CVE-2018-1273 in spring-data-commons) or carry near-certain EPSS scores (0.5-1.0) on critical/high severity findings (e.g. CVE-2019-0232, CVE-2019-0199, CVE-2019-10072, CVE-2020-9484, CVE-2024-50379, CVE-2022-34169). These libraries (tomcat-embed-core, spring-webmvc, spring-beans) show substantial class loading (166-387 classes used), meaning the code is actively exercised and 'the vulnerable path hasn't fired yet' is a probabilistic, not structural, claim. Everything justified by code_not_reachable (0 classes loaded) is sound regardless of severity, and duration-only claims on medium/low severity or low-EPSS critical/high CVEs are reasonable as-is.
+SAML-PetClinic-Demo has roughly 240 VEX claims across ~30 libraries, generated from 288 days of Contrast runtime observation (Assess enabled in dev/prod, no data in qa; Protect/RASP enabled in prod but disabled in dev). About 90 claims rest on genuine structural evidence (code_not_reachable, 0 classes ever loaded) and are safe to trust as-is. The remaining ~150 claims, including several CRITICAL/KEV CVEs (Spring4Shell CVE-2022-22965 across three libraries, GhostCat CVE-2020-1938, Tomcat CVE-2025-24813/2017-12617/2023-44487, and spring-data-commons CVE-2018-1273 with EPSS 0.97), are 'not_affected' purely because the vulnerable path hasn't fired in 288 days - a probabilistic absence-of-evidence argument, not a structural guarantee.
 
-**Recommendation:** Have a human reviewer specifically re-examine the 20 flagged CVEs below before treating them as closed, prioritizing the four KEV-listed findings on spring-beans/spring-webmvc (CVE-2022-22965) and tomcat-embed-core (CVE-2020-1938, CVE-2025-24813, CVE-2017-12617, CVE-2023-44487) plus CVE-2018-1273, given their combination of severity, exploitability, and confirmed active code loading. All code_not_reachable claims can be trusted as-is.
+**Risk Rationale:** Multiple KEV-listed, actively-exploited CVEs (CVE-2022-22965 Spring4Shell on spring-boot-starter-web/spring-webmvc/spring-beans, CVE-2020-1938 GhostCat, CVE-2025-24813, CVE-2017-12617, CVE-2023-44487, and CVE-2018-1273 with EPSS 0.97) are all being waived on duration-only reasoning rather than code_not_reachable or protected_at_runtime. Given that Protect (RASP) is disabled in dev, there is no active backstop control there if any of this reasoning is wrong, and dozens of other CRITICAL/HIGH jackson-databind and tomcat-embed-core CVEs share the same weak justification pattern at scale. None of the Assess/Protect enablement data by itself invalidates the evidence (dev and prod both have Assess data), but the sheer number of severe, duration-only claims - several tied to CVEs with public exploits in the KEV catalog - makes this VEX set unsafe to rely on without human review of the highest-severity items.
+
+**Recommendation:** Prioritize human review of every KEV-listed or EPSS>0.3 CVE relying on duration-only justification, especially CVE-2022-22965 (all three libraries), CVE-2020-1938, CVE-2025-24813, CVE-2017-12617, CVE-2023-44487, and CVE-2018-1273. For these, either confirm code-level unreachability manually, add compensating controls (e.g., enable Protect in dev), or escalate to patch given the low cost/high benefit of upgrading jackson-databind, tomcat-embed-core, and the Spring stack. The code_not_reachable claims (htmlunit, snakeyaml, netty, jetty-http, plexus-utils, commons-compress, bootstrap, junit, commons-lang/commons-lang3, commons-io, httpclient, neko-htmlunit) can be trusted as-is. Medium/low/unknown-severity duration-based claims are acceptable without further action.
 
 | CVE | Library | Score | VEX | Rationale |
 |-----|---------|-------|-----|-----------|

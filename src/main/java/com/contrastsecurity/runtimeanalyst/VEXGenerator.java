@@ -50,10 +50,11 @@ import com.google.gson.JsonObject;
  * CVE Shield/Protect observation data to justify "not affected"/"in triage" claims
  * rather than fabricating them.
  *
- * Three data sources, all under the same contrast.properties credentials:
+ * Four data sources, all under the same contrast.properties credentials:
  *   - GET  /api/v4/organizations/{org}/applications                          app first/last seen
  *   - POST /Contrast/api/ng/{org}/libraries/filter                           per-library CVEs + runtime class-usage
  *   - GET  /api/ns-ui/v1/organizations/{org}/applications/{id}/cves/issues   per-CVE per-environment Shield/Protect status
+ *   - GET  /Contrast/api/ng/{org}/applications/{id}/servers                  per-server Assess/Protect module enablement
  *
  * Decision rules (see CLAUDE.md discussion - these are policy, not spec):
  *   1. classes_used == 0 for the app+library -> not_affected / code_not_reachable, unconditional.
@@ -64,6 +65,14 @@ import com.google.gson.JsonObject;
  *        - days observed >= acceptAfterDays -> not_affected (no justification), detail explains the
  *          day count and threshold as an operational risk-acceptance, not a structural guarantee.
  *        - days observed <  acceptAfterDays -> in_triage, detail explains the day count so far.
+ *
+ * Not factored into the decision rules above (deliberately - see ProtectionStatus): whether Assess/Protect are
+ * even enabled per environment. A "not seen" claim scoped to an environment where Assess itself isn't running
+ * has no runtime evidence behind it at all, but rather than silently changing the claim, that fact is reported
+ * as its own contrast:assessEnabled and contrast:protectEnabled property (per env) so a human (or the VEX
+ * Advisor) can weigh it. Note "Protect" here is the classic HTTP-rule-based RASP module (the API's `defend`
+ * flag) - CVE Shield is a separate, newer microsandbox-based product with no distinct enablement flag found
+ * in this API; see ProtectionStatus below for what that means for this report.
  *
  * Usage:
  *   java -jar runtime-analyst.jar vex --app "MyApp"
@@ -327,6 +336,64 @@ public class VEXGenerator {
         return issues;
     }
 
+    // ---- Assess/Protect module enablement, per app ----
+
+    /**
+     * `defend` is the classic Protect module (HTTP-rule-based RASP) - a different, older product from CVE
+     * Shield (which defends specific CVEs via a microsandbox, not HTTP rules). This API exposes no separate
+     * enablement flag for CVE Shield or for "ADR" as a distinct product, so this only reports Protect/Assess
+     * enablement; it does NOT claim to say whether CVE Shield itself is available or enabled. CVE Shield's own
+     * per-CVE verdicts (PROTECTING/BLOCKED/etc, from cves/issues) still show up per-claim regardless - see the
+     * `protected_at_runtime` justification and the devStatus/qaStatus/prodStatus properties below.
+     */
+    private static class ProtectionStatus {
+        Boolean assessEnabledDev, assessEnabledQa, assessEnabledProd;
+        Boolean protectEnabledDev, protectEnabledQa, protectEnabledProd;
+    }
+
+    private ProtectionStatus fetchProtectionStatus(String appId) throws IOException {
+        String url = host + "/Contrast/api/ng/" + orgId + "/applications/" + appId + "/servers";
+        HttpGet get = new HttpGet(url);
+        get.setHeader("Authorization", authHeader);
+        get.setHeader("API-Key", apiKey);
+        get.setHeader("Accept", "application/json");
+
+        HttpResponse response = httpClient.execute(get);
+        int statusCode = response.getStatusLine().getStatusCode();
+        String body = EntityUtils.toString(response.getEntity());
+        if (statusCode != 200) {
+            throw new IOException("Servers API returned status " + statusCode + ": " + body);
+        }
+
+        ProtectionStatus ps = new ProtectionStatus();
+        JsonObject json = gson.fromJson(body, JsonObject.class);
+        if (!json.has("servers")) {
+            return ps;
+        }
+        for (JsonElement el : json.getAsJsonArray("servers")) {
+            JsonObject server = el.getAsJsonObject();
+            String env = getStringOrNull(server, "environment");
+            boolean assess = server.has("assess") && !server.get("assess").isJsonNull() && server.get("assess").getAsBoolean();
+            boolean protect = server.has("defend") && !server.get("defend").isJsonNull() && server.get("defend").getAsBoolean();
+            if ("DEVELOPMENT".equals(env)) {
+                ps.assessEnabledDev = orTrue(ps.assessEnabledDev, assess);
+                ps.protectEnabledDev = orTrue(ps.protectEnabledDev, protect);
+            } else if ("QA".equals(env)) {
+                ps.assessEnabledQa = orTrue(ps.assessEnabledQa, assess);
+                ps.protectEnabledQa = orTrue(ps.protectEnabledQa, protect);
+            } else if ("PRODUCTION".equals(env)) {
+                ps.assessEnabledProd = orTrue(ps.assessEnabledProd, assess);
+                ps.protectEnabledProd = orTrue(ps.protectEnabledProd, protect);
+            }
+        }
+        return ps;
+    }
+
+    /** Null (no server seen yet) stays null only if never set; otherwise ORs across multiple servers in the same env. */
+    private Boolean orTrue(Boolean existing, boolean value) {
+        return existing == null ? value : (existing || value);
+    }
+
     // ---- Libraries: CVEs + runtime class usage, per app ----
 
     private JsonArray fetchLibraries(String appId) throws IOException {
@@ -389,13 +456,16 @@ public class VEXGenerator {
     public Bom generateVEX(List<AppInfo> apps) throws IOException {
         Bom bom = new Bom();
         List<Vulnerability> vulnerabilities = new ArrayList<>();
+        List<Component> appComponents = new ArrayList<>();
 
         for (AppInfo app : apps) {
             System.out.println("\nProcessing " + app.name + " (" + app.id + ")...");
 
             Map<String, CveIssue> cveIssues = fetchCveIssues(app.id);
             JsonArray libraries = fetchLibraries(app.id);
+            ProtectionStatus protection = fetchProtectionStatus(app.id);
             System.out.println("  " + libraries.size() + " vulnerable libraries, " + cveIssues.size() + " CVE issue records");
+            appComponents.add(buildAppComponent(app, protection));
 
             long daysObserved = (app.lastSeenTime > app.firstSeenTime)
                 ? (app.lastSeenTime - app.firstSeenTime) / (1000L * 60 * 60 * 24)
@@ -438,18 +508,38 @@ public class VEXGenerator {
 
         System.out.println("\nGenerated " + vulnerabilities.size() + " VEX statements.");
         bom.setVulnerabilities(vulnerabilities);
+        bom.setComponents(appComponents);
 
         if (apps.size() == 1) {
-            Component appComponent = new Component();
-            appComponent.setType(Component.Type.APPLICATION);
-            appComponent.setName(apps.get(0).name);
-            appComponent.setBomRef(sanitizeBomRef(apps.get(0).id));
             Metadata metadata = new Metadata();
-            metadata.setComponent(appComponent);
+            metadata.setComponent(appComponents.get(0));
             bom.setMetadata(metadata);
         }
 
         return bom;
+    }
+
+    /** Carries Assess/Protect module-enablement facts (see ProtectionStatus) - one per app, not repeated per statement. */
+    private Component buildAppComponent(AppInfo app, ProtectionStatus protection) {
+        Component appComponent = new Component();
+        appComponent.setType(Component.Type.APPLICATION);
+        appComponent.setName(app.name);
+        appComponent.setBomRef(sanitizeBomRef(app.id));
+
+        List<Property> properties = new ArrayList<>();
+        properties.add(property("contrast:assessEnabledDev", enabledLabel(protection.assessEnabledDev)));
+        properties.add(property("contrast:assessEnabledQa", enabledLabel(protection.assessEnabledQa)));
+        properties.add(property("contrast:assessEnabledProd", enabledLabel(protection.assessEnabledProd)));
+        properties.add(property("contrast:protectEnabledDev", enabledLabel(protection.protectEnabledDev)));
+        properties.add(property("contrast:protectEnabledQa", enabledLabel(protection.protectEnabledQa)));
+        properties.add(property("contrast:protectEnabledProd", enabledLabel(protection.protectEnabledProd)));
+        appComponent.setProperties(properties);
+        return appComponent;
+    }
+
+    /** "" (no data) means no agent was ever seen reporting from that environment - not the same as "disabled". */
+    private String enabledLabel(Boolean value) {
+        return value == null ? "" : String.valueOf(value);
     }
 
     /** Returns null when the CVE shouldn't get a VEX statement at all (exposed/exploited/unrecognized status). */

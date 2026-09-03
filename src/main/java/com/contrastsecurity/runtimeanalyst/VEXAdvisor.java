@@ -38,7 +38,15 @@ public class VEXAdvisor {
         "vulnerable code path hasn't executed in N days of observation). Your job is NOT to re-derive the CVE - it " +
         "is to judge whether relying on each claim, as stated, is reasonable given the CVE's severity/exploitability, " +
         "or whether it's the kind of claim a human reviewer should double-check before trusting it.\n\n" +
+        "You're also given whether Assess (the module that produces the runtime evidence every claim rests on) and " +
+        "Protect (the classic HTTP-rule-based RASP module, distinct from CVE Shield) are enabled per environment " +
+        "for this application. Weigh this directly: a duration-based claim scoped to an environment where Assess " +
+        "itself has no data or is disabled isn't weak evidence, it's NO evidence - flag it regardless of severity. " +
+        "A claim in an environment where Protect is disabled has one less active mitigating control as a backstop " +
+        "if the absence-of-execution reasoning turns out wrong, which raises the stakes of getting it wrong.\n\n" +
         "## What makes a claim worth flagging for review\n\n" +
+        "- Any duration-based claim scoped to an environment where Assess has no data or is disabled - there is no " +
+        "runtime evidence behind it at all, regardless of the CVE's severity.\n" +
         "- A `not_affected` claim justified only by \"N days without observed execution\" (not by code_not_reachable " +
         "or protected_at_runtime) on a CRITICAL/HIGH severity CVE, especially one with a high EPSS score or KEV " +
         "(known-exploited) status - absence of evidence is weaker evidence the more severe/exploitable the CVE is.\n" +
@@ -93,6 +101,9 @@ public class VEXAdvisor {
     static class AppEntry {
         String name;
         List<VexStatement> statements = new ArrayList<>();
+        // "true"/"false"/"" (no agent ever seen in that environment) - see VEXGenerator.ProtectionStatus
+        String assessEnabledDev, assessEnabledQa, assessEnabledProd;
+        String protectEnabledDev, protectEnabledQa, protectEnabledProd;
     }
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -249,6 +260,22 @@ public class VEXAdvisor {
             }).statements.add(s);
         }
 
+        JsonArray components = vex.has("components") ? vex.getAsJsonArray("components") : new JsonArray();
+        for (JsonElement el : components) {
+            JsonObject c = el.getAsJsonObject();
+            if (!"application".equals(getString(c, "type", null))) continue;
+            String appName = getString(c, "name", null);
+            AppEntry entry = appName != null ? byApp.get(appName) : null;
+            if (entry == null) continue;
+            Map<String, String> props = properties(c);
+            entry.assessEnabledDev = props.get("contrast:assessEnabledDev");
+            entry.assessEnabledQa = props.get("contrast:assessEnabledQa");
+            entry.assessEnabledProd = props.get("contrast:assessEnabledProd");
+            entry.protectEnabledDev = props.get("contrast:protectEnabledDev");
+            entry.protectEnabledQa = props.get("contrast:protectEnabledQa");
+            entry.protectEnabledProd = props.get("contrast:protectEnabledProd");
+        }
+
         return new ArrayList<>(byApp.values());
     }
 
@@ -259,6 +286,16 @@ public class VEXAdvisor {
         } catch (NumberFormatException e) {
             return 0L;
         }
+    }
+
+    /** "" (no agent ever seen) is distinct from "false" (agent seen, module explicitly disabled). */
+    private String formatEnvFlags(String dev, String qa, String prod) {
+        return "dev=" + envFlagLabel(dev) + ", qa=" + envFlagLabel(qa) + ", prod=" + envFlagLabel(prod);
+    }
+
+    private String envFlagLabel(String value) {
+        if (value == null || value.isEmpty()) return "no data";
+        return "true".equals(value) ? "enabled" : "disabled";
     }
 
     private Double parseDouble(String s) {
@@ -290,6 +327,10 @@ public class VEXAdvisor {
     private String formatAppForAi(AppEntry entry) {
         StringBuilder sb = new StringBuilder();
         sb.append("Application: ").append(entry.name).append("\n\n");
+        sb.append("Assess (the module that produces the runtime evidence behind every claim below) enabled: ")
+          .append(formatEnvFlags(entry.assessEnabledDev, entry.assessEnabledQa, entry.assessEnabledProd)).append("\n");
+        sb.append("Protect enabled (classic RASP module, not CVE Shield - no separate enablement flag for that is available): ")
+          .append(formatEnvFlags(entry.protectEnabledDev, entry.protectEnabledQa, entry.protectEnabledProd)).append("\n\n");
         sb.append("VEX Claims:");
 
         for (VexStatement s : entry.statements) {
@@ -517,7 +558,12 @@ public class VEXAdvisor {
         sb.append("| `CVE Not Used Nd` | not_affected - library loaded, but zero observed executions of the vulnerable path in N days of runtime monitoring, past the acceptance threshold |\n");
         sb.append("| `CVE Watching Nd` | in_triage - zero observed executions in N days so far, still short of the acceptance threshold |\n\n");
         sb.append("Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, so the claims worth ")
-          .append("a second look surface at the top - see the Key Findings above for which specific CVEs those are.\n");
+          .append("a second look surface at the top - see the Key Findings above for which specific CVEs those are.\n\n");
+        sb.append("**Protection Status** (shown per app below) - Assess is the module that produces the runtime ")
+          .append("evidence every claim in this report rests on; Protect is the classic HTTP-rule-based RASP module. ")
+          .append("Neither is CVE Shield - CVE Shield is a separate, newer product that defends specific CVEs via a ")
+          .append("microsandbox rather than HTTP rules, and Contrast's API exposes no distinct enablement flag for it. ")
+          .append("CVE Shield's own per-CVE verdicts still show up per-claim above as the `CVE Shielded` rationale.\n");
 
         sb.append("\n---\n\n## Application Detail\n\n");
 
@@ -534,6 +580,13 @@ public class VEXAdvisor {
             String riskLevel = getString(r, "risk_level", "UNKNOWN");
 
             sb.append("### ").append(appName).append("\n\n**Risk Level:** ").append(riskLevel).append("\n\n");
+            if (entry != null) {
+                sb.append("**Protection Status:** Assess (runtime evidence): ")
+                  .append(formatEnvFlags(entry.assessEnabledDev, entry.assessEnabledQa, entry.assessEnabledProd))
+                  .append(" · Protect (classic RASP, not CVE Shield): ")
+                  .append(formatEnvFlags(entry.protectEnabledDev, entry.protectEnabledQa, entry.protectEnabledProd))
+                  .append("\n\n");
+            }
             sb.append(getString(r, "application_description", "No description available.")).append("\n\n");
             sb.append("**Risk Rationale:** ").append(getString(r, "risk_rationale", "Unknown")).append("\n\n");
             sb.append("**Recommendation:** ").append(getString(r, "recommendation", "None")).append("\n\n");
