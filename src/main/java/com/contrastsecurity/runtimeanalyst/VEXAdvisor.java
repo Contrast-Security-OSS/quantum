@@ -510,17 +510,14 @@ public class VEXAdvisor {
 
         sb.append("\n### Legend\n\n");
         sb.append("**VEX** - `NA` = not_affected, `IT` = in_triage\n\n");
-        sb.append("**Action:**\n\n");
-        sb.append("| Action | Meaning |\n|--------|---------|\n");
-        sb.append("| `Safe` | Structural justification (`UNU`/`SHD`) - trust the claim as-is regardless of severity |\n");
-        sb.append("| `Monitor` | Duration-based justification (`AGD`/`WCH`), advisor assessed it as sound for now - keep watching |\n");
-        sb.append("| `Review` | Flagged `needs_review` by the VEX Advisor - human should confirm before relying on it (see the app's Risk Rationale above) |\n\n");
-        sb.append("**Rationale code:**\n\n");
-        sb.append("| Code | Meaning |\n|------|---------|\n");
-        sb.append("| `UNU` | Unused - library never loaded at runtime (0 classes) |\n");
-        sb.append("| `SHD` | Shielded - CVE Shield/Protect actively mitigating at runtime |\n");
-        sb.append("| `AGD` | Aged out - not_affected on duration alone (no observed execution past the acceptance threshold) |\n");
-        sb.append("| `WCH` | Watching - in_triage, still within the acceptance window |\n");
+        sb.append("**Rationale** - why the claim was made, with the day count for the two duration-based reasons:\n\n");
+        sb.append("| Rationale | Meaning |\n|-----------|---------|\n");
+        sb.append("| `Unused` | Library never loaded at runtime (0 classes) - structural, not time-based |\n");
+        sb.append("| `Shielded` | CVE Shield/Protect actively mitigating at runtime - an active control, not time-based |\n");
+        sb.append("| `Aged Nd` | not_affected on N days without observed execution alone, past the acceptance threshold |\n");
+        sb.append("| `Watching Nd` | in_triage - N days without observed execution so far, still short of the acceptance threshold |\n\n");
+        sb.append("Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, so the claims worth ")
+          .append("a second look surface at the top - see the Key Findings above for which specific CVEs those are.\n");
 
         sb.append("\n---\n\n## Application Detail\n\n");
 
@@ -530,7 +527,6 @@ public class VEXAdvisor {
             int idx = order.indexOf(getString(r, "risk_level", "UNKNOWN"));
             return idx < 0 ? 99 : idx;
         }));
-        List<String> severityOrder = java.util.Arrays.asList("critical", "high", "medium", "low", "unknown");
 
         for (JsonObject r : sortedResults) {
             String appName = getString(r, "application", "Unknown");
@@ -542,29 +538,25 @@ public class VEXAdvisor {
             sb.append("**Risk Rationale:** ").append(getString(r, "risk_rationale", "Unknown")).append("\n\n");
             sb.append("**Recommendation:** ").append(getString(r, "recommendation", "None")).append("\n\n");
 
-            Map<String, JsonObject> statementAssessments = assessmentsByApp.getOrDefault(appName, Map.of());
-
             if (entry != null) {
-                List<String> actionOrder = java.util.Arrays.asList("Review", "Monitor", "Safe");
                 List<VexStatement> statements = new ArrayList<>(entry.statements);
                 statements.sort((a, b) -> {
-                    int aAction = actionOrder.indexOf(action(statementAssessments, a));
-                    int bAction = actionOrder.indexOf(action(statementAssessments, b));
-                    if (aAction != bAction) return Integer.compare(aAction, bAction);
-                    int aSev = severityOrder.indexOf(a.severity != null ? a.severity.toLowerCase() : "unknown");
-                    int bSev = severityOrder.indexOf(b.severity != null ? b.severity.toLowerCase() : "unknown");
-                    if (aSev < 0) aSev = severityOrder.size();
-                    if (bSev < 0) bSev = severityOrder.size();
-                    return Integer.compare(aSev, bSev);
+                    boolean aKev = Boolean.TRUE.equals(a.cisaKev), bKev = Boolean.TRUE.equals(b.cisaKev);
+                    if (aKev != bKev) return aKev ? -1 : 1;
+                    double aEpss = a.epssScore != null ? a.epssScore : -1;
+                    double bEpss = b.epssScore != null ? b.epssScore : -1;
+                    if (aEpss != bEpss) return Double.compare(bEpss, aEpss);
+                    double aScore = a.score != null ? a.score : -1;
+                    double bScore = b.score != null ? b.score : -1;
+                    return Double.compare(bScore, aScore);
                 });
 
-                sb.append("| CVE | Library | Score | VEX | Action | Rationale |\n|-----|---------|-------|-----|--------|-----------|\n");
+                sb.append("| CVE | Library | Score | VEX | Rationale |\n|-----|---------|-------|-----|-----------|\n");
                 for (VexStatement s : statements) {
                     sb.append("| ").append(s.cveId).append(" | ").append(plainLibrary(s.purl))
                       .append(" | ").append(s.score != null ? s.score : "-").append(" | ")
                       .append("in_triage".equals(s.state) ? "IT" : "NA").append(" | ")
-                      .append(action(statementAssessments, s)).append(" | ")
-                      .append(rationaleCode(s)).append(" |\n");
+                      .append(rationaleWord(s)).append(" |\n");
                 }
                 sb.append("\n");
             }
@@ -576,35 +568,25 @@ public class VEXAdvisor {
         sb.append("VEX claims were generated by `VEXGenerator` from Contrast runtime library class-usage data and ")
           .append("per-environment CVE Shield/Protect status - see `vex --help` for the exact decision policy. This ")
           .append("advisor does not change any claim; it only assesses whether relying on each claim as generated is ")
-          .append("reasonable given the CVE's severity and exploitability. See the Legend above for the Action/VEX/Rationale ")
-          .append("codes used in the per-application tables.\n\n");
-        sb.append("- **Safe/Monitor** (sound): the claim's justification supports relying on it as-is - Safe is structural ")
-          .append("(the library is unused or an active control is mitigating it), Monitor is duration-based but currently well within reason\n");
-        sb.append("- **Review** (needs_review): the claim rests on absence-of-observed-execution for a severe/exploitable CVE, or ")
+          .append("reasonable given the CVE's severity and exploitability - it doesn't offer a distinct action per ")
+          .append("claim, since the real options (verify reachability, upgrade the library) are the same regardless of ")
+          .append("severity. See the Legend above for how the VEX/Rationale columns are derived, and the Key Findings ")
+          .append("above for which specific CVEs are CISA KEV-listed or high-EPSS.\n\n");
+        sb.append("- **sound**: the claim's justification (structural fact or active control, or a duration comfortably ")
+          .append("past the threshold on a low-stakes CVE) supports relying on it as-is\n");
+        sb.append("- **needs_review**: the claim rests on absence-of-observed-execution for a severe/exploitable CVE, or ")
           .append("is otherwise borderline - a human should confirm before treating it as resolved\n\n---\n\n");
         sb.append("*Report generated by Contrast VEX Advisor*\n*Powered by Contrast Security Runtime Observability*\n");
 
         return sb.toString();
     }
 
-    private boolean isFlagged(Map<String, JsonObject> statementAssessments, VexStatement s) {
-        JsonObject assessment = statementAssessments.get(s.cveId);
-        return assessment != null && "needs_review".equals(getString(assessment, "assessment", ""));
-    }
-
-    /** Safe = structural (UNU/SHD); Monitor = duration-based but assessed sound; Review = flagged needs_review. */
-    private String action(Map<String, JsonObject> statementAssessments, VexStatement s) {
-        if (isFlagged(statementAssessments, s)) return "Review";
-        String code = rationaleCode(s);
-        return ("UNU".equals(code) || "SHD".equals(code)) ? "Safe" : "Monitor";
-    }
-
-    /** UNU/SHD structural justifications are always sound; AGD/WCH are duration-based and may be flagged. */
-    private String rationaleCode(VexStatement s) {
-        if ("code_not_reachable".equals(s.justification)) return "UNU";
-        if ("protected_at_runtime".equals(s.justification)) return "SHD";
-        if ("in_triage".equals(s.state)) return "WCH";
-        return "AGD";
+    /** Unused/Shielded are structural; Aged/Watching are duration-based and carry the day count. */
+    private String rationaleWord(VexStatement s) {
+        if ("code_not_reachable".equals(s.justification)) return "Unused";
+        if ("protected_at_runtime".equals(s.justification)) return "Shielded";
+        if ("in_triage".equals(s.state)) return "Watching " + s.daysObserved + "d";
+        return "Aged " + s.daysObserved + "d";
     }
 
     /** Strips a purl down to "artifact@version" - drops the "pkg:maven/<group>/" prefix for a narrow column. */
