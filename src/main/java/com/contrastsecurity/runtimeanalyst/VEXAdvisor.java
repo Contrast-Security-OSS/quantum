@@ -512,10 +512,10 @@ public class VEXAdvisor {
         sb.append("**VEX** - `NA` = not_affected, `IT` = in_triage\n\n");
         sb.append("**Rationale** - why the claim was made, with the day count for the two duration-based reasons:\n\n");
         sb.append("| Rationale | Meaning |\n|-----------|---------|\n");
-        sb.append("| `Unused` | Library never loaded at runtime (0 classes) - structural, not time-based |\n");
-        sb.append("| `Shielded` | CVE Shield/Protect actively mitigating at runtime - an active control, not time-based |\n");
-        sb.append("| `Aged Nd` | not_affected on N days without observed execution alone, past the acceptance threshold |\n");
-        sb.append("| `Watching Nd` | in_triage - N days without observed execution so far, still short of the acceptance threshold |\n\n");
+        sb.append("| `Library Unused` | Library never loaded at runtime (0 classes) - structural, not time-based |\n");
+        sb.append("| `CVE Shielded` | CVE Shield/Protect actively mitigating at runtime - an active control, not time-based |\n");
+        sb.append("| `CVE Not Used Nd` | not_affected - library loaded, but zero observed executions of the vulnerable path in N days of runtime monitoring, past the acceptance threshold |\n");
+        sb.append("| `CVE Watching Nd` | in_triage - zero observed executions in N days so far, still short of the acceptance threshold |\n\n");
         sb.append("Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, so the claims worth ")
           .append("a second look surface at the top - see the Key Findings above for which specific CVEs those are.\n");
 
@@ -581,12 +581,12 @@ public class VEXAdvisor {
         return sb.toString();
     }
 
-    /** Unused/Shielded are structural; Aged/Watching are duration-based and carry the day count. */
+    /** Library Unused/CVE Shielded are structural; CVE Not Used/CVE Watching are duration-based and carry the day count. */
     private String rationaleWord(VexStatement s) {
-        if ("code_not_reachable".equals(s.justification)) return "Unused";
-        if ("protected_at_runtime".equals(s.justification)) return "Shielded";
-        if ("in_triage".equals(s.state)) return "Watching " + s.daysObserved + "d";
-        return "Aged " + s.daysObserved + "d";
+        if ("code_not_reachable".equals(s.justification)) return "Library Unused";
+        if ("protected_at_runtime".equals(s.justification)) return "CVE Shielded";
+        if ("in_triage".equals(s.state)) return "CVE Watching " + s.daysObserved + "d";
+        return "CVE Not Used " + s.daysObserved + "d";
     }
 
     /** Strips a purl down to "artifact@version" - drops the "pkg:maven/<group>/" prefix for a narrow column. */
