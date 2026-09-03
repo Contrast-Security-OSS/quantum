@@ -1,24 +1,19 @@
 # Runtime Analyst
 
-Runtime Analyst turns Contrast Security's runtime observability data into structured, standard reports, across three domains:
+Runtime Analyst turns Contrast Security's runtime observability data into structured, standard reports. RA doesn't scan source code or dependency manifests - it reads what Contrast's agents observed actually running in your applications, with full stack traces, usage counts, and architecture context. This runtime visibility is critical for post-quantum migration and AI governance planning - you need to know not just *what's* in use, but *how* it's being used and by *what*.
 
-- **Crypto** - every cryptographic algorithm observed running in your applications, with NIST post-quantum vulnerability classification
-- **AI** - every AI model and provider observed running, with cloud-vs-local classification for shadow-AI visibility
-- **Blueprint (alpha)** - a map of how your applications connect and behave: assets, deployment zones, connections, and crypto/AI behaviors
-
-For Crypto and AI, it produces both a [CycloneDX](https://cyclonedx.org/) Bill of Materials - **CBOM** and **AI-BOM** - and an AI-powered analysis report - **Quantum Advisor** and **AI Advisor** - that classifies findings, explains what each application actually does, and writes its analysis back into the BOM itself. Blueprint (alpha) produces only a draft CycloneDX 2.0 Architectural BOM + Bill of Behaviors; it doesn't have an analysis report yet.
-
-It doesn't scan source code or dependency manifests - it reads what Contrast's agents observed actually running in your applications, with full stack traces, usage counts, and architecture context.
+- **Cryptography** - every cryptographic algorithm observed running in your apps/APIs, with NIST post-quantum vulnerability classification.  Produces a CBOM and an AI-powered analysis report.
+- **AI** - every AI model and provider observed running, with cloud-vs-local classification for shadow-AI visibility. Produces a AIBOM and an AI-powered analysis report
+- **Blueprint (alpha)** - a map of how your apps/APIs connect and behave: assets, deployment zones, connections, and crypto/AI behaviors
+- **Threat Model** (coming soon) - TBD
+- **Vulnerability Exclusion** - an analysis of library CVE exposure in your apps/APIs, based Contrast's runtime library-usage and CVE Shield data. Produces a VEX document and an AI-powered analysis report.
 
 **Requirements:**
 
 - A Contrast account with runtime data already flowing in from real-world applications and APIs - Contrast's agents must actually be deployed and observing traffic. Runtime Analyst only reports on what Contrast has observed; it has nothing to show against an account with no instrumented applications or no production/QA traffic.
-- Java 17+ and Maven to build.
 - The `claude` CLI on your `PATH` and logged in, for `--analyze`/the advisor reports - no separate API key, no AWS/Bedrock credentials, no Python.
 
-One jar, one command per report type.
-
-## Why Contrast for This?
+## Why Contrast?
 
 Contrast provides runtime observability that goes far beyond static code scanning or self-reported inventories:
 
@@ -31,36 +26,11 @@ Contrast provides runtime observability that goes far beyond static code scannin
 - **Application dependencies** - Which apps and APIs depend on each crypto algorithm or AI model
 - **Real connections, not guesses** - Blueprint's assets, zones, and flows come from the same architecture graph, so the map it draws is what Contrast actually saw talking to what, not an inferred or self-reported topology
 
-This runtime visibility is critical for post-quantum migration and AI governance planning - you need to know not just *what's* in use, but *how* it's being used and by *what*.
 
-## `--help`
-
-```
-$ java -jar runtime-analyst.jar
-
-Runtime Analyst - Contrast Security Bill of Materials generator
-
-Usage:
-  java -jar runtime-analyst.jar auth [options]              Connect to Contrast and generate contrast.properties
-  java -jar runtime-analyst.jar cbom [options]              Generate a Cryptography Bill of Materials
-  java -jar runtime-analyst.jar aibom [options]             Generate an AI/LLM usage Bill of Materials
-  java -jar runtime-analyst.jar blueprint [options]         Generate a CycloneDX Blueprint (ABOM + Bill of Behaviors)
-  java -jar runtime-analyst.jar cbom-advisor <cbom.json>    Re-run the Quantum Advisor against an existing CBOM
-  java -jar runtime-analyst.jar aibom-advisor <aibom.json>  Re-run the AI Advisor against an existing AI-BOM
-
-`cbom --analyze` / `aibom --analyze` already run the matching advisor automatically after generation -
-the standalone cbom-advisor/aibom-advisor commands are for re-running the advisor without regenerating the BOM.
-
-Run with -h after a subcommand for its options, e.g.:
-  java -jar runtime-analyst.jar cbom -h
-  java -jar runtime-analyst.jar aibom -h
-```
-
-Every subcommand supports `-h`/`--help` for its own options - see [Examples](#examples) below for each one's full help text.
 
 ## Authentication
 
-Every command except `auth` itself reads a `contrast.properties` file for credentials. If `cbom`, `aibom`, or `blueprint` don't find one (or the one named with `-c`), they run `auth` for you automatically first, then proceed with the command you actually asked for - so you never have to run `auth` yourself as a separate step. You can also set up `contrast.properties` ahead of time, two ways:
+Every command except `auth` itself reads a `contrast.properties` file for credentials. If `cbom`, `aibom`, `blueprint`, or `vex` don't find one (or the one named with `-c`), they run `auth` for you automatically first, then proceed with the command you actually asked for - so you never have to run `auth` yourself as a separate step. You can also set up `contrast.properties` ahead of time, two ways:
 
 **Option 1 - `auth` (recommended):**
 
@@ -68,20 +38,9 @@ Every command except `auth` itself reads a `contrast.properties` file for creden
 java -jar runtime-analyst.jar auth --host https://your-instance.contrastsecurity.com
 ```
 
-This opens a real browser window and lets you log in exactly the way you normally would, including SSO/MFA - there's nothing to copy or paste. The window closes as soon as login completes; in the background, it reads your personal API key, service key, and organization ID directly off your account's **User Settings > Your Keys** page, verifies them with a real API call, and writes `contrast.properties` for you. Your session cookie is never read or stored - only the API key and service key that page shows you.
-
-**Option 2 - create it by hand:**
-
-```properties
-contrast.url=https://your-instance.contrastsecurity.com/api/ns-ui/v1
-contrast.org_id=your-org-id
-contrast.auth_header=base64-encoded-email:service-key
-contrast.api_key=your-api-key
-```
-
-Find these values yourself under **User Settings > Your Keys** in the Contrast UI. `contrast.auth_header` is the base64 encoding of `your-email:your-service-key` (not the service key alone).
-
 Every command accepts `-c <path>` to point at a config file somewhere other than the working directory.
+
+
 
 ## Usage
 
@@ -97,10 +56,12 @@ A single jar, dispatched by subcommand:
 | `cbom` | Generate a Cryptography Bill of Materials |
 | `aibom` | Generate an AI/LLM usage Bill of Materials |
 | `blueprint` (alpha) | Generate a draft CycloneDX 2.0 Architectural BOM + Bill of Behaviors |
+| `vex` | Generate a CycloneDX VEX for an application's library CVEs |
 | `cbom-advisor` | Re-run the Quantum Advisor against an existing CBOM file |
 | `aibom-advisor` | Re-run the AI Advisor against an existing AI-BOM file |
+| `vex-advisor` | Re-run the VEX Advisor against an existing VEX file |
 
-`cbom`, `aibom`, and `blueprint` all share the same filter flags: `--app <id|name>`, `--env <PRODUCTION|DEVELOPMENT|QA>`, `--list` (list available applications and exit), `-o <file>` (output path), and `-c <config.properties>`. `cbom`/`aibom` additionally support `--analyze`, which runs the matching advisor automatically after generation.
+`cbom`, `aibom`, `blueprint`, and `vex` all share `--app <id|name>`, `--env <PRODUCTION|DEVELOPMENT|QA>`, `--list` (list available applications and exit), `-o <file>` (output path), and `-c <config.properties>`. For `cbom`/`aibom`/`blueprint`, `--env` filters which observations are included. For `vex`, `--env` means something more specific: it scopes each claim to that one environment's CVE Shield/exposure status, instead of considering the application's dev/qa/prod combined (see the `vex` policy below) - `--env PRODUCTION` means "not seen/protected in production specifically," not "not seen somewhere across the app." `cbom`/`aibom`/`vex` additionally support `--analyze`, which runs the matching advisor automatically after generation. `vex` also has its own `--vex-accept-after-days <n>` (see below).
 
 ## Examples
 
@@ -109,23 +70,11 @@ A single jar, dispatched by subcommand:
 ```
 $ java -jar runtime-analyst.jar auth -h
 
-Auth - connect runtime-analyst to your Contrast account
-
-Opens a real browser window, lets you log in (including SSO/MFA) the way you normally
-would, then reads your personal API key/service key/org id off User Settings > Your Keys
-directly - no manual copy/paste into the terminal. The window closes as soon as login
-completes; everything after that runs in a background headless browser.
-
-Usage:
-  java -jar runtime-analyst.jar auth [--host <url>] [-o <contrast.properties>]
-```
-
-```bash
 # First-time setup against your instance
-java -jar runtime-analyst.jar auth --host https://eval.contrastsecurity.com
+$ java -jar runtime-analyst.jar auth --host https://eval.contrastsecurity.com
 
 # Write to a different config path
-java -jar runtime-analyst.jar auth --host https://eval.contrastsecurity.com -o prod.properties
+$ java -jar runtime-analyst.jar auth --host https://eval.contrastsecurity.com -o prod.properties
 ```
 
 ### `cbom`
@@ -133,98 +82,71 @@ java -jar runtime-analyst.jar auth --host https://eval.contrastsecurity.com -o p
 ```
 $ java -jar runtime-analyst.jar cbom -h
 
-CBOM Generator - Create CycloneDX CBOM from Contrast observations
-
-Usage:
-  java -jar runtime-analyst.jar cbom                    Generate CBOM for all apps
-  java -jar runtime-analyst.jar cbom --app <id|name>    Filter by app (ID or name)
-  java -jar runtime-analyst.jar cbom --env <tier>       Filter by environment (PRODUCTION, DEVELOPMENT, QA)
-  java -jar runtime-analyst.jar cbom --list             List available applications with IDs
-  java -jar runtime-analyst.jar cbom --analyze          Run Quantum Advisor AI analysis after CBOM generation
-  java -jar runtime-analyst.jar cbom -o <file.json>     Specify output filename
-  java -jar runtime-analyst.jar cbom -c <config.properties>  Use custom config file
-```
-
-```bash
-java -jar runtime-analyst.jar cbom                                    # all apps -> cbom.json
-java -jar runtime-analyst.jar cbom --list                             # list applications and their IDs
-java -jar runtime-analyst.jar cbom --app "MyApp"                      # filter by app name
-java -jar runtime-analyst.jar cbom --app 7136cb1b-f846-4c1d-bdd3-77b448cbd2fe   # ...or by ID
-java -jar runtime-analyst.jar cbom --env PRODUCTION                   # only prod observations
+java -jar runtime-analyst.jar cbom                      # all apps -> cbom.json
+java -jar runtime-analyst.jar cbom --list               # list applications and their IDs
+java -jar runtime-analyst.jar cbom --app "MyApp"        # filter by app name
+java -jar runtime-analyst.jar cbom --app 7136cb1b-f846-4c1d-bdd3-77b448cbd2fe
+java -jar runtime-analyst.jar cbom --env PRODUCTION     # only prod observations
 java -jar runtime-analyst.jar cbom --app "MyApp" --env PRODUCTION -o myapp-prod.json
 java -jar runtime-analyst.jar cbom -c prod.properties --list
-java -jar runtime-analyst.jar cbom --analyze                          # + Quantum Advisor risk report
+java -jar runtime-analyst.jar cbom --analyze            # + Quantum Advisor risk report
 ```
+
+
 
 ### `aibom`
 
 ```
 $ java -jar runtime-analyst.jar aibom -h
 
-AI-BOM Generator - Create CycloneDX AI-BOM from Contrast AI usage observations
-
-Usage:
-  java -jar runtime-analyst.jar aibom                   Generate AI-BOM for all apps
-  java -jar runtime-analyst.jar aibom --app <id|name>   Filter by app (ID or name)
-  java -jar runtime-analyst.jar aibom --env <tier>      Filter by environment (PRODUCTION, DEVELOPMENT, QA)
-  java -jar runtime-analyst.jar aibom --list            List available applications with IDs
-  java -jar runtime-analyst.jar aibom --analyze         Run AI Advisor analysis after AI-BOM generation
-  java -jar runtime-analyst.jar aibom -o <file.json>    Specify output filename
-  java -jar runtime-analyst.jar aibom -c <config.properties>  Use custom config file
-```
-
-```bash
 java -jar runtime-analyst.jar aibom
 java -jar runtime-analyst.jar aibom --list
 java -jar runtime-analyst.jar aibom --app "MyApp" --env PRODUCTION
-java -jar runtime-analyst.jar aibom --analyze                         # + AI Advisor governance report
+java -jar runtime-analyst.jar aibom --analyze         	# + AI Advisor governance report
 ```
+
+
 
 ### `blueprint` (alpha)
 
 ```
 $ java -jar runtime-analyst.jar blueprint -h
 
-Blueprint Generator - Create a CycloneDX Blueprint (ABOM + Bill of Behaviors) from Contrast data
-
-Usage:
-  java -jar runtime-analyst.jar blueprint                   Generate a Blueprint for all apps
-  java -jar runtime-analyst.jar blueprint --app <id|name>   Filter by app (ID or name)
-  java -jar runtime-analyst.jar blueprint --env <tier>      Filter by environment (PRODUCTION, DEVELOPMENT, QA)
-  java -jar runtime-analyst.jar blueprint --list            List available applications with IDs
-  java -jar runtime-analyst.jar blueprint -o <file.json>    Specify output filename
-  java -jar runtime-analyst.jar blueprint -c <config.properties>  Use custom config file
-
-Note: Blueprints are a CycloneDX draft (unreleased 2.0-dev branch, spec PR #652).
-This command populates assets/zones/flows/behaviors from real Contrast data only -
-it does not generate threats/controls/risks (TM-BOM), which would require fabricating
-findings Contrast's telemetry cannot back.
-```
-
-```bash
 java -jar runtime-analyst.jar blueprint
 java -jar runtime-analyst.jar blueprint --app "MyApp" --env PRODUCTION
 ```
 
-### `cbom-advisor` / `aibom-advisor`
 
-Re-run an advisor against a BOM you already have, without regenerating it:
+
+### `vex`
 
 ```
-$ java -jar runtime-analyst.jar cbom-advisor
-Usage: java -jar runtime-analyst.jar cbom-advisor <cbom.json> [-v] [-o report.md] [--json out.json] [--no-confirm] [--filter all|vulnerable|asymmetric]
+$ java -jar runtime-analyst.jar vex -h
 
-$ java -jar runtime-analyst.jar aibom-advisor
-Usage: java -jar runtime-analyst.jar aibom-advisor <aibom.json> [-v] [-o report.md] [--json out.json] [--no-confirm]
+java -jar runtime-analyst.jar vex --app "MyApp"                 # -> vex-MyApp.json, considers dev+qa+prod together
+java -jar runtime-analyst.jar vex --app "MyApp" --env PRODUCTION  # scope every claim to production only
+java -jar runtime-analyst.jar vex --list                        # list applications and their IDs
+java -jar runtime-analyst.jar vex --app "MyApp" --vex-accept-after-days 60 -o vex.json
+java -jar runtime-analyst.jar vex --app "MyApp" --analyze        # + VEX Advisor soundness review
 ```
 
-```bash
-java -jar runtime-analyst.jar cbom-advisor cbom.json -o report.md
-java -jar runtime-analyst.jar aibom-advisor aibom.json -o report.md
-java -jar runtime-analyst.jar cbom-advisor cbom.json -v -o report.md --filter vulnerable
-```
 
-Everything - BOM generation and AI analysis - runs in a single JVM process. The advisors shell out to the `claude` CLI already logged in to this shell; no separate API key or AWS/Bedrock credentials needed, and no Python required.
+
+By default a claim considers the application's dev/qa/prod environments together - "protected" means protected in at least one, "not seen" means not seen in any of them. `--env <tier>` narrows every claim to just that one environment instead, so `--env PRODUCTION` means "not seen/protected in production specifically," not "not seen somewhere in the app." An exclusion is generated when:
+
+1. **Library never loaded at runtime in this application** (`classes_used == 0` for that app)
+   → `not_affected` 
+2. **Library loaded, but CVE Shield is actively mitigating it for this application** 
+   → `not_affected` / `protected_at_runtime`.
+3. **Library loaded, and this application's CVE status is `EXPOSED`/`EXPLOITED`** 
+   → no VEX statement at all. This tool never suppresses a vulnerability it can't positively account for.
+4. **Library loaded, but the CVE has never been observed executing in this application** - a statement is still generated, but *what* it claims depends on whether CVE Shield has a virtual patch for that CVE at all. This is a per-CVE, product-level fact (`cveShieldExists` on the org-wide `/organizations/{org}/cves` endpoint) - not an app- or environment-scoped one, since coverage existing anywhere means it's available everywhere Shield/ADR is enabled:
+   - Shield covers this CVE and simply hasn't fired → `not_affected` once days observed clears the acceptance threshold, `in_triage` until then - elapsed time is meaningful evidence here, because something was watching.
+   - Shield has **no coverage at all** for that CVE → `in_triage`, permanently, regardless of days observed. Elapsed time can't turn "no detector was watching" into "nothing happened" - this can never graduate to `not_affected` on duration alone. Earlier versions of this tool tried three different wrong things here: silently dropping these CVEs entirely, marking them `not_affected` anyway once enough days had passed, and inferring "coverage" from a per-app/per-environment `NO_SHIELD` status instead of the org-wide fact - all three were bugs, not policy choices.
+
+Every statement carries `contrast:*` properties (`classesUsed`/`classCount`, `daysObserved`, `acceptAfterDays`, `envFilter`, and the per-environment `devStatus`/`qaStatus`/`prodStatus`) so a reviewer can see the underlying evidence, not just the resulting state.
+
+
 
 ## Output
 
@@ -270,12 +192,43 @@ A draft CycloneDX 2.0 document with a top-level `blueprints[]` array containing:
 
 Deliberately does **not** generate threats, controls, or risks (TM-BOM) - the draft spec models those as a separate, sibling construct, and none of it can be derived from Contrast telemetry without an actual STRIDE-style analysis.
 
+### VEX
+
+A standard CycloneDX 1.6 document with a top-level `vulnerabilities[]` array, one entry per (application, library, CVE) with:
+
+- `id` - the CVE identifier, `source` - NVD reference
+- `description` - the CVE description, as reported by Contrast
+- `ratings[]` - CVSS v3.1 score/severity/vector as reported by Contrast
+- `advisories[]` - any reference URLs Contrast has on file for the CVE (omitted when there are none)
+- `affects[].ref` - a best-effort `pkg:maven/...` purl for the affected library
+- `affects[].versions[]` - the deployed version (`affected`) and, when Contrast has upgrade guidance for the library, the recommended fixed version (`unaffected`)
+- `recommendation` - the remediation action: Contrast's own minimal-upgrade guidance for the library when available, falling back to "no newer release identified" when it isn't
+- `analysis.state`/`analysis.justification`/`analysis.detail` - the VEX claim itself and why it was made (see the policy in the [`vex` examples](#vex) above)
+- `analysis.response[]` - `update` when a fix version is known, `workaround_available` for `protected_at_runtime` claims (the active CVE Shield control **is** the workaround), omitted otherwise
+- `properties[]` - the underlying evidence (`contrast:classesUsed`/`classCount`, `contrast:daysObserved`, `contrast:acceptAfterDays`, `contrast:devStatus`/`qaStatus`/`prodStatus`, `contrast:latestVersion`) plus exploitability signals (`contrast:epssScore`/`epssPercentile`, `contrast:cisaKev` - CISA Known Exploited Vulnerabilities catalog membership) plus `contrast:shieldAvailable` - whether CVE Shield could catch this specific CVE at all in the environment(s) considered (`"true"`/`"false"`/absent if unknown)
+
+All of the above is deterministic, pulled directly from Contrast's own CVE/library data - nothing here is AI-generated, since a VEX claim is an attestation and needs to stay auditable back to its source evidence. The EPSS/CISA KEV/Shield-availability signals are new inputs to the **VEX Advisor**'s AI judgment (below), not to the claim itself.
+
+`contrast:shieldAvailable` is the org-wide `cveShieldExists` flag from `/organizations/{org}/cves`, verbatim - whether Contrast has a virtual patch definition for this CVE at all, a per-CVE product-level fact rather than something that could differ between environments. (An earlier version of this tool tried to infer it from the per-application `cves/issues` endpoint's `NO_SHIELD` status per environment instead - that status is real and does show up per-app/per-env, but coverage itself isn't scoped that way, so the org-wide fact is authoritative.) This isn't just informational - it changes which state a claim can reach (see policy rule 4 above): when Shield has no coverage, the claim stays `in_triage` forever, since elapsed time without a detector watching is not evidence of anything.
+
+The document also has a top-level `components[]` array with one Application component per app, carrying whether Assess (the module that produces every claim's runtime evidence) and ADR (the classic HTTP-rule-based RASP module, formerly branded "Protect" - a different, older product from CVE Shield) are enabled per environment: `contrast:assessEnabledDev`/`Qa`/`Prod` and `contrast:adrEnabledDev`/`Qa`/`Prod` (`"true"`/`"false"`/`""` - empty means no agent was ever seen reporting from that environment, which is a different fact from "disabled").
+
+```
+Contrast VEX
+└── SAML-PetClinic-Demo
+    ├── CVE-2018-14721 (jackson-databind 2.8.8) → not_affected / code_not_reachable
+    └── CVE-2022-22965 (spring-webmvc 4.3.9)    → not_affected (288 days, no observed execution)
+```
+
+Note: `PROTECTED_AT_RUNTIME` (CVE Shield actively mitigating) is implemented but not yet confirmed against a live example with that status - see the caveats in the `vex` command's own help/design notes before relying on it.
+
 ### Advisor reports
 
 - **Quantum Advisor** - findings grouped by risk level (CRITICAL/HIGH/MEDIUM/LOW/NOT_QUANTUM_ISSUE), with an "Application Context" section describing each app from its architecture graph data
 - **AI Advisor** - organized as an inventory of AI-enabled applications (one section per app, not per finding): an AI-generated description of what the app does, then each AI usage instance with model/provider/endpoint and a description of what that specific call is doing, inferred from the key methods around it in the stack trace
+- **VEX Advisor** - not a second opinion on whether a CVE exists (Contrast's runtime data already establishes that), but a soundness check on whether each `not_affected`/`in_triage` claim is safe to rely on given the CVE's severity/exploitability. Which claims need review is decided **deterministically**, not by an AI call - CRITICAL/HIGH severity, CISA KEV listing, EPSS ≥ 0.5, or Assess having no runtime data to back the claim are all plain facts already sitting on the VEX, so classifying 235 statements one-by-one over an AI round-trip added minutes of latency and cost without adding judgment, and made the same VEX produce a different flagged count from run to run on identical input (21, 61, 125 in one session) - a real liability for something meant to be relied on. The single AI call per app is used only for the narrative (a 2-3 sentence description, risk level, risk rationale, and recommendation, given the already-decided flagged list) - turning facts into prose, not deciding what the facts are. This cut the advisor's typical run from ~8 minutes and ~30,000 output tokens down to under 30 seconds and ~2,000. The report opens with a summary (coverage + computed key findings: flagged-claim count, distinct KEV/high-EPSS CVEs among them, CRITICAL/HIGH apps) before the per-application detail, and lists every claim in one compressed table per app (`CVE | Library | Score | VEX | Shield | Rationale`, e.g. `Yes` / `CVE Not Used 288d` or `No` / `CVE Not Used 288d` - decoded in a legend) instead of a full-sentence rationale repeated per claim. The **Shield** column is `contrast:shieldAvailable` - `No` means the claim rests entirely on absence-of-execution with no possible active backstop, which is materially weaker than the same claim where Shield exists and simply hasn't fired (and CVEs with `No` here never actually reach the VEX at all - see the `vex` command's policy above). Rows sort CISA KEV-listed first, then by EPSS, then by CVSS score, so the claims worth a second look surface at the top. Each app's section also shows a **Protection Status** line (Assess/ADR enablement per environment, from the VEX's own `components[]` - see above): a duration-based claim in an environment where Assess has no data isn't weak evidence, it's *no* evidence, and is flagged for review on that basis alone.
 
-Both advisors write their generated application descriptions back into the source BOM's `Component.description` field, so the BOM itself stays self-describing even without the report. The Quantum Advisor also writes `quantum:*` risk properties (risk level, recommendation, code source, etc.) back onto each crypto algorithm component - this happens automatically as part of every run, no separate step needed.
+Both the Quantum and AI Advisors write their generated application descriptions back into the source BOM's `Component.description` field, so the BOM itself stays self-describing even without the report. The Quantum Advisor also writes `quantum:*` risk properties (risk level, recommendation, code source, etc.) back onto each crypto algorithm component. The VEX Advisor writes `contrast:vexAdvisorAssessment` (`sound`/`needs_review`) and `contrast:vexAdvisorRationale` back onto each vulnerability's `properties[]`. All of this happens automatically as part of every `--analyze` run, no separate step needed.
 
 ## BOM Viewer
 
@@ -291,6 +244,19 @@ open tools/bom-viewer.html
 Two sample AI-BOM files are included to try it with:
 - `sample-aibom.json` - real output from `AIBOMGenerator` against a live org (one model, both apps local/self-hosted)
 - `test-aibom.json` - a hand-crafted fixture covering cases the sample doesn't: multiple providers (OpenAI/Anthropic/Ollama), both cloud and local host categories, and an app with multiple call sites for the same model
+
+## Sample Reports
+
+`samples/` has one real, current output from each generator and its matching advisor report - useful as a reference for what each format actually looks like without running the tool yourself:
+
+| CycloneDX document | Advisor report | Scoped to |
+|---|---|---|
+| `sample-cbom.json` | `sample-cbom-advisor.md` | `Cargo-Crypto-contrast-cargo-cats-frontgateservice` |
+| `sample-aibom.json` | `sample-aibom-advisor.md` | `Robert-cargocats-aiservice` |
+| `sample-blueprint.json` | *(no advisor - see the Blueprint section above)* | `Cargo-Crypto-contrast-cargo-cats-frontgateservice` |
+| `sample-vex.json` | `sample-vex-advisor.md` | `SAML-PetClinic-Demo` |
+
+Each is scoped with `--app` to one application rather than the whole org (smaller, more readable files, and a full-org VEX run makes one CVE-issues API call per application). They're deliberately *not* all the same app - in this org, crypto usage, AI usage, and vulnerable libraries happen to show up in three disjoint sets of applications, so no single app would produce non-empty output for all four generators. Each sample uses whichever app actually has real data for that report type.
 
 ## Configuration Reference
 

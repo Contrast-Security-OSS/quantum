@@ -21,6 +21,7 @@ CLAUDE.md
 cbom*.json
 aibom*.json
 blueprint*.json
+vex*.json
 
 # Shell scripts (may contain credentials)
 *.sh

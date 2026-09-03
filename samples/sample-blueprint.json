@@ -1,0 +1,97 @@
+{
+  "$schema": "https://cyclonedx.org/schema/2.0/cyclonedx-2.0.schema.json",
+  "specFormat": "CycloneDX",
+  "specVersion": "2.0",
+  "serialNumber": "urn:uuid:c0876091-e05b-4bfb-bea5-e76d5c88112b",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-02T21:56:06.331Z"
+  },
+  "blueprints": [
+    {
+      "bom-ref": "blueprint-1",
+      "name": "Blueprint - Cargo-Crypto-contrast-cargo-cats-frontgateservice",
+      "description": "Generated from Contrast runtime observability data: application architecture/connections (contrast-graph) and crypto/AI usage observations, mapped onto the CycloneDX behavior taxonomy. Does not include threats, controls, or risks - see TM-BOM.",
+      "modelTypes": [
+        "architecture",
+        "behavioral"
+      ],
+      "assets": [
+        {
+          "bom-ref": "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice",
+          "name": "Cargo-Crypto-contrast-cargo-cats-frontgateservice",
+          "type": "system",
+          "zone": "zone-env-development"
+        },
+        {
+          "bom-ref": "asset-external-robert-cargocats-frontgateservice",
+          "name": "Robert-cargocats-frontgateservice",
+          "type": "system",
+          "description": "Known only as an architecture-graph connection target; no application-level data available."
+        },
+        {
+          "bom-ref": "asset-external-robert-cargocats-dataservice",
+          "name": "Robert-cargocats-dataservice",
+          "type": "system",
+          "description": "Known only as an architecture-graph connection target; no application-level data available."
+        },
+        {
+          "bom-ref": "asset-external-robert-cargocats-reportservice",
+          "name": "Robert-cargocats-reportservice",
+          "type": "system",
+          "description": "Known only as an architecture-graph connection target; no application-level data available."
+        },
+        {
+          "bom-ref": "asset-external-robert-cargocats-aiservice",
+          "name": "Robert-cargocats-aiservice",
+          "type": "system",
+          "description": "Known only as an architecture-graph connection target; no application-level data available."
+        }
+      ],
+      "zones": [
+        {
+          "bom-ref": "zone-env-development",
+          "name": "DEVELOPMENT",
+          "type": "deployment"
+        }
+      ],
+      "flows": [],
+      "behaviors": {
+        "instances": [
+          {
+            "bom-ref": "behavior-1",
+            "behavior": "security:cryptography:encryptsData",
+            "actors": [
+              "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice"
+            ],
+            "trigger": "unknown"
+          },
+          {
+            "bom-ref": "behavior-2",
+            "behavior": "security:cryptography:hashesData",
+            "actors": [
+              "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice"
+            ],
+            "trigger": "unknown"
+          },
+          {
+            "bom-ref": "behavior-3",
+            "behavior": "security:cryptography:hashesData",
+            "actors": [
+              "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice"
+            ],
+            "trigger": "unknown"
+          },
+          {
+            "bom-ref": "behavior-4",
+            "behavior": "security:cryptography:hashesData",
+            "actors": [
+              "asset-app-cargo-crypto-contrast-cargo-cats-frontgateservice"
+            ],
+            "trigger": "unknown"
+          }
+        ]
+      }
+    }
+  ]
+}
