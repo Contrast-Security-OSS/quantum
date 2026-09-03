@@ -18,75 +18,77 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
- * AI-powered review of a CycloneDX VEX document produced by VEXGenerator - not a second
- * opinion on whether the CVE exists (Contrast's runtime data already establishes that),
- * but a sanity check on whether each "not_affected"/"in_triage" CLAIM is well-supported
- * given the CVE's severity/exploitability, or whether a human should look at it before
- * relying on it.
+ * Review of a CycloneDX VEX document produced by VEXGenerator - not a second opinion on whether the CVE
+ * exists (Contrast's runtime data already establishes that), but a sanity check on whether each
+ * "not_affected"/"in_triage" CLAIM is well-supported given the CVE's severity/exploitability, or whether a
+ * human should look at it before relying on it.
+ *
+ * WHICH claims need review is decided deterministically (see needsReview()), not by an AI call - every input
+ * (severity, CISA KEV, EPSS, Assess/ADR enablement, CVE Shield coverage) is already a plain fact sitting on the
+ * VEX itself, so classifying it per-statement over an AI round-trip added cost and multi-minute latency
+ * without adding judgment, and made the same VEX produce a different flagged count from run to run on
+ * identical input - a liability for something meant to be relied on. The one AI call per app is used only for
+ * the narrative (application_description/risk_level/risk_rationale/recommendation), synthesizing what the
+ * already-decided facts mean in prose.
  *
  * Usage:
  *   java -jar runtime-analyst.jar vex-advisor vex.json [-v] [-o report.md] [--json out.json] [--no-confirm]
  */
 public class VEXAdvisor {
 
+    /**
+     * Which VEX statements are worth a human's attention before being relied on. Deterministic, not an AI call -
+     * every input here (state/justification, severity, CISA KEV, EPSS, Assess/ADR enablement) is already a plain
+     * fact sitting on the statement or its app, so classifying it 235 times over an AI round-trip added latency
+     * and cost without adding judgment: it also made the same VEX produce a different flagged count from run to
+     * run (21, then 61, then 125, all on identical input), which is a liability for something meant to be relied
+     * on. The AI's role is now the app-level narrative only - synthesizing what these facts mean in prose, not
+     * deciding what the facts are.
+     */
+    private boolean needsReview(VexStatement s, AppEntry entry) {
+        if (s.justification != null) return false; // code_not_reachable / protected_at_runtime - structural, always sound
+        if ("in_triage".equals(s.state) && s.daysObserved < s.acceptAfterDays) return false; // genuinely still early
+        boolean assessBlind = isAssessBlind(s, entry);
+        boolean highSeverity = s.severity != null
+            && ("critical".equalsIgnoreCase(s.severity) || "high".equalsIgnoreCase(s.severity));
+        boolean kev = Boolean.TRUE.equals(s.cisaKev);
+        boolean highEpss = s.epssScore != null && s.epssScore >= 0.5;
+        return assessBlind || highSeverity || kev || highEpss;
+    }
+
+    /**
+     * Whether Assess had no runtime data anywhere in the environment(s) this claim's evidence spans - a claim
+     * scoped to ALL (dev/qa/prod combined, the default) is only "blind" if every one of the three lacks data;
+     * one --env-scoped claim is blind only if that specific environment lacks data.
+     */
+    private boolean isAssessBlind(VexStatement s, AppEntry entry) {
+        String scope = s.envFilter != null ? s.envFilter : "ALL";
+        if ("DEVELOPMENT".equals(scope)) return !"true".equals(entry.assessEnabledDev);
+        if ("QA".equals(scope)) return !"true".equals(entry.assessEnabledQa);
+        if ("PRODUCTION".equals(scope)) return !"true".equals(entry.assessEnabledProd);
+        return !"true".equals(entry.assessEnabledDev)
+            && !"true".equals(entry.assessEnabledQa)
+            && !"true".equals(entry.assessEnabledProd);
+    }
+
     private static final String ANALYSIS_PROMPT =
-        "You are an application security analyst reviewing a set of VEX (Vulnerability Exploitability eXchange) " +
-        "claims that a tool generated automatically from Contrast Security runtime observability data, for ONE " +
-        "application.\n\n" +
-        "Each claim already has a CycloneDX analysis.state (not_affected or in_triage) and a justification/detail " +
-        "explaining WHY the tool made that claim (e.g. the library's classes were never loaded at runtime, or the " +
-        "vulnerable code path hasn't executed in N days of observation). Your job is NOT to re-derive the CVE - it " +
-        "is to judge whether relying on each claim, as stated, is reasonable given the CVE's severity/exploitability, " +
-        "or whether it's the kind of claim a human reviewer should double-check before trusting it.\n\n" +
-        "You're also given whether Assess (the module that produces the runtime evidence every claim rests on) and " +
-        "ADR (the classic HTTP-rule-based RASP module, formerly branded \"Protect\" - distinct from CVE Shield) " +
-        "are enabled per environment for this application, and whether CVE Shield itself has any coverage for " +
-        "each specific CVE at all (a per-CVE, product-level fact - not something that varies by environment). " +
-        "Weigh all of this directly: a duration-based claim scoped " +
-        "to an environment where Assess has no data or is disabled isn't weak evidence, it's NO evidence - flag " +
-        "it regardless of severity. A claim where CVE Shield has no coverage for that CVE at all is weaker still " +
-        "than one where Shield exists and simply hasn't fired - \"we haven't seen it\" means less when nothing " +
-        "was capable of catching it in the first place. A claim in an environment where ADR is disabled has one " +
-        "less active mitigating control as a backstop if the absence-of-execution reasoning turns out wrong, " +
-        "which raises the stakes of getting it wrong.\n\n" +
-        "## What makes a claim worth flagging for review\n\n" +
-        "- Any duration-based claim scoped to an environment where Assess has no data or is disabled - there is no " +
-        "runtime evidence behind it at all, regardless of the CVE's severity.\n" +
-        "- A duration-based claim on a CRITICAL/HIGH severity CVE where CVE Shield has no coverage at all for that " +
-        "CVE - there's no possibility of an active backstop catching an exploit attempt, so the claim rests " +
-        "entirely on absence-of-execution.\n" +
-        "- A `not_affected` claim justified only by \"N days without observed execution\" (not by code_not_reachable " +
-        "or protected_at_runtime) on a CRITICAL/HIGH severity CVE, especially one with a high EPSS score or KEV " +
-        "(known-exploited) status - absence of evidence is weaker evidence the more severe/exploitable the CVE is.\n" +
-        "- An `in_triage` claim on a CRITICAL/HIGH severity CVE with very few days observed so far - not wrong, but " +
-        "worth surfacing as still-open risk rather than letting it sit silently.\n" +
-        "- Anything where the day count looks barely over the acceptance threshold rather than comfortably past it.\n\n" +
-        "## What's normally fine as-is\n\n" +
-        "- `code_not_reachable` (zero classes of the library ever loaded) - this is a structural fact, not a " +
-        "probabilistic one, regardless of severity.\n" +
-        "- `protected_at_runtime` (CVE Shield actively mitigating) - an active control, not an absence of " +
-        "evidence.\n" +
-        "- Low/medium severity CVEs accepted on duration alone - lower stakes if the absence-of-evidence reasoning " +
-        "turns out wrong.\n\n" +
-        "## Your Task - Output\n\n" +
+        "You are an application security analyst writing a short narrative summary of a VEX (Vulnerability " +
+        "Exploitability eXchange) claim set that a tool generated automatically from Contrast Security runtime " +
+        "observability data, for ONE application. Which specific claims need review has ALREADY been decided " +
+        "deterministically (rule: duration-based claims on a CRITICAL/HIGH severity, CISA KEV-listed, or " +
+        "high-EPSS CVE, or where Assess itself had no runtime data to back the claim) - you're given that list, " +
+        "not asked to re-derive it. Your job is to turn the given facts into a clear, specific narrative: what's " +
+        "in this VEX, what's actually worth a second look and why, and what to do about it.\n\n" +
         "Return JSON:\n" +
         "```json\n" +
         "{\n" +
-        "  \"application_description\": \"2-3 sentence overview of this application's VEX posture - how many claims, \"\n" +
-        "    + \"how sound they generally look\",\n" +
+        "  \"application_description\": \"2-3 sentence overview of this application's VEX posture - how many \"\n" +
+        "    + \"claims, how sound they generally look\",\n" +
         "  \"risk_level\": \"CRITICAL|HIGH|MEDIUM|LOW|SOUND\",\n" +
-        "  \"risk_rationale\": \"Why this level, referencing the specific claims that drove it\",\n" +
-        "  \"recommendation\": \"Specific next action - e.g. which CVEs need a human look before relying on this VEX\",\n" +
-        "  \"statements\": [\n" +
-        "    {\n" +
-        "      \"cve_id\": \"CVE ID exactly as given\",\n" +
-        "      \"assessment\": \"sound|needs_review\",\n" +
-        "      \"rationale\": \"1-2 sentences on why this specific claim is or isn't safe to rely on as-is\"\n" +
-        "    }\n" +
-        "  ]\n" +
+        "  \"risk_rationale\": \"Why this level, naming the specific flagged CVEs/libraries that drove it\",\n" +
+        "  \"recommendation\": \"Specific next action - which CVEs need a human look first, and why those\"\n" +
         "}\n" +
-        "```\n\n" +
-        "Include exactly one entry in \"statements\" for each claim given below, keyed by its CVE ID.\n";
+        "```\n";
 
     static class VexStatement {
         String cveId;
@@ -101,6 +103,7 @@ public class VEXAdvisor {
         Double epssPercentile;
         Boolean cisaKev;
         Boolean shieldAvailable;
+        String envFilter; // "ALL", "DEVELOPMENT", "QA", or "PRODUCTION" - which env(s) this claim's evidence spans
         long classesUsed;
         long classCount;
         long daysObserved;
@@ -166,7 +169,7 @@ public class VEXAdvisor {
         }
 
         ClaudeClient client = new ClaudeClient();
-        double estimatedCost = client.estimateCost(entries.size(), 2000, 800);
+        double estimatedCost = client.estimateCost(entries.size(), 1000, 2500);
         if (!ClaudeClient.confirmCost(estimatedCost, entries.size(), noConfirm)) {
             System.out.println("Cancelled.");
             return;
@@ -184,14 +187,13 @@ public class VEXAdvisor {
                 result.addProperty("application", entry.name);
                 result.addProperty("risk_level", "ERROR");
                 result.addProperty("application_description", String.valueOf(e.getMessage()));
-                result.add("statements", new JsonArray());
             }
             results.add(result);
             String risk = getString(result, "risk_level", "UNKNOWN");
             System.out.println("  [" + risk + "] " + entry.name + " (" + entry.statements.size() + " statement(s))");
         }
 
-        int written = writeAssessmentsToVex(vexPath, results);
+        int written = writeAssessmentsToVex(vexPath, entries);
         if (written > 0) {
             System.out.println("  Wrote " + written + " assessment(s) back into " + vexPath);
         }
@@ -263,6 +265,7 @@ public class VEXAdvisor {
             s.cisaKev = cisaProp != null ? Boolean.parseBoolean(cisaProp) : null;
             String shieldProp = props.get("contrast:shieldAvailable");
             s.shieldAvailable = shieldProp != null && !shieldProp.isEmpty() ? Boolean.parseBoolean(shieldProp) : null;
+            s.envFilter = props.getOrDefault("contrast:envFilter", "ALL");
 
             byApp.computeIfAbsent(appName, k -> {
                 AppEntry e = new AppEntry();
@@ -342,30 +345,37 @@ public class VEXAdvisor {
           .append(formatEnvFlags(entry.assessEnabledDev, entry.assessEnabledQa, entry.assessEnabledProd)).append("\n");
         sb.append("ADR enabled (classic RASP module, formerly \"Protect\" - not CVE Shield): ")
           .append(formatEnvFlags(entry.adrEnabledDev, entry.adrEnabledQa, entry.adrEnabledProd)).append("\n\n");
-        sb.append("VEX Claims:");
 
+        List<VexStatement> flagged = new ArrayList<>();
+        int sound = 0;
         for (VexStatement s : entry.statements) {
-            sb.append("\n\n--- ").append(s.cveId).append(" ---\n");
-            sb.append("Library: ").append(s.purl != null ? s.purl : "unknown").append("\n");
-            sb.append("Severity: ").append(s.severity != null ? s.severity : "unknown")
-              .append(s.score != null ? " (score " + s.score + ")" : "").append("\n");
-            if (s.epssScore != null) {
-                sb.append("EPSS: ").append(s.epssScore)
-                  .append(s.epssPercentile != null ? " (percentile " + s.epssPercentile + ")" : "").append("\n");
+            if (needsReview(s, entry)) flagged.add(s);
+            else sound++;
+        }
+
+        sb.append("Total claims: ").append(entry.statements.size())
+          .append(" (sound: ").append(sound).append(", flagged for review: ").append(flagged.size()).append(")\n\n");
+
+        if (flagged.isEmpty()) {
+            sb.append("No claims were flagged - every claim is either structural (library unused / CVE Shield ")
+              .append("actively mitigating) or duration-based on a low/medium-severity, non-KEV, low-EPSS CVE ")
+              .append("with real Assess data backing it.\n");
+        } else {
+            sb.append("Claims flagged for review (already decided deterministically - explain what's actually ")
+              .append("going on with these in your narrative, don't just restate the reason tag):\n");
+            for (VexStatement s : flagged) {
+                sb.append("\n- ").append(s.cveId).append(" on ").append(s.purl != null ? s.purl : "unknown library")
+                  .append(" (").append(s.severity != null ? s.severity : "unknown severity")
+                  .append(s.score != null ? ", score " + s.score : "").append(")");
+                List<String> tags = new ArrayList<>();
+                if (isAssessBlind(s, entry)) tags.add("Assess has no data here");
+                if (Boolean.TRUE.equals(s.cisaKev)) tags.add("CISA KEV");
+                if (s.epssScore != null && s.epssScore >= 0.5) tags.add("EPSS " + s.epssScore);
+                if (!tags.isEmpty()) sb.append(" [").append(String.join(", ", tags)).append("]");
+                sb.append(" - ").append(s.state).append(", ").append(s.daysObserved).append(" days observed");
+                if (s.recommendation != null) sb.append(". Recommendation on record: ").append(s.recommendation);
             }
-            if (s.cisaKev != null) {
-                sb.append("CISA Known Exploited Vulnerabilities (KEV) catalog: ").append(s.cisaKev ? "YES" : "no").append("\n");
-            }
-            if (s.shieldAvailable != null) {
-                sb.append("CVE Shield has coverage for this CVE at all (org-wide fact): ")
-                  .append(s.shieldAvailable ? "YES" : "NO - no virtual patch coverage at all").append("\n");
-            }
-            sb.append("Claimed state: ").append(s.state).append("\n");
-            if (s.justification != null) sb.append("Justification: ").append(s.justification).append("\n");
-            sb.append("Detail: ").append(s.detail != null ? s.detail : "(none)").append("\n");
-            if (s.recommendation != null) sb.append("Recommendation on record: ").append(s.recommendation).append("\n");
-            sb.append("Classes used: ").append(s.classesUsed).append(" of ").append(s.classCount).append("\n");
-            sb.append("Days observed: ").append(s.daysObserved).append(" (acceptance threshold: ").append(s.acceptAfterDays).append(")\n");
+            sb.append("\n");
         }
 
         return sb.toString();
@@ -394,23 +404,25 @@ public class VEXAdvisor {
         fallback.addProperty("risk_level", "UNKNOWN");
         fallback.addProperty("application_description", "Failed to parse AI response");
         fallback.addProperty("recommendation", response.length() > 500 ? response.substring(0, 500) : response);
-        fallback.add("statements", new JsonArray());
         return fallback;
     }
 
-    private int writeAssessmentsToVex(String vexPath, List<JsonObject> results) throws IOException {
-        Map<String, Map<String, JsonObject>> assessmentsByAppAndCve = new LinkedHashMap<>();
-        for (JsonObject r : results) {
-            String app = getString(r, "application", null);
-            if (app == null || !r.has("statements")) continue;
-            Map<String, JsonObject> byCve = new LinkedHashMap<>();
-            for (JsonElement el : r.getAsJsonArray("statements")) {
-                JsonObject s = el.getAsJsonObject();
-                String cveId = getString(s, "cve_id", null);
-                if (cveId != null) byCve.put(cveId, s);
-            }
-            assessmentsByAppAndCve.put(app, byCve);
+    /** Short, deterministic explanation of why a statement was (or wasn't) flagged - see needsReview(). */
+    private String reviewRationale(VexStatement s, AppEntry entry, boolean flagged) {
+        if (!flagged) return "sound";
+        List<String> reasons = new ArrayList<>();
+        if (isAssessBlind(s, entry)) reasons.add("Assess has no runtime data in the environment(s) this claim covers");
+        if (s.severity != null && ("critical".equalsIgnoreCase(s.severity) || "high".equalsIgnoreCase(s.severity))) {
+            reasons.add(s.severity.toUpperCase() + " severity");
         }
+        if (Boolean.TRUE.equals(s.cisaKev)) reasons.add("CISA KEV-listed");
+        if (s.epssScore != null && s.epssScore >= 0.5) reasons.add("EPSS " + s.epssScore);
+        return "Flagged: " + String.join(", ", reasons) + " - duration-based claim, not a structural guarantee.";
+    }
+
+    private int writeAssessmentsToVex(String vexPath, List<AppEntry> entries) throws IOException {
+        Map<String, AppEntry> entriesByName = new LinkedHashMap<>();
+        for (AppEntry e : entries) entriesByName.put(e.name, e);
 
         JsonObject vex;
         try (FileReader reader = new FileReader(vexPath)) {
@@ -424,11 +436,12 @@ public class VEXAdvisor {
             Map<String, String> props = properties(v);
             String appName = props.getOrDefault("contrast:appName", "Unknown Application");
             String cveId = getString(v, "id", null);
+            AppEntry entry = entriesByName.get(appName);
+            if (entry == null || cveId == null) continue;
+            VexStatement s = entry.statements.stream().filter(st -> cveId.equals(st.cveId)).findFirst().orElse(null);
+            if (s == null) continue;
 
-            Map<String, JsonObject> byCve = assessmentsByAppAndCve.get(appName);
-            if (byCve == null || cveId == null || !byCve.containsKey(cveId)) continue;
-
-            JsonObject assessment = byCve.get(cveId);
+            boolean flagged = needsReview(s, entry);
             JsonArray oldProperties = v.has("properties") ? v.getAsJsonArray("properties") : new JsonArray();
             JsonArray properties = new JsonArray();
             for (JsonElement propEl : oldProperties) {
@@ -437,8 +450,8 @@ public class VEXAdvisor {
                     properties.add(propEl);
                 }
             }
-            properties.add(propertyJson("contrast:vexAdvisorAssessment", getString(assessment, "assessment", "unknown")));
-            properties.add(propertyJson("contrast:vexAdvisorRationale", getString(assessment, "rationale", "")));
+            properties.add(propertyJson("contrast:vexAdvisorAssessment", flagged ? "needs_review" : "sound"));
+            properties.add(propertyJson("contrast:vexAdvisorRationale", reviewRationale(s, entry, flagged)));
             v.add("properties", properties);
             written++;
         }
@@ -467,20 +480,6 @@ public class VEXAdvisor {
         Map<String, AppEntry> entriesByName = new LinkedHashMap<>();
         for (AppEntry e : entries) entriesByName.put(e.name, e);
 
-        // One assessment lookup per (app, cve), built once - avoids re-deriving it per section below.
-        Map<String, Map<String, JsonObject>> assessmentsByApp = new LinkedHashMap<>();
-        for (JsonObject r : appResults) {
-            String app = getString(r, "application", null);
-            if (app == null || !r.has("statements")) continue;
-            Map<String, JsonObject> byCve = new LinkedHashMap<>();
-            for (JsonElement el : r.getAsJsonArray("statements")) {
-                JsonObject s = el.getAsJsonObject();
-                String cveId = getString(s, "cve_id", null);
-                if (cveId != null) byCve.put(cveId, s);
-            }
-            assessmentsByApp.put(app, byCve);
-        }
-
         Map<String, Integer> riskCounts = new LinkedHashMap<>();
         Map<String, String> riskByApp = new LinkedHashMap<>();
         for (JsonObject r : appResults) {
@@ -498,11 +497,8 @@ public class VEXAdvisor {
         List<VexStatement> kevFlagged = new ArrayList<>();
         List<VexStatement> highEpssFlagged = new ArrayList<>();
         for (AppEntry entry : entries) {
-            Map<String, JsonObject> byCve = assessmentsByApp.getOrDefault(entry.name, Map.of());
             for (VexStatement s : entry.statements) {
-                JsonObject assessment = byCve.get(s.cveId);
-                boolean flagged = assessment != null && "needs_review".equals(getString(assessment, "assessment", ""));
-                if (flagged) {
+                if (needsReview(s, entry)) {
                     needsReviewCount++;
                     if (Boolean.TRUE.equals(s.cisaKev)) kevFlagged.add(s);
                     else if (s.epssScore != null && s.epssScore >= 0.5) highEpssFlagged.add(s);
@@ -571,13 +567,15 @@ public class VEXAdvisor {
           .append("enabled): `Yes` (Shield covers it, even if it hasn't fired), `No` (no Shield coverage for this ")
           .append("CVE at all - the claim rests entirely on absence-of-execution, with no possible active ")
           .append("backstop), `-` (unknown).\n\n");
-        sb.append("**Rationale** - why the claim was made, with the day count for the three duration-based reasons:\n\n");
+        sb.append("**Rationale** - why the claim was made, with the day count for the two duration-based reasons:\n\n");
         sb.append("| Rationale | Meaning |\n|-----------|---------|\n");
         sb.append("| `Library Unused` | Library never loaded at runtime (0 classes) - structural, not time-based |\n");
         sb.append("| `CVE Shielded` | CVE Shield actively mitigating at runtime - an active control, not time-based |\n");
         sb.append("| `CVE Not Used Nd` | not_affected - library loaded, but zero observed executions of the vulnerable path in N days of runtime monitoring, past the acceptance threshold |\n");
-        sb.append("| `CVE Watching Nd` | in_triage - zero observed executions in N days so far, still short of the acceptance threshold - may still graduate to `CVE Not Used` |\n");
-        sb.append("| `No Shield Coverage Nd` | in_triage, permanently - CVE Shield has no coverage for this CVE here (Shield column is `No`), so elapsed time is never evidence of anything and this can never graduate, no matter how large Nd gets |\n\n");
+        sb.append("| `CVE Watching Nd` | in_triage - zero observed executions in N days so far, still short of the acceptance threshold - may still graduate to `CVE Not Used` |\n\n");
+        sb.append("CVEs with no CVE Shield coverage at all never appear in this table - VEXGenerator excludes ")
+          .append("them entirely rather than claiming `not_affected` or `in_triage` without a detector ever having ")
+          .append("watched (see its console output for the excluded count).\n\n");
         sb.append("Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, so the claims worth ")
           .append("a second look surface at the top - see the Key Findings above for which specific CVEs those are.\n\n");
         sb.append("**Protection Status** (shown per app below) - Assess is the module that produces the runtime ")
@@ -659,17 +657,13 @@ public class VEXAdvisor {
 
     /**
      * Library Unused/CVE Shielded are structural. CVE Not Used/CVE Watching are duration-based and genuinely
-     * still accumulating toward (or past) the acceptance threshold. No Shield Coverage is also in_triage, but
-     * for a different reason - Shield has zero coverage for this CVE, so it stays in_triage forever regardless
-     * of daysObserved; using "CVE Watching Nd" for that case would make a 288-day-old in_triage claim look like
-     * a bug rather than the intended "can never graduate" state.
+     * still accumulating toward (or past) the acceptance threshold. CVEs with no CVE Shield coverage at all
+     * never reach this report - VEXGenerator excludes them entirely (see its decision-rule 3), since neither
+     * not_affected nor in_triage is a claim it can support without a detector ever having watched.
      */
     private String rationaleWord(VexStatement s) {
         if ("code_not_reachable".equals(s.justification)) return "Library Unused";
         if ("protected_at_runtime".equals(s.justification)) return "CVE Shielded";
-        if ("in_triage".equals(s.state) && Boolean.FALSE.equals(s.shieldAvailable)) {
-            return "No Shield Coverage " + s.daysObserved + "d";
-        }
         if ("in_triage".equals(s.state)) return "CVE Watching " + s.daysObserved + "d";
         return "CVE Not Used " + s.daysObserved + "d";
     }

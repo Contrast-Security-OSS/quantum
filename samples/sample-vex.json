@@ -3,7 +3,7 @@
   "specVersion": "1.6",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-03T03:38:50Z",
+    "timestamp": "2026-09-03T04:21:00Z",
     "component": {
       "type": "application",
       "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2",
@@ -176,11 +176,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.1), Shield coverage exists, 288 days well past threshold."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -290,11 +290,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.06), Shield coverage backstop present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -408,7 +408,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity with elevated EPSS (0.5) accepted on duration alone, worth a second look."
+          "value": "Flagged: CRITICAL severity, EPSS 0.5 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -522,7 +522,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity with EPSS 0.27 relying solely on absence-of-execution."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -632,11 +632,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -746,11 +746,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.09), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -860,11 +860,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.13), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -974,11 +974,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.08), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -1088,11 +1088,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.1), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -1202,11 +1202,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "EPSS 0.18, moderate, Shield backstop present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -1316,11 +1316,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.11), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -1430,11 +1430,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "EPSS 0.18, Shield backstop present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -1544,11 +1544,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.06), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -1658,11 +1658,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.06), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -1772,11 +1772,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.11), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -1886,11 +1886,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -2000,11 +2000,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.11), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -2114,11 +2114,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.11), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -2228,11 +2228,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -2346,7 +2346,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity with notably high EPSS (0.38) resolved on duration alone."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -2460,7 +2460,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, EPSS 0.2, worth confirming before relying on absence-of-execution."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -2570,11 +2570,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -2684,11 +2684,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.08), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -2798,11 +2798,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.08), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -2912,11 +2912,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.08), high severity but Shield backstop present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -3026,11 +3026,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.13), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -3140,11 +3140,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.09), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -3254,11 +3254,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.08), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -3368,11 +3368,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.1), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -3482,11 +3482,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -3596,11 +3596,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -3710,11 +3710,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -3824,11 +3824,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -3942,7 +3942,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.21 resolved purely on duration."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -4052,11 +4052,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.03), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -4166,11 +4166,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -4280,11 +4280,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.11), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -4394,11 +4394,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -4508,11 +4508,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -4622,11 +4622,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -4736,11 +4736,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.07), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -4850,11 +4850,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.07), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -4964,11 +4964,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.09), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -5078,11 +5078,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.07), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -5192,11 +5192,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.03), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -5306,11 +5306,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.03), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -5420,11 +5420,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "EPSS 0.18, under review threshold, Shield backstop present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -5534,11 +5534,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.09), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -5648,11 +5648,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -5762,11 +5762,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.11), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -5876,11 +5876,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.07), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -5994,7 +5994,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.22 accepted on duration alone."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -6108,7 +6108,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, lower stakes even with EPSS 0.45."
+          "value": "sound"
         }
       ]
     },
@@ -6222,235 +6222,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS (0.11)."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2026-54515-bf88c7b27e95cbadce4e7c316a56c3efffda8026",
-      "id": "CVE-2026-54515",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54515"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54515"
-          },
-          "score": 5.3,
-          "severity": "medium",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
-        }
-      ],
-      "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.8.0 until 2.18.9, 2.21.5, and 3.1.4, in BeanDeserializerBase.createContextual(), per-property @JsonIgnoreProperties exclusions are applied by _handleByNameInclusion(), producing a contextual deserializer whose BeanPropertyMap has the ignored properties removed. The subsequent per-property case-insensitivity block (triggered by @JsonFormat(ACCEPT_CASE_INSENSITIVE_PROPERTIES)) rebuilds from this._beanProperties (the original, unfiltered map) instead of contextual._beanProperties, then overwrites the filtered map — restoring every property _handleByNameInclusion had just removed. The ignored property becomes writable again. This vulnerability is fixed in 2.18.9, 2.21.5, and 3.1.4.",
-      "recommendation": "Upgrade jackson-databind from 2.8.8 to 2.21.5 to remediate CVE-2026-54515. Latest available release is 2.22.1.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (263 of 582 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.8.8",
-          "versions": [
-            {
-              "version": "2.8.8",
-              "status": "affected"
-            },
-            {
-              "version": "2.21.5",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "263"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "582"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.0"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "27.36"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "2.22.1"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
           "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Correctly in_triage given no Shield coverage, but medium severity and negligible EPSS keep stakes low."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2026-54514-bf88c7b27e95cbadce4e7c316a56c3efffda8026",
-      "id": "CVE-2026-54514",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54514"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54514"
-          },
-          "score": 5.3,
-          "severity": "medium",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
-        }
-      ],
-      "description": "jackson-databind contains the general-purpose data-binding functionality and tree-model for Jackson Data Processor. From 2.0.0 until 2.18.8, 2.21.4, and 3.1.4, JDKFromStringDeserializer constructed InetSocketAddress with new InetSocketAddress(host, port), which performs eager DNS name resolution for hostname inputs at deserialization time. An application that binds untrusted JSON into a type containing an InetSocketAddress field issues an attacker-chosen DNS query during readValue, before any application-level validation or connect logic. The fix uses InetSocketAddress.createUnresolved(host, port), deferring DNS to an explicit connect. This vulnerability is fixed in 2.18.8, 2.21.4, and 3.1.4.",
-      "recommendation": "Upgrade jackson-databind from 2.8.8 to 2.21.5 to remediate CVE-2026-54514. Latest available release is 2.22.1.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (263 of 582 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.8.8",
-          "versions": [
-            {
-              "version": "2.8.8",
-              "status": "affected"
-            },
-            {
-              "version": "2.21.5",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "263"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "582"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.0"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "29.75"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "2.22.1"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Correctly in_triage given no Shield coverage, but medium severity and negligible EPSS keep stakes low."
         }
       ]
     },
@@ -6562,7 +6334,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -6674,7 +6446,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -6784,11 +6556,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Minimal class usage (1 of 190) and low EPSS, Shield backstop present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -6898,11 +6670,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Minimal class usage and low EPSS, Shield backstop present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -7014,7 +6786,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact despite EPSS 1.0."
+          "value": "sound"
         }
       ]
     },
@@ -7126,7 +6898,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -7238,7 +7010,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -7350,7 +7122,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -7462,7 +7234,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -7574,7 +7346,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -7686,7 +7458,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -7798,7 +7570,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -7906,11 +7678,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "KEV-listed Spring4Shell with EPSS 1.0 resolved solely on absence-of-execution for spring-beans, not structural non-reachability."
+          "value": "sound"
         }
       ]
     },
@@ -8024,7 +7796,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "KEV-listed critical vulnerability with EPSS 0.97 resolved solely on absence-of-execution, not structural non-reachability."
+          "value": "Flagged: CRITICAL severity, CISA KEV-listed, EPSS 0.97 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -8134,11 +7906,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.02), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -8248,11 +8020,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -8366,7 +8138,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -8480,7 +8252,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -8592,7 +8364,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low EPSS, Shield backstop present."
+          "value": "sound"
         }
       ]
     },
@@ -8702,11 +8474,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.04), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -8816,11 +8588,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.08), Shield coverage present, logback-classic instance."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -8930,11 +8702,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.01), Shield coverage present, logback-classic instance."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -9048,7 +8820,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -9160,7 +8932,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -9272,7 +9044,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -9384,7 +9156,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -9496,7 +9268,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -9608,7 +9380,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -9720,7 +9492,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -9834,7 +9606,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity with EPSS 0.32 accepted on duration alone."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -9944,11 +9716,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.04), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -10058,11 +9830,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.01), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -10172,11 +9944,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.03), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -10290,7 +10062,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -10404,7 +10176,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS, spring-context instance."
+          "value": "sound"
         }
       ]
     },
@@ -10518,7 +10290,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -10628,11 +10400,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "KEV-listed Spring4Shell with EPSS 1.0 resolved solely on absence-of-execution for spring-beans, not structural non-reachability."
+          "value": "sound"
         }
       ]
     },
@@ -10742,11 +10514,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -10860,7 +10632,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.55 accepted on duration alone."
+          "value": "Flagged: HIGH severity, EPSS 0.55 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -10974,7 +10746,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -11088,7 +10860,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -11202,7 +10974,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -11316,7 +11088,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -11430,7 +11202,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -11544,7 +11316,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -11658,7 +11430,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -11772,7 +11544,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -11882,11 +11654,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.08), Shield coverage present, logback-classic instance."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -11996,11 +11768,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.01), Shield coverage present, logback-classic instance."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -12110,11 +11882,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
+          "value": "sound"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "KEV-listed Spring4Shell with EPSS 1.0 resolved solely on absence-of-execution for spring-beans, not structural non-reachability."
+          "value": "sound"
         }
       ]
     },
@@ -12228,7 +12000,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -12342,7 +12114,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity with EPSS 0.22 accepted on duration alone."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -12456,7 +12228,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "KEV-listed, EPSS 1.0, critical Tomcat partial-PUT RCE resolved solely on absence-of-execution."
+          "value": "Flagged: CRITICAL severity, CISA KEV-listed, EPSS 1.0 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -12566,125 +12338,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.01), Shield coverage present."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2026-41293-f197a93ae66212767b004fd93d7a1a8ea62bc3fa",
-      "id": "CVE-2026-41293",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41293"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41293"
-          },
-          "score": 9.8,
-          "severity": "critical",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
-        }
-      ],
-      "description": "Improper Input Validation vulnerability in Apache Tomcat.\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.21, from 10.1.0-M1 through 10.1.54, from 9.0.0.M1 through 9.0.117, from 10.0.0-M1 through 10.0.27.\nOlder, end of support versions may also be affected.\n\nUsers are recommended to upgrade to version [FIXED_VERSION], which fixes the issue.",
-      "recommendation": "Upgrade tomcat-embed-core from 8.5.15 to 9.0.118 to remediate CVE-2026-41293. Latest available release is 10.1.57.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (387 of 1481 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@8.5.15",
-          "versions": [
-            {
-              "version": "8.5.15",
-              "status": "affected"
-            },
-            {
-              "version": "9.0.118",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "387"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "1481"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.02"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "73.56"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "11.0.24"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
           "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, in_triage with no CVE Shield coverage at all, no possible active backstop."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -12798,7 +12456,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "KEV-listed Ghostcat vulnerability with EPSS 0.99 resolved solely on absence-of-execution."
+          "value": "Flagged: CRITICAL severity, CISA KEV-listed, EPSS 0.99 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -12908,11 +12566,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.04), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -13026,7 +12684,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity with EPSS 0.44 accepted on duration alone."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -13136,125 +12794,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.01), Shield coverage present."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2025-66614-f197a93ae66212767b004fd93d7a1a8ea62bc3fa",
-      "id": "CVE-2025-66614",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-66614"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-66614"
-          },
-          "score": 9.1,
-          "severity": "critical",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N"
-        }
-      ],
-      "description": "Improper Input Validation vulnerability.\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.14, from 10.1.0-M1 through 10.1.49, from 9.0.0-M1 through 9.0.112.\n\nThe following versions were EOL at the time the CVE was created but are \nknown to be affected: 8.5.0 through 8.5.100. Older EOL versions are not affected.\nTomcat did not validate that the host name provided via the SNI \nextension was the same as the host name provided in the HTTP host header \nfield. If Tomcat was configured with more than one virtual host and the \nTLS configuration for one of those hosts did not require client \ncertificate authentication but another one did, it was possible for a \nclient to bypass the client certificate authentication by sending \ndifferent host names in the SNI extension and the HTTP host header field.\n\n\n\nThe vulnerability only applies if client certificate authentication is \nonly enforced at the Connector. It does not apply if client certificate \nauthentication is enforced at the web application.\n\n\nUsers are recommended to upgrade to version 11.0.15 or later, 10.1.50 or later or 9.0.113 or later, which fix the issue.",
-      "recommendation": "Upgrade tomcat-embed-core from 8.5.15 to 9.0.118 to remediate CVE-2025-66614. Latest available release is 10.1.57.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (387 of 1481 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@8.5.15",
-          "versions": [
-            {
-              "version": "8.5.15",
-              "status": "affected"
-            },
-            {
-              "version": "9.0.118",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "387"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "1481"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.0"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "14.35"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "11.0.24"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
           "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Critical severity, in_triage with no CVE Shield coverage at all."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -13368,7 +12912,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "EPSS 1.0, high severity, resolved solely on absence-of-execution."
+          "value": "Flagged: HIGH severity, EPSS 1.0 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -13482,7 +13026,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "KEV-listed Tomcat JSP upload RCE with EPSS 1.0 resolved solely on absence-of-execution."
+          "value": "Flagged: HIGH severity, CISA KEV-listed, EPSS 1.0 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -13596,7 +13140,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.73 accepted on duration alone."
+          "value": "Flagged: HIGH severity, EPSS 0.73 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -13710,7 +13254,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.21 accepted on duration alone."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -13820,11 +13364,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.11), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -13934,11 +13478,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.03), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -14052,7 +13596,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.67 accepted on duration alone."
+          "value": "Flagged: HIGH severity, EPSS 0.67 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -14162,11 +13706,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.01), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -14280,7 +13824,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.73 accepted on duration alone."
+          "value": "Flagged: HIGH severity, EPSS 0.73 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -14390,11 +13934,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -14504,11 +14048,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "EPSS 0.18, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -14618,11 +14162,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.05), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -14736,7 +14280,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.57 accepted on duration alone."
+          "value": "Flagged: HIGH severity, EPSS 0.57 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -14846,11 +14390,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.03), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -14960,11 +14504,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.02), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -15074,11 +14618,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.02), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -15188,11 +14732,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.02), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -15302,11 +14846,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.02), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -15420,121 +14964,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.6 accepted on duration alone."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2020-11996-f197a93ae66212767b004fd93d7a1a8ea62bc3fa",
-      "id": "CVE-2020-11996",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-11996"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-11996"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        }
-      ],
-      "description": "A specially crafted sequence of HTTP/2 requests sent to Apache Tomcat 10.0.0-M1 to 10.0.0-M5, 9.0.0.M1 to 9.0.35 and 8.5.0 to 8.5.55 could trigger high CPU usage for several seconds. If a sufficient number of such requests were made on concurrent HTTP/2 connections, the server could become unresponsive.",
-      "recommendation": "Upgrade tomcat-embed-core from 8.5.15 to 9.0.118 to remediate CVE-2020-11996. Latest available release is 10.1.57.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (387 of 1481 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@8.5.15",
-          "versions": [
-            {
-              "version": "8.5.15",
-              "status": "affected"
-            },
-            {
-              "version": "9.0.118",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "387"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "1481"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.27"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "97.88"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "11.0.24"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, elevated EPSS (0.27), in_triage with no CVE Shield coverage at all."
+          "value": "Flagged: HIGH severity, EPSS 0.6 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -15648,121 +15078,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.23 accepted on duration alone."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2026-24880-f197a93ae66212767b004fd93d7a1a8ea62bc3fa",
-      "id": "CVE-2026-24880",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-24880"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-24880"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
-        }
-      ],
-      "description": "Inconsistent Interpretation of HTTP Requests (\u0027HTTP Request/Response Smuggling\u0027) vulnerability in Apache Tomcat via invalid chunk extension.\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.18, from 10.1.0-M1 through 10.1.52, from 9.0.0.M1 through 9.0.115, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109.\nOther, unsupported versions may also be affected.\n\nUsers are recommended to upgrade to version 11.0.20, 10.1.52 or 9.0.116, which fix the issue.",
-      "recommendation": "Upgrade tomcat-embed-core from 8.5.15 to 9.0.118 to remediate CVE-2026-24880. Latest available release is 10.1.57.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (387 of 1481 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@8.5.15",
-          "versions": [
-            {
-              "version": "8.5.15",
-              "status": "affected"
-            },
-            {
-              "version": "9.0.118",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "387"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "1481"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.01"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "42.18"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "11.0.24"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, in_triage with no CVE Shield coverage at all."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -15876,7 +15192,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "KEV-listed HTTP/2 Rapid Reset with EPSS 1.0 resolved solely on absence-of-execution."
+          "value": "Flagged: HIGH severity, CISA KEV-listed, EPSS 1.0 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -15990,121 +15306,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.21 accepted on duration alone."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2026-42498-f197a93ae66212767b004fd93d7a1a8ea62bc3fa",
-      "id": "CVE-2026-42498",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42498"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-42498"
-          },
-          "score": 7.3,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
-        }
-      ],
-      "description": "Exposure of HTTP Authentication Header to unexpected hosts during WebSocket authentication vulnerability in Apache Tomcat.\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.21, from 10.1.0-M1 through 10.1.54, from 9.0.2 through 9.0.117, from 8.5.24 through 8.5.100, from 7.0.83 through 7.0.109.\n\nUsers are recommended to upgrade to version 11.0.22, 10.1.55 or 9.0.118, which fix the issue.",
-      "recommendation": "Upgrade tomcat-embed-core from 8.5.15 to 9.0.118 to remediate CVE-2026-42498. Latest available release is 10.1.57.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (387 of 1481 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@8.5.15",
-          "versions": [
-            {
-              "version": "8.5.15",
-              "status": "affected"
-            },
-            {
-              "version": "9.0.118",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "387"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "1481"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.01"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "46.41"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "11.0.24"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, in_triage with no CVE Shield coverage at all."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -16214,11 +15416,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.03), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -16328,11 +15530,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.01), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -16442,11 +15644,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.09), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -16560,7 +15762,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity with EPSS 0.57 accepted on duration alone."
+          "value": "Flagged: HIGH severity, EPSS 0.57 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -16674,121 +15876,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2023-41080-f197a93ae66212767b004fd93d7a1a8ea62bc3fa",
-      "id": "CVE-2023-41080",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-41080"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-41080"
-          },
-          "score": 6.1,
-          "severity": "medium",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
-        }
-      ],
-      "description": "URL Redirection to Untrusted Site (\u0027Open Redirect\u0027) vulnerability in FORM authentication feature Apache Tomcat.This issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.0-M10, from 10.1.0-M1 through 10.0.12, from 9.0.0-M1 through 9.0.79 and from 8.5.0 through 8.5.92.\n\nThe vulnerability is limited to the ROOT (default) web application.",
-      "recommendation": "Upgrade tomcat-embed-core from 8.5.15 to 9.0.118 to remediate CVE-2023-41080. Latest available release is 10.1.57.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (387 of 1481 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@8.5.15",
-          "versions": [
-            {
-              "version": "8.5.15",
-              "status": "affected"
-            },
-            {
-              "version": "9.0.118",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "387"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "1481"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.06"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "92.87"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "11.0.24"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
           "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, in_triage with no Shield coverage, but low stakes."
         }
       ]
     },
@@ -16902,7 +15990,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity keeps stakes manageable despite EPSS 0.46."
+          "value": "sound"
         }
       ]
     },
@@ -17016,7 +16104,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, moderate EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -17130,7 +16218,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -17244,7 +16332,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -17358,7 +16446,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, very low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -17472,7 +16560,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -17586,235 +16674,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2023-45648-f197a93ae66212767b004fd93d7a1a8ea62bc3fa",
-      "id": "CVE-2023-45648",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-45648"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-45648"
-          },
-          "score": 5.3,
-          "severity": "medium",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
-        }
-      ],
-      "description": "Improper Input Validation vulnerability in Apache Tomcat.Tomcat from 11.0.0-M1 through 11.0.0-M11, from 10.1.0-M1 through 10.1.13, from 9.0.0-M1 through 9.0.81 and from 8.5.0 through 8.5.93 did not correctly parse HTTP trailer headers. A specially \ncrafted, invalid trailer header could cause Tomcat to treat a single \nrequest as multiple requests leading to the possibility of request \nsmuggling when behind a reverse proxy.\n\nUsers are recommended to upgrade to version 11.0.0-M12 onwards, 10.1.14 onwards, 9.0.81 onwards or 8.5.94 onwards, which fix the issue.\n\n",
-      "recommendation": "Upgrade tomcat-embed-core from 8.5.15 to 9.0.118 to remediate CVE-2023-45648. Latest available release is 10.1.57.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (387 of 1481 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@8.5.15",
-          "versions": [
-            {
-              "version": "8.5.15",
-              "status": "affected"
-            },
-            {
-              "version": "9.0.118",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "387"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "1481"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.06"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "92.66"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "11.0.24"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
           "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, in_triage with no Shield coverage, but low stakes."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2020-1935-f197a93ae66212767b004fd93d7a1a8ea62bc3fa",
-      "id": "CVE-2020-1935",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-1935"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-1935"
-          },
-          "score": 4.8,
-          "severity": "medium",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
-        }
-      ],
-      "description": "In Apache Tomcat 9.0.0.M1 to 9.0.30, 8.5.0 to 8.5.50 and 7.0.0 to 7.0.99 the HTTP header parsing code used an approach to end-of-line parsing that allowed some invalid HTTP headers to be parsed as valid. This led to a possibility of HTTP Request Smuggling if Tomcat was located behind a reverse proxy that incorrectly handled the invalid Transfer-Encoding header in a particular manner. Such a reverse proxy is considered unlikely.",
-      "recommendation": "Upgrade tomcat-embed-core from 8.5.15 to 9.0.118 to remediate CVE-2020-1935. Latest available release is 10.1.57.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (387 of 1481 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@8.5.15",
-          "versions": [
-            {
-              "version": "8.5.15",
-              "status": "affected"
-            },
-            {
-              "version": "9.0.118",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "387"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "1481"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.09"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "95.05"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "11.0.24"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, in_triage with no Shield coverage, but low stakes."
         }
       ]
     },
@@ -17928,121 +16788,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "EPSS 0.94 is very high despite medium severity score, worth confirming."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2026-43514-f197a93ae66212767b004fd93d7a1a8ea62bc3fa",
-      "id": "CVE-2026-43514",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43514"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43514"
-          },
-          "score": 3.7,
-          "severity": "low",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N"
-        }
-      ],
-      "description": "Observable Timing Discrepancy vulnerability when comparing AJP secret in Apache Tomcat.\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.21, from 10.1.0-M1 through 10.1.54, from 9.0.0.M1 through 9.0.117, from 8.5.0 through 8.5.100, from 7.0.0 through 7.0.109.\nOlder unsupported versions may also be affected.\n\nUsers are recommended to upgrade to version 11.0.22, 10.1.55 or 9.0.118 which fix the issue.",
-      "recommendation": "Upgrade tomcat-embed-core from 8.5.15 to 9.0.118 to remediate CVE-2026-43514. Latest available release is 10.1.57.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (387 of 1481 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@8.5.15",
-          "versions": [
-            {
-              "version": "8.5.15",
-              "status": "affected"
-            },
-            {
-              "version": "9.0.118",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "387"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "1481"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.0"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "28.04"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "11.0.24"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Low severity, in_triage with no Shield coverage, minimal stakes."
+          "value": "Flagged: EPSS 0.94 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -18154,7 +16900,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -18266,7 +17012,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -18378,7 +17124,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -18490,7 +17236,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -18602,7 +17348,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -18714,7 +17460,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -18826,7 +17572,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -18938,7 +17684,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -19050,7 +17796,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -19162,7 +17908,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -19274,7 +18020,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -19386,7 +18132,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -19498,7 +18244,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -19608,7 +18354,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -19720,7 +18466,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -19832,7 +18578,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -19944,7 +18690,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -20056,7 +18802,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -20168,7 +18914,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -20278,11 +19024,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS despite critical score, Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -20392,11 +19138,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.01), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -20506,11 +19252,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS (0.01), Shield coverage present."
+          "value": "Flagged: CRITICAL severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -20620,11 +19366,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS, minimal class usage (4 of 347), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -20734,11 +19480,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Very low EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -20852,7 +19598,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -20964,7 +19710,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -21076,7 +19822,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -21186,11 +19932,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity but very low EPSS (0.01), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -21300,11 +20046,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -21414,11 +20160,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -21532,7 +20278,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -21644,7 +20390,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact regardless of missing Shield coverage."
+          "value": "sound"
         }
       ]
     },
@@ -21756,7 +20502,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -21866,11 +20612,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low class usage and moderate EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -21982,7 +20728,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -22094,7 +20840,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -22206,7 +20952,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -22318,7 +21064,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -22430,7 +21176,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -22542,7 +21288,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -22656,7 +21402,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "EPSS 0.81 is very high, only 7 of 1501 classes loaded but claim rests on duration not reachability, worth confirming."
+          "value": "Flagged: HIGH severity, EPSS 0.81 - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -22766,11 +21512,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.03), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -22880,11 +21626,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.09), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -22994,11 +21740,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -23108,11 +21854,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.03), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -23226,7 +21972,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -23340,7 +22086,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity keeps stakes manageable despite EPSS 0.35."
+          "value": "sound"
         }
       ]
     },
@@ -23454,7 +22200,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -23568,7 +22314,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -23678,11 +22424,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -23792,11 +22538,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -23906,11 +22652,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -24024,7 +22770,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -24138,7 +22884,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -24252,7 +22998,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity keeps stakes manageable despite EPSS 0.36."
+          "value": "sound"
         }
       ]
     },
@@ -24366,7 +23112,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -24480,7 +23226,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -24590,125 +23336,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.01), Shield coverage present."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2020-13935-a92b066b0ea9ee1cb05b7d5e4bfed4ad8898f741",
-      "id": "CVE-2020-13935",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-13935"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-13935"
-          },
-          "score": 7.5,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        }
-      ],
-      "description": "The payload length in a WebSocket frame was not correctly validated in Apache Tomcat 10.0.0-M1 to 10.0.0-M6, 9.0.0.M1 to 9.0.36, 8.5.0 to 8.5.56 and 7.0.27 to 7.0.104. Invalid payload lengths could trigger an infinite loop. Multiple requests with invalid payload lengths could lead to a denial of service.",
-      "recommendation": "Upgrade tomcat-embed-websocket from 8.5.15 to 8.0.32 to remediate CVE-2020-13935. Latest available release is 10.1.4.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (25 of 168 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-websocket@8.5.15",
-          "versions": [
-            {
-              "version": "8.5.15",
-              "status": "affected"
-            },
-            {
-              "version": "8.0.32",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "25"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "168"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.87"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "99.72"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "11.0.24"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
           "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, EPSS 0.87, in_triage with no CVE Shield coverage at all, no active backstop possible."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -24822,7 +23454,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -24932,11 +23564,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low EPSS (0.03), Shield coverage present."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -25050,121 +23682,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2025-35036-0622a9bcef2eed6d41b5b8e0662c36212009e375",
-      "id": "CVE-2025-35036",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-35036"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-35036"
-          },
-          "score": 7.3,
-          "severity": "high",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
-        }
-      ],
-      "description": "Hibernate Validator before 6.2.0 and 7.0.0, by default and depending how it is used, may interpolate user-supplied input in a constraint violation message with Expression Language. This could allow an attacker to access sensitive information or execute arbitrary Java code. Hibernate Validator as of 6.2.0 and 7.0.0 no longer interpolates custom constraint violation messages with Expression Language and strongly recommends not allowing user-supplied input in constraint violation messages. CVE-2020-5245 and CVE-2025-4428 are examples of related, downstream vulnerabilities involving Expression Language intepolation of user-supplied data.",
-      "recommendation": "Upgrade hibernate-validator from 5.3.5.Final to 8.0.2.Final to remediate CVE-2025-35036.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (225 of 459 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.hibernate/hibernate-validator@5.3.5.Final",
-          "versions": [
-            {
-              "version": "5.3.5.Final",
-              "status": "affected"
-            },
-            {
-              "version": "8.0.2.Final",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "225"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "459"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.01"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "50.61"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "8.0.2.Final"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
-          "value": "needs_review"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "High severity, in_triage with no CVE Shield coverage at all."
+          "value": "sound"
         }
       ]
     },
@@ -25274,239 +23792,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, Shield coverage present."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2023-1932-0622a9bcef2eed6d41b5b8e0662c36212009e375",
-      "id": "CVE-2023-1932",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-1932"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-1932"
-          },
-          "score": 6.1,
-          "severity": "medium",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
-        }
-      ],
-      "description": "A flaw was found in hibernate-validator\u0027s \u0027isValid\u0027 method in the org.hibernate.validator.internal.constraintvalidators.hv.SafeHtmlValidator class, which can be bypassed by omitting the tag ending in a less-than character. Browsers may render an invalid html, allowing HTML injection or Cross-Site-Scripting (XSS) attacks.",
-      "recommendation": "Upgrade hibernate-validator from 5.3.5.Final to 8.0.2.Final to remediate CVE-2023-1932.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (225 of 459 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.hibernate/hibernate-validator@5.3.5.Final",
-          "versions": [
-            {
-              "version": "5.3.5.Final",
-              "status": "affected"
-            },
-            {
-              "version": "8.0.2.Final",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "225"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "459"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.0"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "38.53"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "8.0.2.Final"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, in_triage with no Shield coverage, but low stakes."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2020-10693-0622a9bcef2eed6d41b5b8e0662c36212009e375",
-      "id": "CVE-2020-10693",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-10693"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-10693"
-          },
-          "score": 5.3,
-          "severity": "medium",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
-        }
-      ],
-      "description": "A flaw was found in Hibernate Validator version 6.1.2.Final. A bug in the message interpolation processor enables invalid EL expressions to be evaluated as if they were valid. This flaw allows attackers to bypass input sanitation (escaping, stripping) controls that developers may have put in place when handling user-controlled data in error messages.",
-      "recommendation": "Upgrade hibernate-validator from 5.3.5.Final to 8.0.2.Final to remediate CVE-2020-10693.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (225 of 459 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/org.hibernate/hibernate-validator@5.3.5.Final",
-          "versions": [
-            {
-              "version": "5.3.5.Final",
-              "status": "affected"
-            },
-            {
-              "version": "8.0.2.Final",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "225"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "459"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.02"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "82.07"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "8.0.2.Final"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, in_triage with no Shield coverage, but low stakes."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -25616,125 +23906,11 @@
         },
         {
           "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
+          "value": "needs_review"
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Negligible EPSS, minimal class usage (5 of 1717), Shield coverage present."
-        }
-      ]
-    },
-    {
-      "bom-ref": "eddb8263-7ceb-4f56-a227-36065ce2e9c2-cve-2018-10237-6ce200f6b23222af3d8abb6b6459e6c44f4bb0e9",
-      "id": "CVE-2018-10237",
-      "source": {
-        "name": "NVD",
-        "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-10237"
-      },
-      "ratings": [
-        {
-          "source": {
-            "name": "NVD",
-            "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-10237"
-          },
-          "score": 5.9,
-          "severity": "medium",
-          "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
-        }
-      ],
-      "description": "Unbounded memory allocation in Google Guava 11.0 through 24.x before 24.1.1 allows remote attackers to conduct denial of service attacks against servers that depend on this library and deserialize attacker-provided data, because the AtomicDoubleArray class (when serialized with Java serialization) and the CompoundOrdering class (when serialized with GWT serialization) perform eager allocation without appropriate checks on what a client has sent and whether the data size is reasonable.",
-      "recommendation": "Upgrade guava from 19.0 to 33.6.0-jre to remediate CVE-2018-10237.",
-      "analysis": {
-        "state": "in_triage",
-        "response": [
-          "update"
-        ],
-        "detail": "Library loaded (5 of 1717 classes used) but this CVE\u0027s vulnerable code path has not been observed executing in SAML-PetClinic-Demo (across its own dev/qa/prod environments) in 288 days of runtime monitoring. CVE Shield has no coverage for this CVE in this environment scope, so there is no detection mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by elapsed time alone, regardless of the 30-day threshold."
-      },
-      "affects": [
-        {
-          "ref": "pkg:maven/com.google.guava/guava@19.0",
-          "versions": [
-            {
-              "version": "19.0",
-              "status": "affected"
-            },
-            {
-              "version": "33.6.0-jre",
-              "status": "unaffected"
-            }
-          ]
-        }
-      ],
-      "properties": [
-        {
-          "name": "contrast:appId",
-          "value": "eddb8263-7ceb-4f56-a227-36065ce2e9c2"
-        },
-        {
-          "name": "contrast:appName",
-          "value": "SAML-PetClinic-Demo"
-        },
-        {
-          "name": "contrast:classesUsed",
-          "value": "5"
-        },
-        {
-          "name": "contrast:classCount",
-          "value": "1717"
-        },
-        {
-          "name": "contrast:daysObserved",
-          "value": "288"
-        },
-        {
-          "name": "contrast:acceptAfterDays",
-          "value": "30"
-        },
-        {
-          "name": "contrast:envFilter",
-          "value": "ALL"
-        },
-        {
-          "name": "contrast:epssScore",
-          "value": "0.05"
-        },
-        {
-          "name": "contrast:epssPercentile",
-          "value": "91.8"
-        },
-        {
-          "name": "contrast:cisaKev",
-          "value": "false"
-        },
-        {
-          "name": "contrast:shieldAvailable",
-          "value": "false"
-        },
-        {
-          "name": "contrast:latestVersion",
-          "value": "33.6.0-jre"
-        },
-        {
-          "name": "contrast:devStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:qaStatus",
-          "value": ""
-        },
-        {
-          "name": "contrast:prodStatus",
-          "value": "NO_SHIELD"
-        },
-        {
-          "name": "contrast:vexAdvisorAssessment",
-          "value": "sound"
-        },
-        {
-          "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, in_triage with no Shield coverage, but low stakes."
+          "value": "Flagged: HIGH severity - duration-based claim, not a structural guarantee."
         }
       ]
     },
@@ -25848,7 +24024,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -25960,7 +24136,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, moderate EPSS but low stakes given severity classification."
+          "value": "sound"
         }
       ]
     },
@@ -26072,7 +24248,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low stakes despite EPSS 0.25."
+          "value": "sound"
         }
       ]
     },
@@ -26186,7 +24362,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, moderate EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -26300,7 +24476,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -26414,7 +24590,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -26526,7 +24702,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -26638,7 +24814,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -26750,7 +24926,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -26862,7 +25038,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -26974,7 +25150,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -27086,7 +25262,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -27198,7 +25374,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -27310,7 +25486,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact, commons-lang3 instance."
+          "value": "sound"
         }
       ]
     },
@@ -27422,7 +25598,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact, commons-lang3 instance."
+          "value": "sound"
         }
       ]
     },
@@ -27536,7 +25712,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -27650,7 +25826,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -27764,7 +25940,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -27878,7 +26054,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, low EPSS, spring-context instance."
+          "value": "sound"
         }
       ]
     },
@@ -27992,7 +26168,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Low severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -28104,7 +26280,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -28216,7 +26392,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -28328,7 +26504,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "code_not_reachable, zero classes loaded, structural fact."
+          "value": "sound"
         }
       ]
     },
@@ -28442,7 +26618,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Medium severity, negligible EPSS."
+          "value": "sound"
         }
       ]
     },
@@ -28554,7 +26730,7 @@
         },
         {
           "name": "contrast:vexAdvisorRationale",
-          "value": "Unknown severity, low EPSS."
+          "value": "sound"
         }
       ]
     }

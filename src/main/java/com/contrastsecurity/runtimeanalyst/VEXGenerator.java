@@ -60,23 +60,22 @@ import com.google.gson.JsonObject;
  * Decision rules (see CLAUDE.md discussion - these are policy, not spec):
  *   1. classes_used == 0 for the app+library -> not_affected / code_not_reachable, unconditional.
  *   2. classes_used > 0, CVE's env status is PROTECTING/BLOCKED -> not_affected / protected_at_runtime.
- *   3. classes_used > 0, CVE's env status is EXPOSED/EXPLOITED (or unrecognized) -> no VEX entry;
+ *   3. classes_used > 0, CVE Shield has no coverage for this CVE at all (org-wide cveShieldExists is false -
+ *      see shieldAvailability()) -> no VEX entry. Coverage is a per-CVE, product-level fact, not an
+ *      app/environment-scoped one - if Shield covers a CVE anywhere, it covers it everywhere Shield/ADR is
+ *      enabled. Without it, "not observed executing" isn't evidence of anything (there was never a detector
+ *      watching), so neither not_affected nor in_triage is a claim this tool can support - in_triage would be
+ *      just as wrong, since it implies evidence is accumulating toward a future resolution that nothing here
+ *      could ever produce. This is the same "can't positively account for it" bucket as rule 5 below, just a
+ *      different root cause (no detection capability, vs. confirmed exploitation) - excluded CVEs are counted
+ *      in the run's own console output, not silently dropped.
+ *   4. classes_used > 0, CVE's env status is NOT_SEEN (or missing) in every environment observed - Shield has
+ *      coverage here (rule 3 didn't apply) and simply hasn't fired, so elapsed time is genuine evidence:
+ *        - days observed >= acceptAfterDays -> not_affected (no justification), detail explains the
+ *          day count and threshold as an operational risk-acceptance, not a structural guarantee.
+ *        - days observed <  acceptAfterDays -> in_triage, detail explains the day count so far.
+ *   5. classes_used > 0, CVE's env status is EXPOSED/EXPLOITED (or unrecognized) -> no VEX entry;
  *      never suppress a vulnerability we can't positively account for.
- *   4. classes_used > 0, CVE's env status is NOT_SEEN/NO_SHIELD (or missing) in every environment observed:
- *      NO_SHIELD (confirmed by scanning every app in this org) means CVE Shield has no coverage for this CVE
- *      at all, as opposed to NOT_SEEN (Shield exists and just hasn't fired). Coverage is a per-CVE,
- *      product-level fact, not an app/environment-scoped one - if Shield covers a CVE anywhere, it covers it
- *      everywhere Shield/ADR is enabled - so this is decided by the org-wide cveShieldExists flag (see
- *      shieldAvailability()), not by inferring it from per-app NO_SHIELD/NOT_SEEN status. This matters for
- *      the state, not just the reporting: elapsed time can never turn "no detector was watching" into
- *      "nothing happened," so:
- *        - shieldAvailability() is false (no coverage for this CVE, org-wide) -> in_triage, permanently,
- *          regardless of daysObserved - this can never graduate to not_affected on duration alone.
- *        - shieldAvailability() is true/unknown and days observed >= acceptAfterDays -> not_affected (no
- *          justification), detail explains the day count and threshold as an operational risk-acceptance,
- *          not a structural guarantee.
- *        - shieldAvailability() is true/unknown and days observed < acceptAfterDays -> in_triage, detail
- *          explains the day count so far (may still graduate to not_affected later).
  *
  * Not factored into the decision rules above (deliberately - see ModuleStatus): whether Assess/ADR are
  * even enabled per environment. A "not seen" claim scoped to an environment where Assess itself isn't running
@@ -84,8 +83,6 @@ import com.google.gson.JsonObject;
  * as its own contrast:assessEnabled and contrast:adrEnabled property (per env) so a human (or the VEX
  * Advisor) can weigh it. ADR (formerly branded "Protect") is the classic HTTP-rule-based RASP module (the
  * API's `defend` flag) - a separate product from CVE Shield, which defends specific CVEs via a microsandbox.
- * Whether CVE Shield could even catch this CVE at all - contrast:shieldAvailable - is the org-wide
- * cveShieldExists flag from /cves, verbatim (see shieldAvailability()).
  *
  * Usage:
  *   java -jar runtime-analyst.jar vex --app "MyApp"
@@ -109,6 +106,11 @@ public class VEXGenerator {
     private String apiKey;
     private int acceptAfterDays = 30;
     private String envFilter; // DEVELOPMENT, QA, or PRODUCTION - null means consider all three
+
+    // Counts of CVEs deliberately excluded from the VEX (no statement generated) because this tool can't
+    // positively account for them - tracked so the exclusion is visible in the run's own output, not silent.
+    private int excludedNoShieldCoverage = 0;
+    private int excludedExposedOrUnrecognized = 0;
 
     private final Gson gson = new Gson();
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -573,6 +575,18 @@ public class VEXGenerator {
         }
 
         System.out.println("\nGenerated " + vulnerabilities.size() + " VEX statements.");
+        if (excludedNoShieldCoverage > 0 || excludedExposedOrUnrecognized > 0) {
+            System.out.println("Excluded " + (excludedNoShieldCoverage + excludedExposedOrUnrecognized)
+                + " CVE(s) - no VEX statement generated, since this tool can't positively account for them:");
+            if (excludedNoShieldCoverage > 0) {
+                System.out.println("  " + excludedNoShieldCoverage + " have no CVE Shield coverage at all - "
+                    + "absence-of-execution isn't evidence when nothing was ever watching");
+            }
+            if (excludedExposedOrUnrecognized > 0) {
+                System.out.println("  " + excludedExposedOrUnrecognized + " are EXPOSED/EXPLOITED (or an "
+                    + "unrecognized status) - genuinely affected, not a claim this tool makes");
+            }
+        }
         bom.setVulnerabilities(vulnerabilities);
         bom.setComponents(appComponents);
 
@@ -721,20 +735,19 @@ public class VEXGenerator {
             analysis.setJustification(Justification.PROTECTED_AT_RUNTIME);
             detail = "CVE Shield is actively mitigating this vulnerability at runtime in " + app.name
                 + " (" + envScopeLabel() + ").";
+        } else if (Boolean.FALSE.equals(shieldAvailability(orgWideShieldExists))) {
+            // CVE Shield has no coverage for this CVE at all - there was never anything watching for an exploit
+            // attempt, so "not observed executing" isn't evidence of anything, and neither not_affected nor
+            // in_triage is a claim we can support. in_triage would be just as wrong: it implies evidence is
+            // accumulating toward a future resolution, but nothing is running that could ever produce one. This
+            // is the same "can't positively account for it" bucket as EXPOSED/EXPLOITED below - no VEX entry.
+            excludedNoShieldCoverage++;
+            return null;
         } else if (issue != null && isNotSeen(issue)) {
-            boolean shieldAvail = !Boolean.FALSE.equals(shieldAvailability(orgWideShieldExists));
             detail = "Library loaded (" + classesUsed + " of " + classCount + " classes used) but this CVE's "
                 + "vulnerable code path has not been observed executing in " + app.name + " (" + envScopeLabel()
                 + ") in " + daysObserved + " days of runtime monitoring";
-            if (!shieldAvail) {
-                // CVE Shield has no coverage for this CVE here at all, so there was never anything watching for
-                // an exploit attempt - elapsed time cannot turn "nothing detected" into "nothing happened." This
-                // can never graduate to not_affected on duration alone, no matter how long it's been.
-                analysis.setState(State.IN_TRIAGE);
-                detail += ". CVE Shield has no coverage for this CVE in this environment scope, so there is no "
-                    + "detection mechanism to have caught an exploit attempt - this cannot be resolved to "
-                    + "not_affected by elapsed time alone, regardless of the " + acceptAfterDays + "-day threshold.";
-            } else if (daysObserved >= acceptAfterDays) {
+            if (daysObserved >= acceptAfterDays) {
                 analysis.setState(State.NOT_AFFECTED);
                 detail += " (policy threshold: " + acceptAfterDays + " days). Operational risk acceptance based on "
                     + "runtime observation, not a structural non-reachability guarantee.";
@@ -745,16 +758,10 @@ public class VEXGenerator {
         } else if (issue == null) {
             // Library confirmed used, but no matching per-CVE environment record found at all -
             // treat the same as "not seen" using the same duration logic, but flag the missing join.
-            boolean shieldAvail = !Boolean.FALSE.equals(shieldAvailability(orgWideShieldExists));
             detail = "Library loaded (" + classesUsed + " of " + classCount + " classes used); no per-environment "
                 + "CVE Shield/exposure record found for this CVE+version in " + app.name + ". Not observed "
                 + "executing in " + daysObserved + " days of runtime monitoring for this application";
-            if (!shieldAvail) {
-                analysis.setState(State.IN_TRIAGE);
-                detail += ". CVE Shield has no coverage for this CVE at all (org-wide), so there is no detection "
-                    + "mechanism to have caught an exploit attempt - this cannot be resolved to not_affected by "
-                    + "elapsed time alone, regardless of the " + acceptAfterDays + "-day threshold.";
-            } else if (daysObserved >= acceptAfterDays) {
+            if (daysObserved >= acceptAfterDays) {
                 analysis.setState(State.NOT_AFFECTED);
                 detail += " (policy threshold: " + acceptAfterDays + " days). Operational risk acceptance based on "
                     + "runtime observation, not a structural non-reachability guarantee.";
@@ -764,6 +771,7 @@ public class VEXGenerator {
             }
         } else {
             // EXPOSED / EXPLOITED / any unrecognized status - never suppress.
+            excludedExposedOrUnrecognized++;
             return null;
         }
 

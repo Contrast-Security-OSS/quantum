@@ -5,7 +5,7 @@
 
 ---
 
-**Report Date:** September 2, 2026
+**Report Date:** September 3, 2026
 **Assessment Type:** VEX Claim Soundness Review
 
 ---
@@ -14,24 +14,24 @@
 
 This report reviews VEX (Vulnerability Exploitability eXchange) claims generated from Contrast Security runtime library-usage and CVE Shield data. It does not re-derive whether a CVE exists - it judges whether each `not_affected`/`in_triage` claim is well-supported enough to rely on as-is, or whether a human should look at it first.
 
-**Coverage:** 1 application(s), 251 VEX statement(s) reviewed.
+**Coverage:** 1 application(s), 235 VEX statement(s) reviewed.
 
 **Key Findings:**
 
-- **37 of 251 claim(s) flagged for human review** before relying on them.
-- **8 flagged claim(s) are on CVEs in the CISA Known Exploited Vulnerabilities (KEV) catalog** - actively exploited in the wild: CVE-2022-22965, CVE-2018-1273, CVE-2025-24813, CVE-2020-1938, CVE-2017-12617, CVE-2023-44487.
-- **12 flagged claim(s) have an EPSS score ≥ 0.5** (50%+ predicted exploitation likelihood): CVE-2017-17485, CVE-2024-38819, CVE-2019-0232, CVE-2019-0199, CVE-2025-55752, CVE-2019-10072 (+6 more).
+- **125 of 235 claim(s) flagged for human review** before relying on them.
+- **7 flagged claim(s) are on CVEs in the CISA Known Exploited Vulnerabilities (KEV) catalog** - actively exploited in the wild: CVE-2018-1273, CVE-2022-22965, CVE-2025-24813, CVE-2020-1938, CVE-2017-12617, CVE-2023-44487.
+- **11 flagged claim(s) have an EPSS score ≥ 0.5** (50%+ predicted exploitation likelihood): CVE-2017-17485, CVE-2024-38819, CVE-2019-0232, CVE-2019-0199, CVE-2025-55752, CVE-2019-10072 (+5 more).
 - Application(s) rated CRITICAL/HIGH risk: SAML-PetClinic-Demo.
 
 ### Applications
 
 | Application | Risk Level | Statements |
 |-------------|------------|------------|
-| SAML-PetClinic-Demo | HIGH | 251 |
+| SAML-PetClinic-Demo | CRITICAL | 235 |
 
 | Risk Level | Applications |
 |------------|--------------|
-| HIGH | 1 |
+| CRITICAL | 1 |
 
 ### Legend
 
@@ -39,7 +39,7 @@ This report reviews VEX (Vulnerability Exploitability eXchange) claims generated
 
 **Shield** - whether CVE Shield has a virtual patch for this specific CVE at all (a per-CVE, product-level fact - coverage existing anywhere means it's available everywhere Shield is enabled): `Yes` (Shield covers it, even if it hasn't fired), `No` (no Shield coverage for this CVE at all - the claim rests entirely on absence-of-execution, with no possible active backstop), `-` (unknown).
 
-**Rationale** - why the claim was made, with the day count for the three duration-based reasons:
+**Rationale** - why the claim was made, with the day count for the two duration-based reasons:
 
 | Rationale | Meaning |
 |-----------|---------|
@@ -47,7 +47,8 @@ This report reviews VEX (Vulnerability Exploitability eXchange) claims generated
 | `CVE Shielded` | CVE Shield actively mitigating at runtime - an active control, not time-based |
 | `CVE Not Used Nd` | not_affected - library loaded, but zero observed executions of the vulnerable path in N days of runtime monitoring, past the acceptance threshold |
 | `CVE Watching Nd` | in_triage - zero observed executions in N days so far, still short of the acceptance threshold - may still graduate to `CVE Not Used` |
-| `No Shield Coverage Nd` | in_triage, permanently - CVE Shield has no coverage for this CVE here (Shield column is `No`), so elapsed time is never evidence of anything and this can never graduate, no matter how large Nd gets |
+
+CVEs with no CVE Shield coverage at all never appear in this table - VEXGenerator excludes them entirely rather than claiming `not_affected` or `in_triage` without a detector ever having watched (see its console output for the excluded count).
 
 Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, so the claims worth a second look surface at the top - see the Key Findings above for which specific CVEs those are.
 
@@ -59,15 +60,15 @@ Rows are sorted CISA KEV-listed first, then by EPSS score, then by CVSS score, s
 
 ### SAML-PetClinic-Demo
 
-**Risk Level:** HIGH
+**Risk Level:** CRITICAL
 
 **Protection Status:** Assess (runtime evidence): dev=enabled, qa=no data, prod=enabled · ADR (classic RASP, formerly "Protect" - not CVE Shield): dev=disabled, qa=no data, prod=enabled
 
-SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominated by a long tail of jackson-databind and tomcat-embed-core CVEs. The large majority are either structurally sound (code_not_reachable, zero classes loaded) or duration-based claims on low-EPSS CVEs backed by 288 days of Assess data from dev and prod, with Shield coverage and prod ADR as an active backstop. A meaningful subset, however, rests on duration alone for CVEs with very high EPSS or CISA KEV status, including three separate Spring4Shell (CVE-2022-22965) claims, Ghostcat (CVE-2020-1938), the Tomcat JSP-upload RCE (CVE-2017-12617), HTTP/2 Rapid Reset (CVE-2023-44487), and the 2025 Tomcat partial-PUT RCE (CVE-2025-24813).
+This VEX set for SAML-PetClinic-Demo covers 235 claims across a stack of badly outdated dependencies (jackson-databind 2.8.8, spring-webmvc/spring-beans/spring-core 4.3.9, tomcat-embed-core 8.5.15, dom4j 1.6.1, hsqldb 2.3.5, thymeleaf 3.0.6, mysql-connector-java 5.1.42, and others). 110 claims look sound, but 125 are flagged, all of them 'not_affected' determinations resting entirely on 288 days of Assess runtime observation with no exploit ever triggering, not on actual remediation.
 
-**Risk Rationale:** Most claims are well-supported, but a cluster of critical/high severity, actively-exploited (KEV or EPSS near 1.0) CVEs on spring-beans, spring-webmvc, spring-data-commons, and tomcat-embed-core are marked not_affected using only absence-of-execution reasoning, not code_not_reachable or protected_at_runtime. Given ADR is disabled in dev, any wrong call on these specific findings has no active backstop in that tier. Several tomcat-embed-core, hibernate-validator, and guava CVEs are also in_triage with zero CVE Shield coverage at all, meaning there is no active mitigation possible if the absence-of-execution assumption is wrong.
+**Risk Rationale:** Six of the flagged CVEs are CISA KEV-listed with EPSS at or near 1.0, meaning they're being actively exploited in the wild right now: CVE-2022-22965 (Spring4Shell, on both spring-webmvc and spring-beans), CVE-2018-1273 (spring-data-commons RCE, EPSS 0.97), CVE-2020-1938 (Ghostcat, tomcat-embed-core, EPSS 0.99), CVE-2025-24813 (tomcat-embed-core, EPSS 1.0), CVE-2017-12617 (tomcat-embed-core, EPSS 1.0), and CVE-2023-44487 (HTTP/2 Rapid Reset, EPSS 1.0). Every one of these is marked 'not_affected' purely because Assess never saw the vulnerable code path get hit in 288 days of dev/prod traffic. That's an absence-of-evidence argument on some of the most actively weaponized CVEs in the CVE database, sitting on a jackson-databind version (2.8.8) that alone carries 46 flagged critical/high deserialization CVEs. ADR, the runtime protection module that would actually block exploitation attempts, is disabled in dev and has no data in qa, so these versions have never been stress-tested against real attack traffic in any lower environment. Only prod runs both Assess and ADR, and even there the VEX claims are based on non-observation, not on ADR having intercepted and blocked an attempt.
 
-**Recommendation:** Have a human re-verify reachability (not just runtime absence) for the KEV-listed and EPSS-near-1.0 claims before trusting them, especially the three CVE-2022-22965 (Spring4Shell) instances, CVE-2020-1938 (Ghostcat), CVE-2017-12617, CVE-2023-44487, CVE-2025-24813, and CVE-2018-1273. Also prioritize the tomcat-embed-core, hibernate-validator, and guava CVEs currently in_triage with no CVE Shield coverage, since those have no possible active backstop today.
+**Recommendation:** Before trusting this VEX as-is, get a human to look at the six CISA KEV / high-EPSS claims first: CVE-2022-22965 (Spring4Shell) on spring-webmvc and spring-beans, CVE-2018-1273 on spring-data-commons, CVE-2020-1938 (Ghostcat) and CVE-2025-24813 and CVE-2017-12617 on tomcat-embed-core, and CVE-2023-44487 (Rapid Reset). These need either confirmed compensating controls (WAF rules, ADR blocking rules actively enabled and tested against these specific CVEs) or an actual upgrade plan, not a 'we never saw it happen' justification. Given the age and scale of the outdated dependency set (jackson-databind, spring 4.3.9, tomcat 8.5.15 are all years past end-of-life), treat this whole app as a strong upgrade candidate rather than relying on runtime silence as proof of safety, and confirm ADR is actually enabled and exercised against known KEV payloads in a lower environment before leaning on these VEX claims for a production risk decision.
 
 | CVE | Library | Score | VEX | Shield | Rationale |
 |-----|---------|-------|-----|--------|-----------|
@@ -82,7 +83,6 @@ SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominat
 | CVE-2022-1471 | snakeyaml@1.17 | 9.8 | NA | Yes | Library Unused |
 | CVE-2019-0232 | tomcat-embed-core@8.5.15 | 8.1 | NA | Yes | CVE Not Used 288d |
 | CVE-2018-11784 | tomcat-embed-core@8.5.15 | 4.3 | NA | Yes | CVE Not Used 288d |
-| CVE-2020-13935 | tomcat-embed-websocket@8.5.15 | 7.5 | IT | No | No Shield Coverage 288d |
 | CVE-2022-34169 | xalan@2.7.2 | 7.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2019-0199 | tomcat-embed-core@8.5.15 | 7.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2019-10072 | tomcat-embed-core@8.5.15 | 7.5 | NA | Yes | CVE Not Used 288d |
@@ -101,7 +101,6 @@ SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominat
 | CVE-2016-1000027 | spring-web@4.3.9.RELEASE | 9.8 | NA | Yes | CVE Not Used 288d |
 | CVE-2020-8840 | jackson-databind@2.8.8 | 9.8 | NA | Yes | CVE Not Used 288d |
 | CVE-2017-18640 | snakeyaml@1.17 | 7.5 | NA | Yes | Library Unused |
-| CVE-2020-11996 | tomcat-embed-core@8.5.15 | 7.5 | IT | No | No Shield Coverage 288d |
 | CVE-2013-4002 | xercesimpl@2.11.0 | 0.0 | NA | Yes | CVE Not Used 288d |
 | CVE-2024-24549 | tomcat-embed-core@8.5.15 | 7.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2021-24122 | tomcat-embed-core@8.5.15 | 5.9 | NA | Yes | CVE Not Used 288d |
@@ -151,7 +150,6 @@ SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominat
 | CVE-2018-15756 | spring-core@4.3.9.RELEASE | 7.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2021-25329 | tomcat-embed-core@8.5.15 | 7.0 | NA | Yes | CVE Not Used 288d |
 | CVE-2020-13956 | httpclient@4.5.3 | 5.3 | NA | Yes | Library Unused |
-| CVE-2020-1935 | tomcat-embed-core@8.5.15 | 4.8 | IT | No | No Shield Coverage 288d |
 | CVE-2018-14720 | jackson-databind@2.8.8 | 9.8 | NA | Yes | CVE Not Used 288d |
 | CVE-2017-15095 | jackson-databind@2.8.8 | 9.8 | NA | Yes | CVE Not Used 288d |
 | CVE-2019-14379 | jackson-databind@2.8.8 | 9.8 | NA | Yes | CVE Not Used 288d |
@@ -172,8 +170,6 @@ SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominat
 | CVE-2019-16942 | jackson-databind@2.8.8 | 9.8 | NA | Yes | CVE Not Used 288d |
 | CVE-2017-1000487 | plexus-utils@3.0.8 | 9.8 | NA | Yes | Library Unused |
 | CVE-2021-37136 | netty@3.5.7.Final | 7.5 | NA | Yes | Library Unused |
-| CVE-2023-41080 | tomcat-embed-core@8.5.15 | 6.1 | IT | No | No Shield Coverage 288d |
-| CVE-2023-45648 | tomcat-embed-core@8.5.15 | 5.3 | IT | No | No Shield Coverage 288d |
 | CVE-2022-22968 | spring-context@4.3.9.RELEASE | 5.3 | NA | Yes | CVE Not Used 288d |
 | CVE-2019-16335 | jackson-databind@2.8.8 | 9.8 | NA | Yes | CVE Not Used 288d |
 | CVE-2019-16943 | jackson-databind@2.8.8 | 9.8 | NA | Yes | CVE Not Used 288d |
@@ -191,7 +187,6 @@ SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominat
 | CVE-2020-36518 | jackson-databind@2.8.8 | 7.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2024-34750 | tomcat-embed-core@8.5.15 | 7.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2021-21409 | netty@3.5.7.Final | 5.9 | NA | Yes | Library Unused |
-| CVE-2018-10237 | guava@19.0 | 5.9 | IT | No | No Shield Coverage 288d |
 | CVE-2018-11771 | commons-compress@1.9 | 5.5 | NA | Yes | Library Unused |
 | CVE-2018-1259 | spring-data-commons@1.13.4.RELEASE | 0.0 | NA | Yes | CVE Not Used 288d |
 | CVE-2015-2156 | netty@3.5.7.Final | 0.0 | NA | Yes | Library Unused |
@@ -222,7 +217,6 @@ SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominat
 | CVE-2018-1257 | spring-core@4.3.9.RELEASE | 6.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2018-11039 | spring-web@4.3.9.RELEASE | 5.9 | NA | Yes | CVE Not Used 288d |
 | CVE-2018-1199 | spring-core@4.3.9.RELEASE | 5.3 | NA | Yes | CVE Not Used 288d |
-| CVE-2026-41293 | tomcat-embed-core@8.5.15 | 9.8 | IT | No | No Shield Coverage 288d |
 | CVE-2018-1274 | spring-data-commons@1.13.4.RELEASE | 7.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2025-52434 | tomcat-embed-core@8.5.15 | 7.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2022-42252 | tomcat-embed-core@8.5.15 | 7.5 | NA | Yes | CVE Not Used 288d |
@@ -237,7 +231,6 @@ SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominat
 | CVE-2020-15250 | junit@4.12 | 5.5 | NA | Yes | Library Unused |
 | CVE-2022-22970 | spring-beans@4.3.9.RELEASE | 5.3 | NA | Yes | CVE Not Used 288d |
 | CVE-2023-42795 | tomcat-embed-core@8.5.15 | 5.3 | NA | Yes | CVE Not Used 288d |
-| CVE-2020-10693 | hibernate-validator@5.3.5.Final | 5.3 | IT | No | No Shield Coverage 288d |
 | CVE-2025-48924 | commons-lang@2.6 | 5.3 | NA | Yes | Library Unused |
 | CVE-2025-48924 | commons-lang3@3.1 | 5.3 | NA | Yes | Library Unused |
 | CVE-2026-43512 | tomcat-embed-core@8.5.15 | 9.8 | NA | Yes | CVE Not Used 288d |
@@ -252,12 +245,9 @@ SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominat
 | CVE-2023-6378 | logback-core@1.1.11 | 7.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2023-6378 | logback-classic@1.1.11 | 7.5 | NA | Yes | CVE Not Used 288d |
 | CVE-2026-41284 | tomcat-embed-core@8.5.15 | 7.5 | NA | Yes | CVE Not Used 288d |
-| CVE-2026-24880 | tomcat-embed-core@8.5.15 | 7.5 | IT | No | No Shield Coverage 288d |
 | CVE-2022-4244 | plexus-utils@3.0.8 | 7.5 | NA | Yes | Library Unused |
 | CVE-2022-29546 | neko-htmlunit@2.21 | 7.5 | NA | Yes | Library Unused |
 | CVE-2023-20883 | spring-boot-autoconfigure@1.5.4.RELEASE | 7.5 | NA | Yes | CVE Not Used 288d |
-| CVE-2026-42498 | tomcat-embed-core@8.5.15 | 7.3 | IT | No | No Shield Coverage 288d |
-| CVE-2025-35036 | hibernate-validator@5.3.5.Final | 7.3 | IT | No | No Shield Coverage 288d |
 | CVE-2019-12418 | tomcat-embed-core@8.5.15 | 7.0 | NA | Yes | CVE Not Used 288d |
 | CVE-2022-41854 | snakeyaml@1.17 | 6.5 | NA | Yes | Library Unused |
 | CVE-2023-20863 | spring-expression@4.3.9.RELEASE | 6.5 | NA | Yes | CVE Not Used 288d |
@@ -283,7 +273,6 @@ SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominat
 | CVE-2022-2047 | jetty-http@9.4.5.v20170502 | 2.7 | NA | Yes | Library Unused |
 | CVE-2022-21363 | mysql-connector-java@5.1.42 | 0.0 | NA | Yes | CVE Not Used 288d |
 | CVE-2025-52999 | jackson-core@2.8.8 | 0.0 | NA | Yes | CVE Not Used 288d |
-| CVE-2025-66614 | tomcat-embed-core@8.5.15 | 9.1 | IT | No | No Shield Coverage 288d |
 | CVE-2026-41901 | thymeleaf@3.0.6.RELEASE | 9.0 | NA | Yes | CVE Not Used 288d |
 | CVE-2026-22733 | spring-boot-starter-actuator@1.5.4.RELEASE | 8.1 | NA | Yes | Library Unused |
 | CVE-2026-41716 | spring-data-commons@1.13.4.RELEASE | 7.5 | NA | Yes | CVE Not Used 288d |
@@ -301,19 +290,15 @@ SAML-PetClinic-Demo carries roughly 250 VEX claims across ~35 libraries, dominat
 | CVE-2026-41845 | spring-webmvc@4.3.9.RELEASE | 6.1 | NA | Yes | CVE Not Used 288d |
 | CVE-2026-41846 | spring-webmvc@4.3.9.RELEASE | 6.1 | NA | Yes | CVE Not Used 288d |
 | CVE-2026-41844 | spring-webmvc@4.3.9.RELEASE | 6.1 | NA | Yes | CVE Not Used 288d |
-| CVE-2023-1932 | hibernate-validator@5.3.5.Final | 6.1 | IT | No | No Shield Coverage 288d |
 | CVE-2026-41721 | spring-data-commons@1.13.4.RELEASE | 5.9 | NA | Yes | CVE Not Used 288d |
 | CVE-2026-41711 | spring-data-commons@1.13.4.RELEASE | 5.9 | NA | Yes | CVE Not Used 288d |
 | CVE-2026-41841 | spring-webmvc@4.3.9.RELEASE | 5.9 | NA | Yes | CVE Not Used 288d |
 | CVE-2026-41843 | spring-webmvc@4.3.9.RELEASE | 5.9 | NA | Yes | CVE Not Used 288d |
 | CVE-2024-25710 | commons-compress@1.9 | 5.5 | NA | Yes | Library Unused |
-| CVE-2026-54515 | jackson-databind@2.8.8 | 5.3 | IT | No | No Shield Coverage 288d |
-| CVE-2026-54514 | jackson-databind@2.8.8 | 5.3 | IT | No | No Shield Coverage 288d |
 | CVE-2026-22745 | spring-webmvc@4.3.9.RELEASE | 5.3 | NA | Yes | CVE Not Used 288d |
 | CVE-2026-41853 | spring-webmvc@4.3.9.RELEASE | 5.3 | NA | Yes | CVE Not Used 288d |
 | CVE-2026-41852 | spring-expression@4.3.9.RELEASE | 5.3 | NA | Yes | CVE Not Used 288d |
 | CVE-2025-49128 | jackson-core@2.8.8 | 4.0 | NA | Yes | CVE Not Used 288d |
-| CVE-2026-43514 | tomcat-embed-core@8.5.15 | 3.7 | IT | No | No Shield Coverage 288d |
 | CVE-2026-22741 | spring-webmvc@4.3.9.RELEASE | 3.1 | NA | Yes | CVE Not Used 288d |
 | CVE-2025-22233 | spring-context@4.3.9.RELEASE | 3.1 | NA | Yes | CVE Not Used 288d |
 | CVE-2026-10532 | logback-core@1.1.11 | 0.0 | NA | Yes | CVE Not Used 288d |
